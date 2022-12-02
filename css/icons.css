@@ -7,8 +7,8 @@
 }
 
 #loader {
-  border: 8px solid var(--tColorDark2); /* Light grey */
-  border-top: 8px solid var(--tColorBlue); /* Blue */
+  border: 8px solid var(--color_dark2); /* Light grey */
+  border-top: 8px solid var(--color_blue); /* Blue */
   border-radius: 50%;
   width: 30px;
   height: 30px;
@@ -28,13 +28,13 @@
   display: inline-block;
   width: 30px;
   height: 30px;
-  border-right: 0.3em solid var(--tColorDark2);
-  border-top: 0.3em solid var(--tColorDark2);
+  border-right: 0.3em solid var(--color_dark2);
+  border-top: 0.3em solid var(--color_dark2);
   transform: rotate(135deg);
 }
 
 #down_arrow:hover {
-  border-color: var(--tColorBlue)
+  border-color: var(--color_blue)
 }
 
 

@@ -2,29 +2,29 @@
 :root {
     --font: '-apple-system', 'BlinkMacSystemFont', "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     --hfont: 'Roboto Condensed', sans-serif;
-    --fontSize: 16;
+    --font_size: 16;
 
-    --tColorDark: rgb(21, 32, 43);
-    --tColorDark3: rgb(25, 39, 52);
-    --tColorDark2: rgb(56, 68, 77);
-    --tColorLight: rgb(255,255,255);
-    --tColorLight2: rgb(110, 118, 125);
+    --color_dark: rgb(21, 32, 43);
+    --color_dark3: rgb(25, 39, 52);
+    --color_dark2: rgb(56, 68, 77);
+    --color_light: rgb(255,255,255);
+    --color_light2: rgb(110, 118, 125);
 
-    --tColorBlue: #1da1f2;
+    --color_blue: #1da1f2;
     
     
-    --bgColor: var(--tColorDark);
-    --textColor: var(--tColorLight);
-    --selectedColor: var(--tColorBlue);
+    --bg_color: var(--color_dark);
+    --text_color: var(--color_light);
+    --selected_color: var(--color_blue);
 }
 
 /* GENERAL */
 
 body {
   font-family: var(--font);
-  font-size: var(--fontSize);
-  color: var(--textColor);
-  background-color: var(--bgColor);
+  font-size: var(--font_size);
+  color: var(--text_color);
+  background-color: var(--bg_color);
   padding: 0;
   margin: 0;
 
@@ -34,17 +34,17 @@ body {
 textarea {
   border: none;
   overflow: auto;
-  font-size: var(--fontSize);
+  font-size: var(--font_size);
   font-family: var(--font);
-  color: var(--textColor);
-  background-color: var(--bgColor);
+  color: var(--text_color);
+  background-color: var(--bg_color);
   resize: none; /*remove the resize handle on the bottom right*/
 }
 
 button {
-  background-color: var(--bgColor);
-  color: var(--tColorLight2);
-  font-size: var(--fontSize);
+  background-color: var(--bg_color);
+  color: var(--color_light2);
+  font-size: var(--font_size);
   text-align: center;
   border: none;
   padding: 0;
@@ -58,12 +58,12 @@ ul {
 }
 
 a {
-  color: var(--textColor);
+  color: var(--text_color);
   text-decoration: none;
 }
 
 a:hover {
-  /* color: var(--tColorBlue); */
+  /* color: var(--color_blue); */
   /* TODO: Makes text of clickable toots blue on hover*/
 }
 
@@ -74,5 +74,5 @@ a:hover {
 
 .bordered {
   border: 1px solid;
-  border-color: var(--tColorDark2);
+  border-color: var(--color_dark2);
 }

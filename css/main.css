@@ -16,7 +16,7 @@ a {
 li {
   padding: 12px 16px;
   border: 1px solid;
-  border-color: var(--tColorDark2);
+  border-color: var(--color_dark2);
 }
 
 
@@ -67,14 +67,14 @@ li {
 
 /* TODO: split in disabled/enabled versions*/
 .svg_button {
-  fill: var(--tColorLight2);
+  fill: var(--color_light2);
 }
 /* .svg_button:hover { */
-/*   fill: var(--tColorBlue); */
+/*   fill: var(--color_blue); */
 /* } */
 
 .svg_button_like_active {
-  fill: var(--tColorBlue);
+  fill: var(--color_blue);
 }
 
 .avi {
