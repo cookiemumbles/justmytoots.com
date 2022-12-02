@@ -1,0 +1,54 @@
+@charset "UTF-8";
+
+#loader_wrapper {
+  width: 30px;
+  height: 30px;
+  margin: auto;
+}
+
+#loader {
+  border: 8px solid var(--tColorDark2); /* Light grey */
+  border-top: 8px solid var(--tColorBlue); /* Blue */
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  margin: auto;
+  animation: spin 1s ease infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+#down_arrow {
+  position: relative;
+  top: -5px;
+  content: "";
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  border-right: 0.3em solid var(--tColorDark2);
+  border-top: 0.3em solid var(--tColorDark2);
+  transform: rotate(135deg);
+}
+
+#down_arrow:hover {
+  border-color: var(--tColorBlue)
+}
+
+
+/* The Close Button */
+.close {
+  /* color: #aaa; */
+  /* float: right; */
+  font-size: 28px;
+  font-weight: bold;
+}
+
+/* .close:hover, */
+/* .close:focus { */
+/*   /1* color: black; *1/ */
+/*   text-decoration: none; */
+/*   cursor: pointer; */
+/* } */

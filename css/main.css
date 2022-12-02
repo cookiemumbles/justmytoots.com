@@ -1,0 +1,117 @@
+@charset "UTF-8";
+@import '/css/base.css';
+@import '/css/icons.css';
+@import '/css/popup.css';
+
+a {
+  display: block;
+}
+
+.centeredbody {
+  width:100%;
+  display: flex;
+  justify-content: center;
+}
+
+li {
+  padding: 12px 16px;
+  border: 1px solid;
+  border-color: var(--tColorDark2);
+}
+
+
+/* HEADER */
+
+#header {
+  margin-bottom: 1em;
+}
+
+
+/* TWEETS */
+
+#tweet_list_wrap {
+  border-width: 0 1px;
+}
+#tweet_list {
+  border-width: 1px 0 0 0;
+}
+
+.single_tweet_wrap {
+  display: flex;
+}
+
+.single_tweet_li {
+  padding: 1px;
+  border-width: 0 0 1px 0;
+}
+
+.tweet_textarea {
+  flex: 1;
+  border: none;
+  overflow: auto;
+  margin: 10px 0 10px 5px;
+  width: 100%;
+}
+
+.tweet_text {
+  flex: 1;
+  border: none;
+  margin: 10px;
+  width: 100%;
+}
+
+.btn_bar_item {
+  width: 20px;
+  margin-left: 1em;
+}
+
+/* TODO: split in disabled/enabled versions*/
+.svg_button {
+  fill: var(--tColorLight2);
+}
+/* .svg_button:hover { */
+/*   fill: var(--tColorBlue); */
+/* } */
+
+.svg_button_like_active {
+  fill: var(--tColorBlue);
+}
+
+.avi {
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.twit_pic {
+  margin: 4px;
+  border-radius: 5%;
+  width: 270px;
+  height: auto;
+}
+
+.tweet_header {
+  display:flex;
+}
+
+.tweet_user_name {
+  font-weight: bold;
+  margin-right: 3px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tweet_screen_name {
+  font-weight: lighter;
+  color: #aaa;
+}
+
+.list_style {
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+ul.actual_list {
+  list-style: disc;
+  padding-left: 1em;
+}
+

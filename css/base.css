@@ -1,0 +1,78 @@
+@charset "UTF-8";
+:root {
+    --font: '-apple-system', 'BlinkMacSystemFont', "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --hfont: 'Roboto Condensed', sans-serif;
+    --fontSize: 16;
+
+    --tColorDark: rgb(21, 32, 43);
+    --tColorDark3: rgb(25, 39, 52);
+    --tColorDark2: rgb(56, 68, 77);
+    --tColorLight: rgb(255,255,255);
+    --tColorLight2: rgb(110, 118, 125);
+
+    --tColorBlue: #1da1f2;
+    
+    
+    --bgColor: var(--tColorDark);
+    --textColor: var(--tColorLight);
+    --selectedColor: var(--tColorBlue);
+}
+
+/* GENERAL */
+
+body {
+  font-family: var(--font);
+  font-size: var(--fontSize);
+  color: var(--textColor);
+  background-color: var(--bgColor);
+  padding: 0;
+  margin: 0;
+
+  text-decoration: none;
+}
+
+textarea {
+  border: none;
+  overflow: auto;
+  font-size: var(--fontSize);
+  font-family: var(--font);
+  color: var(--textColor);
+  background-color: var(--bgColor);
+  resize: none; /*remove the resize handle on the bottom right*/
+}
+
+button {
+  background-color: var(--bgColor);
+  color: var(--tColorLight2);
+  font-size: var(--fontSize);
+  text-align: center;
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+a {
+  color: var(--textColor);
+  text-decoration: none;
+}
+
+a:hover {
+  /* color: var(--tColorBlue); */
+  /* TODO: Makes text of clickable toots blue on hover*/
+}
+
+#content {
+  width: 600px;
+}
+
+
+.bordered {
+  border: 1px solid;
+  border-color: var(--tColorDark2);
+}
