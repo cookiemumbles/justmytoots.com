@@ -1,5 +1,6 @@
 import JRequest from '/js/utils/JRequest.js';
 import TootHtmlBuilder from '/js/ui/TootHtmlBuilder.js';
+import { wrapIn, createElement } from '/js/ui/HtmlBuilder.js';
 
 var accountInfo = null
 var lastTootId = null
@@ -11,9 +12,13 @@ function main() {
   // TODO: implement
   // popup()
 
-  var handle = "cookie_mumbles@ohai.social"
   if (urlParams.has('acct')) {
     var handle = urlParams.get('acct')
+  } else if (window.location.pathname != "/") {
+    var handle = window.location.pathname.slice(1)
+  } else {
+    displayMissingUserMessage()
+    return
   }
 
   getAccountInfo(handle, function (resultAccountInfo) {
@@ -143,6 +148,29 @@ function popup() {
           modal.style.display = "none";
     }
   } 
+}
+
+function displayMissingUserMessage() {
+  document.getElementById("loader_wrapper").innerHTML = ''
+
+  const container = document.getElementById("tweet_list")
+  container.innerHTML = '';
+  container.appendChild(
+    wrapIn('li',
+      { class: 'bordered single_tweet_li', tabindex: 1 },
+      wrapIn('div', { class: "single_tweet_wrap" },
+          wrapIn('div', {class:"tweet_text"},
+            createElement("div", {}, 
+              "<p>"
+              + "Please provide a user identifier in the url. For example like this:</br>"
+              + "<a href='https://justmytoots.com/cookie_mumbles@ohai.social'>https://justmytoots.com/cookie_mumbles@ohai.social</a>"
+              + "</p>"
+            )
+          )
+      )
+    )
+
+  );
 }
 
 document.addEventListener("DOMContentLoaded", function(){
