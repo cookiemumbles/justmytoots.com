@@ -4,8 +4,33 @@
 @import '/css/popup.css';
 
 a {
+  color: var(--text_color);
+  text-decoration: none;
   display: block;
 }
+
+a:hover {
+  /* color: var(--color_blue); */
+  /* TODO: Makes text of clickable toots blue on hover*/
+}
+
+#content {
+  width: 600px;
+
+  /* These are technically the same, but use both */
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+
+  -ms-word-break: break-word;
+  word-break: break-word;
+}
+
+
+.bordered {
+  border: 1px solid;
+  border-color: var(--color_dark2);
+}
+
 
 .centeredbody {
   width:100%;
