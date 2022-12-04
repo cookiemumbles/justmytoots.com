@@ -85,10 +85,6 @@ li {
   width: 100%;
 }
 
-.btn_bar_item {
-  margin-left: 1em;
-}
-
 .snac_icon {
   margin-right: 0.2em;
 }
@@ -131,7 +127,18 @@ li {
 
 .tweet_footer {
   display:flex;
-  justify-content: center;
+}
+
+.toot_footer_item {
+  flex: 1;
+  display:flex;
+}
+
+.toot_footer_btn {
+  margin-right: 1em;
+}
+
+.toot_footer_txt {
 }
 
 .tweet_user_name {
