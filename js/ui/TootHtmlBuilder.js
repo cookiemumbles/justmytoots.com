@@ -13,9 +13,10 @@ export default class TootHtmlBuilder {
       { class: 'bordered single_tweet_li', tabindex: 1 },
       wrapIn('div', {
         class: "single_tweet_wrap" ,
-        'data-tweet-user': acct,
-        'data-tweet-user-id': acctId,
-        'data-tweet-id':toot["id"]
+        'data-toot-user': acct,
+        'data-toot-user-id': acctId,
+        'data-toot-id':toot["id"],
+        'data-toot-url':toot['url'],
       },
         [
           wrapIn('div', {},
@@ -34,7 +35,7 @@ export default class TootHtmlBuilder {
                 return createElement('img', { class: "twit_pic", src: attatchment['preview_url']})
               })
             ),
-            wrapIn('div', { class: "tweet_header"},
+            wrapIn('div', { class: "tweet_footer"},
               [
                 createSvgRef("svg_icon_retweet_active",
                   {
@@ -50,6 +51,12 @@ export default class TootHtmlBuilder {
                   }
                 ),
                 createElement('div', {class:"btn_bar_item"}, toot['favourites_count']),
+                createSvgRef("svg_icon_copy",
+                  {
+                    class:"btn_bar_item svg_button btn_copy_toot",
+                    width:"24", height:"24"
+                  }
+                ),
               ]
             ),
           ]),

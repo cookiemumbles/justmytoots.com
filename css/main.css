@@ -86,7 +86,6 @@ li {
 }
 
 .btn_bar_item {
-  width: 20px;
   margin-left: 1em;
 }
 
@@ -116,6 +115,11 @@ li {
 
 .tweet_header {
   display:flex;
+}
+
+.tweet_footer {
+  display:flex;
+  justify-content: center;
 }
 
 .tweet_user_name {
