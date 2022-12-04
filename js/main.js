@@ -40,7 +40,7 @@ function addCopyListeners() {
     .forEach(currentButton => {
       currentButton.addEventListener('click', event => {
         const prentDiv = event.target.closest('.single_tweet_wrap');
-        console.log("Clicked copy:" + prentDiv.dataset.tootUrl)
+        // console.log("Clicked copy:" + prentDiv.dataset.tootUrl)
         copyToClipboard(prentDiv.dataset.tootUrl)
 
         showSnacbar("Copied toot url. Now paste it in your mastodon search.", "success")
@@ -107,7 +107,7 @@ function loadPageContent(accountInfo, lastId) {
     loaderOn()
 
     getUserToots(accountInfo, lastId, function (toots) {
-      console.log("toots:", toots)
+      // console.log("toots:", toots)
 
       toots.forEach(toot => {
         document.getElementById('tweet_list')
