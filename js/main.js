@@ -36,14 +36,43 @@ function main() {
 
 function addCopyListeners() {
   Array
-    .from(document.getElementsByClassName("btn_copy_toot"))
+    .from(document.getElementsByClassName("btn_action_copy"))
     .forEach(currentButton => {
       currentButton.addEventListener('click', event => {
         const prentDiv = event.target.closest('.single_tweet_wrap');
         console.log("Clicked copy:" + prentDiv.dataset.tootUrl)
         copyToClipboard(prentDiv.dataset.tootUrl)
+
+        showSnacbar("Copied toot url. Now paste it in your mastodon search.")
       });
     })
+  Array
+    .from(document.getElementsByClassName("btn_action_boost"))
+    .forEach(currentButton => {
+      currentButton.addEventListener('click', event => {
+        showSnacbar("Not (yet) supported. Copy link to toot instead.")
+      });
+    })
+  Array
+    .from(document.getElementsByClassName("btn_action_favorite"))
+    .forEach(currentButton => {
+      currentButton.addEventListener('click', event => {
+        showSnacbar("Not (yet) supported. Copy link to toot instead.")
+      });
+    })
+}
+
+function showSnacbar(text) {
+  var snackbar = document.getElementById("snackbar");
+
+  snackbar.className = "show";
+  snackbar.innerHTML = text
+
+  // After 4 seconds, remove the show class from DIV
+  setTimeout(
+    function(){ snackbar.className = snackbar.className.replace("show", ""); },
+    4000
+  );
 }
 
 function loadPageContent(accountInfo, lastId) {

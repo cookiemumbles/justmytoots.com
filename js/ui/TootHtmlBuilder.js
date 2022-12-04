@@ -39,21 +39,21 @@ export default class TootHtmlBuilder {
               [
                 createSvgRef("svg_icon_retweet_active",
                   {
-                    class:"btn_bar_item svg_button",
+                    class:"btn_bar_item svg_button btn_action_boost",
                     width:"24", height:"24"
                   }
                 ),
                 createElement('div', {class:"btn_bar_item"}, toot['reblogs_count']),
                 createSvgRef("svg_icon_star",
                   {
-                    class:"btn_bar_item svg_button",
+                    class:"btn_bar_item svg_button btn_action_favorite",
                     width:"24", height:"24"
                   }
                 ),
                 createElement('div', {class:"btn_bar_item"}, toot['favourites_count']),
                 createSvgRef("svg_icon_copy",
                   {
-                    class:"btn_bar_item svg_button btn_copy_toot",
+                    class:"btn_bar_item svg_button btn_action_copy",
                     width:"24", height:"24"
                   }
                 ),
