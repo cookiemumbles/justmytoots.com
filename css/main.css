@@ -89,13 +89,25 @@ li {
   margin-left: 1em;
 }
 
-/* TODO: split in disabled/enabled versions*/
+.snac_icon {
+  margin-right: 0.2em;
+}
+
+.svg_icon {
+  fill: var(--color_light2);
+}
+
 .svg_button {
   fill: var(--color_light2);
 }
-/* .svg_button:hover { */
-/*   fill: var(--color_blue); */
-/* } */
+.svg_button:hover {
+  fill: var(--color_blue);
+}
+
+.svg_icon_line {
+  stroke: var(--color_light2);
+  fill: var(--color_dark2);
+}
 
 .svg_button_like_active {
   fill: var(--color_blue);

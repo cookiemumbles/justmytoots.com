@@ -1,6 +1,6 @@
 import JRequest from '/js/utils/JRequest.js';
 import TootHtmlBuilder from '/js/ui/TootHtmlBuilder.js';
-import { wrapIn, createElement } from '/js/ui/HtmlBuilder.js';
+import { wrapIn, createElement, createSvgRef } from '/js/ui/HtmlBuilder.js';
 
 var accountInfo = null
 var lastTootId = null
@@ -43,7 +43,7 @@ function addCopyListeners() {
         console.log("Clicked copy:" + prentDiv.dataset.tootUrl)
         copyToClipboard(prentDiv.dataset.tootUrl)
 
-        showSnacbar("Copied toot url. Now paste it in your mastodon search.")
+        showSnacbar("Copied toot url. Now paste it in your mastodon search.", "success")
       });
     })
   Array
@@ -62,15 +62,42 @@ function addCopyListeners() {
     })
 }
 
-function showSnacbar(text) {
+function showSnacbar(text, type) {
   var snackbar = document.getElementById("snackbar");
 
-  snackbar.className = "show";
-  snackbar.innerHTML = text
+  snackbar.classList.toggle("show");
+  snackbar.innerHTML = ""
+  if (type == 'success') {
+    snackbar.appendChild(
+      createSvgRef("svg_icon_success",
+        {
+          class:"snac_icon svg_icon",
+          width:"24", height:"24"
+        }
+      )
+    )
+  } else {
+    snackbar.appendChild(
+      createSvgRef("svg_icon_error",
+        {
+          class:"snac_icon svg_icon_line",
+          width:"24", height:"24"
+        }
+      )
+    )
+  }
+
+  snackbar.appendChild(
+    createElement(
+      'div',
+      { class:'tweet_header'},
+      text
+    ),
+  )
 
   // After 4 seconds, remove the show class from DIV
   setTimeout(
-    function(){ snackbar.className = snackbar.className.replace("show", ""); },
+    function(){ snackbar.classList.toggle("show"); },
     4000
   );
 }
