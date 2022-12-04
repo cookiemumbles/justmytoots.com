@@ -42,14 +42,14 @@ export default class TootHtmlBuilder {
                     width:"24", height:"24"
                   }
                 ),
-                createElement('div', {class:"btn_bar_item"}, toot['favourites_count']),
+                createElement('div', {class:"btn_bar_item"}, toot['reblogs_count']),
                 createSvgRef("svg_icon_star",
                   {
                     class:"btn_bar_item svg_button",
                     width:"24", height:"24"
                   }
                 ),
-                createElement('div', {class:"btn_bar_item"}, toot['reblogs_count']),
+                createElement('div', {class:"btn_bar_item"}, toot['favourites_count']),
               ]
             ),
           ]),
