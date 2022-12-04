@@ -19,13 +19,13 @@ export default class TootHtmlBuilder {
         'data-toot-url':toot['url'],
       },
         [
-          wrapIn('div', {},
+          wrapIn('div', {class: "avi_container"},
             createElement('img', { class: "avi", src: toot["account"]["avatar"], width:'48px', height:'48px' })
           ),
-          wrapIn('div', {class:"tweet_text"}, [
+          wrapIn('div', {class:"toot_content"}, [
             wrapIn('div', { class: "tweet_header"}, [
-              createElement('div', { class: "tweet_user_name" }, displayName),
-              createElement('div', { class: "tweet_screen_name" }, '@' + acct ),
+              createElement('div', { class: "toot_user_name" }, displayName),
+              createElement('div', { class: "toot_screen_name" }, '@' + acct ),
             ]),
             wrapIn('a', {href: toot['url']}, [
               createElement('div', {}, text),

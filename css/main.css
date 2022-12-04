@@ -25,13 +25,6 @@ a:hover {
   word-break: break-word;
 }
 
-
-.bordered {
-  border: 1px solid;
-  border-color: var(--color_dark2);
-}
-
-
 .centeredbody {
   width:100%;
   display: flex;
@@ -44,15 +37,17 @@ li {
   border-color: var(--color_dark2);
 }
 
-
-/* HEADER */
+.bordered {
+  border: 1px solid;
+  border-color: var(--color_dark2);
+}
 
 #header {
   margin-bottom: 1em;
 }
 
 
-/* TWEETS */
+/* TOOT CONTAINERS */
 
 #tweet_list_wrap {
   border-width: 0 1px;
@@ -70,20 +65,73 @@ li {
   border-width: 0 0 1px 0;
 }
 
-.tweet_textarea {
-  flex: 1;
-  border: none;
-  overflow: auto;
-  margin: 10px 0 10px 5px;
-  width: 100%;
+
+/* TOOT CONTENT */
+
+.avi_container {
+  margin-left: 5px;
+  margin-top: 10px;
+}
+.avi {
+  object-fit: cover;
+  border-radius: 50%;
 }
 
-.tweet_text {
+/* TOOT HEADER */
+
+.tweet_header {
+  display:flex;
+}
+
+.toot_user_name {
+  font-weight: bold;
+  margin-right: 3px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.toot_screen_name {
+  font-weight: lighter;
+  color: #aaa;
+}
+
+/* TOOT CONTENT */
+
+.toot_content {
   flex: 1;
   border: none;
   margin: 10px;
   width: 100%;
 }
+
+.twit_pic {
+  margin: 4px;
+  border-radius: 5%;
+  width: 270px;
+  height: auto;
+}
+
+/* TOOT FOOTER */
+
+.tweet_footer {
+  display:flex;
+}
+
+.toot_footer_item {
+  flex: 1;
+  display:flex;
+}
+
+.toot_footer_btn {
+  margin-right: 1em;
+}
+
+.toot_footer_txt {
+}
+
+
+/* ** */
+
 
 .snac_icon {
   margin-right: 0.2em;
@@ -108,58 +156,3 @@ li {
 .svg_button_like_active {
   fill: var(--color_blue);
 }
-
-.avi {
-  object-fit: cover;
-  border-radius: 50%;
-}
-
-.twit_pic {
-  margin: 4px;
-  border-radius: 5%;
-  width: 270px;
-  height: auto;
-}
-
-.tweet_header {
-  display:flex;
-}
-
-.tweet_footer {
-  display:flex;
-}
-
-.toot_footer_item {
-  flex: 1;
-  display:flex;
-}
-
-.toot_footer_btn {
-  margin-right: 1em;
-}
-
-.toot_footer_txt {
-}
-
-.tweet_user_name {
-  font-weight: bold;
-  margin-right: 3px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.tweet_screen_name {
-  font-weight: lighter;
-  color: #aaa;
-}
-
-.list_style {
-  margin-left: 5px;
-  margin-right: 5px;
-}
-
-ul.actual_list {
-  list-style: disc;
-  padding-left: 1em;
-}
-
