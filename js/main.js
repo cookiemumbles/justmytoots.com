@@ -5,6 +5,9 @@ import { wrapIn, createElement, createSvgRef } from '/js/ui/HtmlBuilder.js';
 var accountInfo = null
 var lastTootId = null
 
+// NOTE:
+// Disable pagespeed: url/?PageSpeed=off
+// https://stackoverflow.com/a/49243560/3968618
 
 function main() {
   const urlParams = new URLSearchParams(window.location.search);
@@ -29,37 +32,76 @@ function main() {
     });
 
     loadPageContent(resultAccountInfo)
+    authorize(resultAccountInfo)
 
   })
 
 }
 
-function addCopyListeners() {
-  Array
-    .from(document.getElementsByClassName("btn_action_copy"))
-    .forEach(currentButton => {
-      currentButton.addEventListener('click', event => {
-        const prentDiv = event.target.closest('.single_tweet_wrap');
-        // console.log("Clicked copy:" + prentDiv.dataset.tootUrl)
-        copyToClipboard(prentDiv.dataset.tootUrl)
+function getAccountInfo(handle, userDataCallback) {
+  const splitAccount = handle.split("@")
+  const userData = {
+    handle: handle,
+    serverName: splitAccount[1],
+    userName: splitAccount[0],
+  }
 
-        showSnacbar("Copied toot url. Now paste it in your mastodon search.", "success")
-      });
+  JRequest
+        .get(`https://${userData.serverName}/api/v1/accounts/lookup?acct=${userData.handle}`)
+        .then(function (result) {
+          const resultUserData = JSON.parse(result)
+          // console.log('%j', resultUserData)
+          userData['id'] = resultUserData['id']
+          userData['avatar'] = resultUserData['avatar']
+          userData['display_name'] = resultUserData['display_name']
+          userData['url'] = resultUserData['url']
+          userDataCallback(userData)
+        })
+  return userData
+}
+
+function loadPageContent(accountInfo, lastId) {
+  if (!isLoading()) {
+    loaderOn()
+
+    getUserToots(accountInfo, lastId, function (toots) {
+      // console.log("toots:", toots)
+
+      toots.forEach(toot => {
+        document.getElementById('tweet_list')
+          .appendChild( new TootHtmlBuilder().createTootDomItem(toot) );
+      })
+      if (toots.length > 0) {
+        lastTootId = toots[toots.length - 1]['id']
+      }
+
+      loaderOff()
+      addCopyListeners()
+      window.addEventListener("scroll", checkInfiniteScroll);
     })
-  Array
-    .from(document.getElementsByClassName("btn_action_boost"))
-    .forEach(currentButton => {
-      currentButton.addEventListener('click', event => {
-        showSnacbar("Not (yet) supported. Copy link to toot instead.")
-      });
-    })
-  Array
-    .from(document.getElementsByClassName("btn_action_favorite"))
-    .forEach(currentButton => {
-      currentButton.addEventListener('click', event => {
-        showSnacbar("Not (yet) supported. Copy link to toot instead.")
-      });
-    })
+  }
+}
+
+function authorize(userData) {
+  const args = [
+    "response_type=code",
+    // "redirect_uri=urn:ietf:wg:oauth:2.0:oob",
+    // "redirect_uri=http%3A%2F%2Fstaging.justmytoots.com",
+
+    "redirect_uri=http://staging.justmytoots.com",
+    "scope=read+write+follow+push",
+  ]
+
+  JRequest
+        .get(
+          `https://techhub.social/oauth/authorize?${args.join("&")}`
+          // `https://techhub.social/api/v1/apps/verify_credentials`
+          )
+        .then(function (result) {
+          const resultUserData = JSON.parse(result)
+          console.log('RESULT:', resultUserData)
+        })
+// https://mastodon.example/oauth/authorize
 }
 
 function showSnacbar(text, type) {
@@ -102,49 +144,32 @@ function showSnacbar(text, type) {
   );
 }
 
-function loadPageContent(accountInfo, lastId) {
-  if (!isLoading()) {
-    loaderOn()
+function addCopyListeners() {
+  Array
+    .from(document.getElementsByClassName("btn_action_copy"))
+    .forEach(currentButton => {
+      currentButton.addEventListener('click', event => {
+        const prentDiv = event.target.closest('.single_tweet_wrap');
+        // console.log("Clicked copy:" + prentDiv.dataset.tootUrl)
+        copyToClipboard(prentDiv.dataset.tootUrl)
 
-    getUserToots(accountInfo, lastId, function (toots) {
-      // console.log("toots:", toots)
-
-      toots.forEach(toot => {
-        document.getElementById('tweet_list')
-          .appendChild( new TootHtmlBuilder().createTootDomItem(toot) );
-      })
-      if (toots.length > 0) {
-        lastTootId = toots[toots.length - 1]['id']
-      }
-
-      loaderOff()
-      addCopyListeners()
-      window.addEventListener("scroll", checkInfiniteScroll);
+        showSnacbar("Copied toot url. Now paste it in your mastodon search.", "success")
+      });
     })
-  }
-
-}
-
-function getAccountInfo(handle, userDataCallback) {
-  const splitAccount = handle.split("@")
-  const userData = {
-    handle: handle,
-    serverName: splitAccount[1],
-    userName: splitAccount[0],
-  }
-
-  JRequest
-        .get(`https://${userData.serverName}/api/v1/accounts/lookup?acct=${userData.handle}`)
-        .then(function (result) {
-          const resultUserData = JSON.parse(result)
-          // console.log('%j', resultUserData)
-          userData['id'] = resultUserData['id']
-          userData['avatar'] = resultUserData['avatar']
-          userData['display_name'] = resultUserData['display_name']
-          userData['url'] = resultUserData['url']
-          userDataCallback(userData)
-        })
-  return userData
+  Array
+    .from(document.getElementsByClassName("btn_action_boost"))
+    .forEach(currentButton => {
+      currentButton.addEventListener('click', event => {
+        showSnacbar("Not (yet) supported. Copy link to toot instead.")
+      });
+    })
+  Array
+    .from(document.getElementsByClassName("btn_action_favorite"))
+    .forEach(currentButton => {
+      currentButton.addEventListener('click', event => {
+        showSnacbar("Not (yet) supported. Copy link to toot instead.")
+      });
+    })
 }
 
 function getUserToots(userData, lastId, callback) {
