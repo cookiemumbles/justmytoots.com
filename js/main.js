@@ -1,6 +1,8 @@
 import JRequest from '/js/utils/JRequest.js';
+import { copyToClipboard } from '/js/utils/System.js';
 import TootHtmlBuilder from '/js/ui/TootHtmlBuilder.js';
 import { wrapIn, createElement, createSvgRef } from '/js/ui/HtmlBuilder.js';
+import { showSnacbar } from '/js/ui/Snacbar.js';
 
 var accountInfo = null
 var lastTootId = null
@@ -32,7 +34,7 @@ function main() {
     });
 
     loadPageContent(resultAccountInfo)
-    authorize(resultAccountInfo)
+    // authorize(resultAccountInfo)
 
   })
 
@@ -102,46 +104,6 @@ function authorize(userData) {
           console.log('RESULT:', resultUserData)
         })
 // https://mastodon.example/oauth/authorize
-}
-
-function showSnacbar(text, type) {
-  var snackbar = document.getElementById("snackbar");
-
-  snackbar.classList.toggle("show");
-  snackbar.innerHTML = ""
-  if (type == 'success') {
-    snackbar.appendChild(
-      createSvgRef("svg_icon_success",
-        {
-          class:"snac_icon svg_icon",
-          width:"24", height:"24"
-        }
-      )
-    )
-  } else {
-    snackbar.appendChild(
-      createSvgRef("svg_icon_error",
-        {
-          class:"snac_icon svg_icon_line",
-          width:"24", height:"24"
-        }
-      )
-    )
-  }
-
-  snackbar.appendChild(
-    createElement(
-      'div',
-      { class:'tweet_header'},
-      text
-    ),
-  )
-
-  // After 4 seconds, remove the show class from DIV
-  setTimeout(
-    function(){ snackbar.classList.toggle("show"); },
-    4000
-  );
 }
 
 function addCopyListeners() {
@@ -267,40 +229,6 @@ function displayMissingUserMessage() {
 
   );
 }
-
-// from: https://stackoverflow.com/a/33928558/3968618
-// Copies a string to the clipboard. Must be called from within an
-// event handler such as click. May return false if it failed, but
-// this is not always possible. Browser support for Chrome 43+,
-// Firefox 42+, Safari 10+, Edge and Internet Explorer 10+.
-// Internet Explorer: The clipboard feature may be disabled by
-// an administrator. By default a prompt is shown the first
-// time the clipboard is used (per session).
-function copyToClipboard(text) {
-    if (window.clipboardData && window.clipboardData.setData) {
-        // Internet Explorer-specific code path to prevent textarea being shown while dialog is visible.
-        return window.clipboardData.setData("Text", text);
-
-    }
-    else if (document.queryCommandSupported && document.queryCommandSupported("copy")) {
-        var textarea = document.createElement("textarea");
-        textarea.textContent = text;
-        textarea.style.position = "fixed";  // Prevent scrolling to bottom of page in Microsoft Edge.
-        document.body.appendChild(textarea);
-        textarea.select();
-        try {
-            return document.execCommand("copy");  // Security exception may be thrown by some browsers.
-        }
-        catch (ex) {
-            console.warn("Copy to clipboard failed.", ex);
-            return prompt("Copy to clipboard: Ctrl+C, Enter", text);
-        }
-        finally {
-            document.body.removeChild(textarea);
-        }
-    }
-}
-
 
 document.addEventListener("DOMContentLoaded", function(){
   main();
