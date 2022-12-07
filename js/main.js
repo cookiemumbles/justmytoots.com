@@ -12,21 +12,16 @@ var lastTootId = null
 // https://stackoverflow.com/a/49243560/3968618
 
 function main() {
-  const urlParams = new URLSearchParams(window.location.search);
 
-  // TODO: implement
-  // popup()
-
-  if (urlParams.has('acct')) {
-    var handle = urlParams.get('acct')
-  } else if (window.location.pathname != "/") {
-    var handle = window.location.pathname.slice(1)
-  } else {
-    displayMissingUserMessage()
+  var userData
+  try {
+    userData = getUserData()
+  } catch (e) {
+    displayMissingUserMessage(e)
     return
   }
 
-  getAccountInfo(handle, function (resultAccountInfo) {
+  getAccountInfo(userData, function (resultAccountInfo) {
     accountInfo = resultAccountInfo
 
     document.getElementById('down_arrow').addEventListener('click', function() {
@@ -40,14 +35,40 @@ function main() {
 
 }
 
-function getAccountInfo(handle, userDataCallback) {
+function getUserData() {
+  var userData = {}
+  var handle = getUserHandle()
   const splitAccount = handle.split("@")
-  const userData = {
-    handle: handle,
-    serverName: splitAccount[1],
-    userName: splitAccount[0],
+  if (splitAccount.length == 2) {
+    userData.handle = handle
+    userData.serverName = splitAccount[1]
+    userData.userName = splitAccount[0]
+  } else if (splitAccount.length == 3) {
+    userData.handle = handle
+    if (splitAccount[0] != "" || splitAccount[2] == "") {
+      throw new Error(`Invalid username ${handle}`)
+    }
+    userData.serverName = splitAccount[2]
+    userData.userName = splitAccount[1]
+  } else {
+    throw new Error(`Invalid username ${handle}`)
   }
 
+  return userData
+}
+
+function getUserHandle() {
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.has('acct')) {
+    return urlParams.get('acct')
+  } else if (window.location.pathname != "/") {
+    return window.location.pathname.slice(1)
+  } else {
+    throw new Error("No username found.")
+  }
+}
+
+function getAccountInfo(userData, userDataCallback) {
   JRequest
         .get(`https://${userData.serverName}/api/v1/accounts/lookup?acct=${userData.handle}`)
         .then(function (result) {
@@ -207,8 +228,9 @@ function popup() {
   } 
 }
 
-function displayMissingUserMessage() {
+function displayMissingUserMessage(error) {
   document.getElementById("loader_wrapper").innerHTML = ''
+  console.log("e", error.message)
 
   const container = document.getElementById("tweet_list")
   container.innerHTML = '';
@@ -219,8 +241,9 @@ function displayMissingUserMessage() {
           wrapIn('div', {class:"tweet_text"},
             createElement("div", {}, 
               "<p>"
+              + `<h3>ERROR: ${error.message}</h3>`
               + "Please provide a user identifier in the url. For example like this:</br>"
-              + "<a href='https://justmytoots.com/cookie_mumbles@ohai.social'>https://justmytoots.com/cookie_mumbles@ohai.social</a>"
+              + "<a href='https://justmytoots.com/@cookie_mumbles@ohai.social'>https://justmytoots.com/@cookie_mumbles@ohai.social</a>"
               + "</p>"
             )
           )
