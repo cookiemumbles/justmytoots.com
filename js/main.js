@@ -3,15 +3,20 @@ import { copyToClipboard } from '/js/utils/System.js';
 import TootHtmlBuilder from '/js/ui/TootHtmlBuilder.js';
 import { wrapIn, createElement, createSvgRef } from '/js/ui/HtmlBuilder.js';
 import { showSnacbar } from '/js/ui/Snacbar.js';
+import { test_toots } from '/js/testData.js';
 
 var accountInfo = null
 var lastTootId = null
+
+var verbose = false
+var useTestData = false
 
 // NOTE:
 // Disable pagespeed: url/?PageSpeed=off
 // https://stackoverflow.com/a/49243560/3968618
 
 function main() {
+  loadConfig()
 
   var userData
   try {
@@ -21,18 +26,33 @@ function main() {
     return
   }
 
-  getAccountInfo(userData, function (resultAccountInfo) {
-    accountInfo = resultAccountInfo
+  if (!useTestData) {
+    getAccountInfo(userData, function (resultAccountInfo) {
+      logI("userData:", userData)
+      accountInfo = resultAccountInfo
 
-    document.getElementById('down_arrow').addEventListener('click', function() {
-      loadPageContent(accountInfo, lastTootId)
-    });
+      document.getElementById('down_arrow').addEventListener('click', function() {
+        loadPageContent(accountInfo, lastTootId)
+      });
 
-    loadPageContent(resultAccountInfo)
-    // authorize(resultAccountInfo)
+      loadPageContent(resultAccountInfo)
+      // authorize(resultAccountInfo)
 
-  })
+    })
+  } else {
+    loadToots(test_toots)
+  }
 
+}
+
+function loadConfig() {
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.has('verbose')) {
+    verbose = true
+  }
+  if (urlParams.has('testdata')) {
+    useTestData = true
+  }
 }
 
 function getUserData() {
@@ -59,10 +79,10 @@ function getUserData() {
 
 function getUserHandle() {
   const urlParams = new URLSearchParams(window.location.search);
-  if (urlParams.has('acct')) {
-    return urlParams.get('acct')
-  } else if (window.location.pathname != "/") {
+  if (window.location.pathname != "/") {
     return window.location.pathname.slice(1)
+  } else if (urlParams.has('acct')) {
+    return urlParams.get('acct')
   } else {
     throw new Error("No username found.")
   }
@@ -87,22 +107,25 @@ function loadPageContent(accountInfo, lastId) {
   if (!isLoading()) {
     loaderOn()
 
-    getUserToots(accountInfo, lastId, function (toots) {
-      // console.log("toots:", toots)
-
-      toots.forEach(toot => {
-        document.getElementById('tweet_list')
-          .appendChild( new TootHtmlBuilder().createTootDomItem(toot) );
-      })
-      if (toots.length > 0) {
-        lastTootId = toots[toots.length - 1]['id']
-      }
-
-      loaderOff()
-      addCopyListeners()
-      window.addEventListener("scroll", checkInfiniteScroll);
-    })
+    getUserToots(accountInfo, lastId, loadToots)
   }
+}
+
+function loadToots(toots) {
+  logI("toots:", toots)
+
+  toots.forEach(toot => {
+    document.getElementById('tweet_list')
+      .appendChild( new TootHtmlBuilder().createTootDomItem(toot) );
+  })
+  if (toots.length > 0) {
+    lastTootId = toots[toots.length - 1]['id']
+  }
+
+  loaderOff()
+  addCopyListeners()
+  window.addEventListener("scroll", checkInfiniteScroll);
+
 }
 
 function authorize(userData) {
@@ -251,6 +274,16 @@ function displayMissingUserMessage(error) {
     )
 
   );
+}
+
+function log(...output) {
+  console.log(...output)
+}
+
+function logI(...output) {
+  if (verbose) {
+    console.log(...output)
+  }
 }
 
 document.addEventListener("DOMContentLoaded", function(){
