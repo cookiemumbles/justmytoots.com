@@ -83,6 +83,11 @@ li {
   display:flex;
 }
 
+.toot_header_names {
+  flex: 1;
+  display:flex;
+}
+
 .toot_user_name {
   font-weight: bold;
   margin-right: 3px;
@@ -92,7 +97,13 @@ li {
 
 .toot_screen_name {
   font-weight: lighter;
-  color: #aaa;
+  color: var(--color_light3);
+  text-overflow: ellipsis;
+}
+
+.toot_time {
+  align-self: end;
+  color: var(--color_light2);
 }
 
 /* TOOT CONTENT */

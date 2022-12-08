@@ -24,8 +24,11 @@ export default class TootHtmlBuilder {
           ),
           wrapIn('div', {class:"toot_content"}, [
             wrapIn('div', { class: "tweet_header"}, [
-              createElement('div', { class: "toot_user_name" }, displayName),
-              createElement('div', { class: "toot_screen_name" }, '@' + acct ),
+              wrapIn('div', { class: "toot_header_names"}, [
+                createElement('div', { class: "toot_user_name" }, displayName),
+                createElement('div', { class: "toot_screen_name" }, '@' + acct ),
+              ]),
+              createElement('div', { class: "toot_time" }, this.dateToString(toot.created_at) ),
             ]),
             wrapIn('a', {href: toot['url']}, [
               createElement('div', {}, text),
@@ -68,6 +71,25 @@ export default class TootHtmlBuilder {
   }
 
 
+  dateToString(date) {
+    let millis = Date.now() - Date.parse(date)
+    let minutes = millis / 60000
+
+    switch (true) {
+      case minutes < 1:
+        return "< 1m"
+      case minutes < 60:
+        return minutes.toFixed() + "m"
+        break;
+      case (minutes / 60 < 24):
+        return (minutes / 60).toFixed() + "h"
+      default:
+        let month = new Date(date).toLocaleString('default', { month: 'short' });
+        let day = new Date(date).getDate();
+        return `${month} ${day}`
+      break;
+    }
+  }
 
 }
 
