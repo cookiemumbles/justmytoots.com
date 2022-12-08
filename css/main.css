@@ -101,6 +101,16 @@ li {
   text-overflow: ellipsis;
 }
 
+.content_warning {
+  font-weight: lighter;
+  /* font-style: italic; */
+  padding: 0.4em;
+}
+
+.blur {
+  filter: blur(10px);
+}
+
 .toot_time {
   align-self: end;
   color: var(--color_light2);

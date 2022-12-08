@@ -15,8 +15,8 @@ export default class TootHtmlBuilder {
         class: "single_tweet_wrap" ,
         'data-toot-user': acct,
         'data-toot-user-id': acctId,
-        'data-toot-id':toot["id"],
-        'data-toot-url':toot['url'],
+        'data-toot-id': toot.id,
+        'data-toot-url': toot.url,
       },
         [
           wrapIn('div', {class: "avi_container"},
@@ -30,12 +30,23 @@ export default class TootHtmlBuilder {
               ]),
               createElement('div', { class: "toot_time" }, this.dateToString(toot.created_at) ),
             ]),
+            wrapIn('div', {class:"toot_content_warning_container"},
+              (toot.sensitive) ? [
+                createElement('div', { class: "content_warning", 'data-toot-id': toot.id }, toot.spoiler_text)
+              ] : []
+            ),
             wrapIn('a', {href: toot['url']}, [
-              createElement('div', {}, text),
+              createElement('div', {
+                class: `hidden_${toot.id}`,
+                style: (toot.sensitive) ?  'visibility: hidden' : ''
+              }, text),
             ]),
             wrapIn('div', {},
               toot['media_attachments'].map(attatchment => {
-                return createElement('img', { class: "twit_pic", src: attatchment['preview_url']})
+                return createElement('img', {
+                  class: (toot.sensitive) ? `twit_pic hidden_${toot.id} blur` : 'twit_pic',
+                  src: attatchment['preview_url']
+                })
               })
             ),
             wrapIn('div', { class: "tweet_footer"},

@@ -126,6 +126,7 @@ function loadToots(toots) {
 
   loaderOff()
   addCopyListeners()
+  addContentWarningListeners()
   window.addEventListener("scroll", checkInfiniteScroll);
 
 }
@@ -176,6 +177,31 @@ function addCopyListeners() {
     .forEach(currentButton => {
       currentButton.addEventListener('click', event => {
         showSnacbar("Not (yet) supported. Copy link to toot instead.")
+      });
+    })
+}
+
+function addContentWarningListeners() {
+  Array
+    .from(document.getElementsByClassName("content_warning"))
+    .forEach(btnCW => {
+      btnCW.addEventListener('click', event => {
+
+        Array
+          .from(document.getElementsByClassName(`hidden_${event.target.dataset.tootId}`))
+          .forEach(hiddenElement => {
+            if (hiddenElement.nodeName == "IMG") {
+              hiddenElement.classList.toggle("blur");
+            } else {
+              if (hiddenElement.style.visibility == 'hidden') {
+                hiddenElement.style.visibility = 'visible'
+              } else {
+                hiddenElement.style.visibility = 'hidden'
+              }
+            }
+          })
+        
+        // showSnacbar(event.target.dataset.tootId)
       });
     })
 }
