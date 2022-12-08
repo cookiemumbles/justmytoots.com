@@ -1,15 +1,17 @@
 import JRequest from '/js/utils/JRequest.js';
 import { copyToClipboard } from '/js/utils/System.js';
 import TootHtmlBuilder from '/js/ui/TootHtmlBuilder.js';
-import { wrapIn, createElement, createSvgRef } from '/js/ui/HtmlBuilder.js';
 import { showSnacbar } from '/js/ui/Snacbar.js';
 import { test_toots } from '/js/testData.js';
+import { displayServerError, displayMissingUserMessage } from '/js/ui/ErrorScreen.js';
+import Logger from '/js/utils/Logger.js';
 
 var accountInfo = null
 var lastTootId = null
 
-var verbose = false
 var useTestData = false
+
+var log = new Logger()
 
 // NOTE:
 // Disable pagespeed: url/?PageSpeed=off
@@ -28,7 +30,7 @@ function main() {
 
   if (!useTestData) {
     getAccountInfo(userData, function (resultAccountInfo) {
-      logI("userData:", userData)
+      log.t("userData:", userData)
       accountInfo = resultAccountInfo
 
       document.getElementById('down_arrow').addEventListener('click', function() {
@@ -47,9 +49,6 @@ function main() {
 
 function loadConfig() {
   const urlParams = new URLSearchParams(window.location.search);
-  if (urlParams.has('verbose')) {
-    verbose = true
-  }
   if (urlParams.has('testdata')) {
     useTestData = true
   }
@@ -93,13 +92,16 @@ function getAccountInfo(userData, userDataCallback) {
         .get(`https://${userData.serverName}/api/v1/accounts/lookup?acct=${userData.handle}`)
         .then(function (result) {
           const resultUserData = JSON.parse(result)
-          // console.log('%j', resultUserData)
+          log.t('resultUserData:', resultUserData)
           userData['id'] = resultUserData['id']
           userData['avatar'] = resultUserData['avatar']
           userData['display_name'] = resultUserData['display_name']
           userData['url'] = resultUserData['url']
           userDataCallback(userData)
         })
+    .catch(error => {
+      displayServerError(error)
+    })
   return userData
 }
 
@@ -112,7 +114,7 @@ function loadPageContent(accountInfo, lastId) {
 }
 
 function loadToots(toots) {
-  logI("toots:", toots)
+  log.d("Loading toots:", toots)
 
   toots.forEach(toot => {
     document.getElementById('tweet_list')
@@ -145,7 +147,7 @@ function authorize(userData) {
           )
         .then(function (result) {
           const resultUserData = JSON.parse(result)
-          console.log('RESULT:', resultUserData)
+          log.i('RESULT:', resultUserData)
         })
 // https://mastodon.example/oauth/authorize
 }
@@ -156,7 +158,7 @@ function addCopyListeners() {
     .forEach(currentButton => {
       currentButton.addEventListener('click', event => {
         const prentDiv = event.target.closest('.single_tweet_wrap');
-        // console.log("Clicked copy:" + prentDiv.dataset.tootUrl)
+        log.d("Clicked copy:" + prentDiv.dataset.tootUrl)
         copyToClipboard(prentDiv.dataset.tootUrl)
 
         showSnacbar("Copied toot url. Now paste it in your mastodon search.", "success")
@@ -191,7 +193,7 @@ function getUserToots(userData, lastId, callback) {
     .get(`https://${userData.serverName}/api/v1/accounts/${userData.id}/statuses?${args.join("&")}`)
     .then(function (result) {
       const resultToots = JSON.parse(result)
-      // console.log("resultToots:", resultToots)
+      log.t("All toots returned:", resultToots)
 
       //TODO: maybe map with ID of last toot in case someone boosts a lot for infiniscroll
       callback(
@@ -249,41 +251,6 @@ function popup() {
           modal.style.display = "none";
     }
   } 
-}
-
-function displayMissingUserMessage(error) {
-  document.getElementById("loader_wrapper").innerHTML = ''
-  console.log("e", error.message)
-
-  const container = document.getElementById("tweet_list")
-  container.innerHTML = '';
-  container.appendChild(
-    wrapIn('li',
-      { class: 'bordered single_tweet_li', tabindex: 1 },
-      wrapIn('div', { class: "single_tweet_wrap" },
-          wrapIn('div', {class:"tweet_text"},
-            createElement("div", {}, 
-              "<p>"
-              + `<h3>ERROR: ${error.message}</h3>`
-              + "Please provide a user identifier in the url. For example like this:</br>"
-              + "<a href='https://justmytoots.com/@cookie_mumbles@ohai.social'>https://justmytoots.com/@cookie_mumbles@ohai.social</a>"
-              + "</p>"
-            )
-          )
-      )
-    )
-
-  );
-}
-
-function log(...output) {
-  console.log(...output)
-}
-
-function logI(...output) {
-  if (verbose) {
-    console.log(...output)
-  }
 }
 
 document.addEventListener("DOMContentLoaded", function(){
