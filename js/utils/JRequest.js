@@ -1,3 +1,5 @@
+import Logger from '/js/utils/Logger.js';
+
 export default class JRequest {
 
   static post(url, data) {
@@ -21,18 +23,30 @@ export default class JRequest {
       var xhr = new XMLHttpRequest();
       xhr.open(method, url);
       xhr.setRequestHeader('Content-Type','application/json')
-      xhr.setRequestHeader('Authorization','Bearer i7hZY-NCNw0kzIaeesttCg2i3pTQtjNEbb6EYGApO34')
       xhr.onload = function () {
         if (this.status >= 200 && this.status < 300) {
           resolve(xhr.response);
         } else {
-          reject(new Error("["+this.status+"] " + xhr.statusText + " (" + xhr.response + ")"));
+          reject(new Error(
+            `[${this.status}] ${xhr.statusText} (${xhr.response})`,
+            {cause: `Http status error connecting to ${url}`}
+          ));
         }
       };
       xhr.onerror = function () {
-        reject(new Error("["+this.status+"] " + xhr.statusText + " (" + xhr.response + ")"));
+        reject(new Error(
+          `Unable to connect to server.`,
+          {cause: `Unknown problem connecting to ${url}`}
+        ));
       };
-      console.log(`Requesting: ${url} with: ${JSON.stringify(jsonData)}`)
+      xhr.ontimeout = function() {
+        reject(new Error(
+          `Connection to server timed out.`,
+          {cause: `Timeout connecting to ${url}`}
+        ));
+      }
+
+      new Logger().d(`Requesting: ${url}`, JSON.stringify(jsonData))
       xhr.send(JSON.stringify(jsonData));
     });
   }
