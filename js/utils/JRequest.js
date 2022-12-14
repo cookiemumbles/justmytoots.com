@@ -1,4 +1,4 @@
-import Logger from '/js/utils/Logger.js';
+import Logger from './Logger.js';
 
 export default class JRequest {
 
@@ -18,11 +18,17 @@ export default class JRequest {
     return JRequest.request('GET', url, data);
   }
 
-  static request(method, url, jsonData) {
+  static request(method, url, jsonData, headers) {
     return new Promise(function (resolve, reject) {
       var xhr = new XMLHttpRequest();
       xhr.open(method, url);
-      xhr.setRequestHeader('Content-Type','application/json')
+      if (headers) {
+        for (let key in headers) {
+          xhr.setRequestHeader(key, headers[key])
+        }
+      } else {
+        xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8')
+      }
       xhr.onload = function () {
         if (this.status >= 200 && this.status < 300) {
           resolve(xhr.response);
@@ -46,8 +52,18 @@ export default class JRequest {
         ));
       }
 
-      new Logger().d(`Requesting: ${url}`, JSON.stringify(jsonData))
+
+      const log = new Logger()
+      log.d(`Requesting: ${url}`, jsonData)
+      log.t("headers:", headers)
+
       xhr.send(JSON.stringify(jsonData));
     });
   }
+}
+
+export function buildUrl(inputUrl, querryParams) {
+  const url = new URL(inputUrl);
+  url.search = new URLSearchParams(querryParams)
+  return url
 }

@@ -25,7 +25,7 @@
   position: relative;
   top: -5px;
   content: "";
-  display: inline-block;
+  display: none; /* inline-block */
   width: 30px;
   height: 30px;
   border-right: 0.3em solid var(--color_dark2);

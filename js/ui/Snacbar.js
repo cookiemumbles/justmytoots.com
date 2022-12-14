@@ -1,28 +1,38 @@
-import { createElement, createSvgRef } from '/js/ui/HtmlBuilder.js';
-
-export function showSnacbar(text, type) {
-  if (type == 'success') {
-    showSnac(
-      text, 
-      createSvgRef(
-        "svg_icon_success",
-        { class:"snac_icon svg_icon", width:"24", height:"24" }
-      )
-    )
-  } else {
-    showSnac(
-      text, 
-      createSvgRef(
-        "svg_icon_error",
-        { class:"snac_icon svg_icon_line", width:"24", height:"24" }
-      )
-    )
-  }
-}
+import { createElement, createSvgRef } from './HtmlBuilder.js';
 
 var latestSnaccbarTimeout = null
 var latestReshowTimeout = null
 
+/**
+ * @param {string} text
+ */
+export function showSnacSuccess(text) {
+  showSnac(
+    text, 
+    createSvgRef(
+      "svg_icon_success",
+      { class:"snac_icon svg_icon", width:"24", height:"24" }
+    )
+  )
+}
+
+/**
+ * @param {string} text
+ */
+export function showSnacError(text) {
+  showSnac(
+    text, 
+    createSvgRef(
+      "svg_icon_error",
+      { class:"snac_icon svg_icon_line", width:"24", height:"24" }
+    )
+  )
+}
+
+/**
+ * @param {string} text
+ * @param {SVGSVGElement} svgElement
+ */
 function showSnac(text, svgElement) {
   stopReshowTimer()
 
@@ -53,6 +63,10 @@ function stopReshowTimer() {
   }
 }
 
+/**
+ * @param {string} text
+ * @param {SVGSVGElement} svgElement
+ */
 function closeAndReopenSnacbarWithNewInfo(text, svgElement) {
     clearTimeout(latestSnaccbarTimeout)
     hideSnac()

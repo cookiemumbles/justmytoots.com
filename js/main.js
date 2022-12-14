@@ -1,15 +1,17 @@
-import JRequest from '/js/utils/JRequest.js';
-import { copyToClipboard } from '/js/utils/System.js';
-import TootHtmlBuilder from '/js/ui/TootHtmlBuilder.js';
-import { showSnacbar } from '/js/ui/Snacbar.js';
-import { test_toots } from '/js/testData.js';
-import { displayServerError, displayMissingUserMessage } from '/js/ui/ErrorScreen.js';
-import Logger from '/js/utils/Logger.js';
+import { copyToClipboard } from './utils/System.js';
+import TootHtmlBuilder from './ui/TootHtmlBuilder.js';
+import { showSnacError, showSnacSuccess } from './ui/Snacbar.js';
+import { test_toots } from './testData.js';
+import { displayServerError, displayMissingUserMessage } from './ui/ErrorScreen.js';
+import Logger from './utils/Logger.js';
+import { showHelpModal, showLoginModal } from './ui/Modal.js';
+import { setDataCookie, getDataCookie, appendDataCookie, deleteDataCookie } from './utils/Cookie.js';
+import MastodonApi from './utils/MastodonApi.js';
+import { addClickListenerForEachOfClass, addClickListenerForId, toggleHiddenElement } from './ui/Utils.js';
+import { clearCodeTokenFromUrl, getUserDataFromUrl } from './utils/Browser.js';
 
-var accountInfo = null
-var lastTootId = null
-
-var useTestData = false
+var g_targetUserData = null
+var g_lastTootId = null
 
 var log = new Logger()
 
@@ -18,222 +20,256 @@ var log = new Logger()
 // https://stackoverflow.com/a/49243560/3968618
 
 function main() {
-  loadConfig()
+  const urlParams = new URLSearchParams(window.location.search);
 
-  var userData
+  addInitialListeners()
   try {
-    userData = getUserData()
+    g_targetUserData = getUserDataFromUrl()
   } catch (e) {
     displayMissingUserMessage(e)
     return
   }
 
-  if (!useTestData) {
-    getAccountInfo(userData, function (resultAccountInfo) {
-      log.t("userData:", userData)
-      accountInfo = resultAccountInfo
-
-      document.getElementById('down_arrow').addEventListener('click', function() {
-        loadPageContent(accountInfo, lastTootId)
-      });
-
-      loadPageContent(resultAccountInfo)
-      // authorize(resultAccountInfo)
-
-    })
-  } else {
-    loadToots(test_toots)
-  }
-
-}
-
-function loadConfig() {
-  const urlParams = new URLSearchParams(window.location.search);
   if (urlParams.has('testdata')) {
-    useTestData = true
-  }
-}
-
-function getUserData() {
-  var userData = {}
-  var handle = getUserHandle()
-  const splitAccount = handle.split("@")
-  if (splitAccount.length == 2) {
-    userData.handle = handle
-    userData.serverName = splitAccount[1]
-    userData.userName = splitAccount[0]
-  } else if (splitAccount.length == 3) {
-    userData.handle = handle
-    if (splitAccount[0] != "" || splitAccount[2] == "") {
-      throw new Error(`Invalid username ${handle}`)
-    }
-    userData.serverName = splitAccount[2]
-    userData.userName = splitAccount[1]
-  } else {
-    throw new Error(`Invalid username ${handle}`)
+    loadToots(test_toots)
+    return
   }
 
-  return userData
-}
+  handleLoginPartTwoOrContinue()
+    .then(() => { 
+      const loginData = getDataCookie();
+      if ('bearer_token' in loginData) {
+        return MastodonApi
+          .verifyCredentials(loginData.server, loginData.client_id, loginData.bearer_token)
+          .then(() => {
+            log.i("credentials valid")
+            document.getElementById("btn_login").textContent = "Logout"
+            Promise.resolve(true)
+          })
+          .catch((/** @type {Error} */ error) => {
+            log.w("Credentials appear invalid. Deleting persisted values.");
+            log.e(error);
+            deleteDataCookie();
+            showSnacError("Login error. Please try again.")
+            Promise.resolve(false)
+          })
+      } else {
+        return Promise.resolve(false)
+      }
+    })
+    .then(() => {
+      const loginData = getDataCookie();
+      if ('bearer_token' in loginData) {
+        const loginData = getDataCookie();
+        return MastodonApi
+          .getAccountInfo(loginData.server, g_targetUserData.handle, loginData.bearer_token)
+      } else {
+        return MastodonApi
+          .getAccountInfo(g_targetUserData.server, g_targetUserData.handle)
+      }
+    })
+    .then((/** @type {object} */ result) => {
+        const resultUserData = JSON.parse(result);
+        log.t('resultUserData:', resultUserData);
+        // merge the values we need into our data
+        g_targetUserData['id'] = resultUserData['id'];
+        g_targetUserData['avatar'] = resultUserData['avatar'];
+        g_targetUserData['display_name'] = resultUserData['display_name'];
+        g_targetUserData['url'] = resultUserData['url'];
+        log.d("Enriched target user data:", g_targetUserData);
 
-function getUserHandle() {
-  const urlParams = new URLSearchParams(window.location.search);
-  if (window.location.pathname != "/") {
-    return window.location.pathname.slice(1)
-  } else if (urlParams.has('acct')) {
-    return urlParams.get('acct')
-  } else {
-    throw new Error("No username found.")
-  }
-}
-
-function getAccountInfo(userData, userDataCallback) {
-  JRequest
-        .get(`https://${userData.serverName}/api/v1/accounts/lookup?acct=${userData.handle}`)
-        .then(function (result) {
-          const resultUserData = JSON.parse(result)
-          log.t('resultUserData:', resultUserData)
-          userData['id'] = resultUserData['id']
-          userData['avatar'] = resultUserData['avatar']
-          userData['display_name'] = resultUserData['display_name']
-          userData['url'] = resultUserData['url']
-          userDataCallback(userData)
-        })
-    .catch(error => {
+        loadPageContent(g_targetUserData);
+    })
+    .catch((/** @type {Error} */ error) => {
       displayServerError(error)
     })
-  return userData
 }
 
-function loadPageContent(accountInfo, lastId) {
+
+
+
+/**
+ * @param {{ id: string; server: string; }} targetUserData
+ * @param {string} [lastId]
+ */
+function loadPageContent(targetUserData, lastId) {
   if (!isLoading()) {
     loaderOn()
 
-    getUserToots(accountInfo, lastId, loadToots)
+    Promise
+      .resolve(getDataCookie())
+      .then(loginData => {
+        if ('bearer_token' in loginData) {
+          return MastodonApi
+            .requestStatusses(loginData.server, targetUserData.id, lastId, loginData.bearer_token)
+        } else {
+          return MastodonApi
+            .requestStatusses(targetUserData.server, targetUserData.id, lastId)
+        }
+      })
+      .then(function(result) {
+        const resultToots = JSON.parse(result)
+        log.t("All toots returned:", resultToots)
+
+        if (resultToots.length > 0) {
+          g_lastTootId = resultToots[resultToots.length - 1]['id']
+        }
+
+        return resultToots
+          .filter((/** @type {{ [x: string]: any; }} */ toot) =>
+            !toot['reblog'] && !toot['in_reply_to_id'] && !toot['in_reply_to_account_id'])
+      })
+      .then(toots => {
+        loadToots(toots)
+      })
   }
 }
 
+/**
+ * @param {{ id: string; }[]} toots
+ */
 function loadToots(toots) {
   log.d("Loading toots:", toots)
 
-  toots.forEach(toot => {
+  let loginData = getDataCookie()
+  toots.forEach(( /** @type {{ id: string  }} */toot) => {
+    if (isLoggedIn()) {
+
+      // https://ohai.social/@cookie_mumbles/109512725350000401
+      // https://techhub.social/@cookie_mumbles@ohai.social/109512725627345234
+      // https://${server}/@${handle}/${toot.id}
+      toot['localized_url'] = `https://${loginData.server}/@${g_targetUserData.handle}/${toot.id}`
+    }
     document.getElementById('tweet_list')
-      .appendChild( new TootHtmlBuilder().createTootDomItem(toot) );
+      .appendChild(new TootHtmlBuilder().createTootDomItem(toot));
   })
-  if (toots.length > 0) {
-    lastTootId = toots[toots.length - 1]['id']
-  }
 
   loaderOff()
-  addCopyListeners()
-  addContentWarningListeners()
+  addPostLoadListeners()
   window.addEventListener("scroll", checkInfiniteScroll);
-
 }
 
-function authorize(userData) {
-  const args = [
-    "response_type=code",
-    // "redirect_uri=urn:ietf:wg:oauth:2.0:oob",
-    // "redirect_uri=http%3A%2F%2Fstaging.justmytoots.com",
 
-    "redirect_uri=http://staging.justmytoots.com",
-    "scope=read+write+follow+push",
-  ]
+function addInitialListeners() {
+  addClickListenerForId("btn_login", (/** @type MouseEvent */ event) => {
+    if (event.target.textContent == "Logout") {
+      deleteDataCookie()
+      document.getElementById("btn_login").textContent = "Login"
+    } else {
+      openLoginModal()
+    }
+  })
 
-  JRequest
-        .get(
-          `https://techhub.social/oauth/authorize?${args.join("&")}`
-          // `https://techhub.social/api/v1/apps/verify_credentials`
-          )
-        .then(function (result) {
-          const resultUserData = JSON.parse(result)
-          log.i('RESULT:', resultUserData)
-        })
-// https://mastodon.example/oauth/authorize
+  addClickListenerForId("btn_help", () => {
+    showHelpModal()
+  })
 }
 
-function addCopyListeners() {
-  Array
-    .from(document.getElementsByClassName("btn_action_copy"))
-    .forEach(currentButton => {
-      currentButton.addEventListener('click', event => {
-        const prentDiv = event.target.closest('.single_tweet_wrap');
-        log.d("Clicked copy:" + prentDiv.dataset.tootUrl)
-        copyToClipboard(prentDiv.dataset.tootUrl)
 
-        showSnacbar("Copied toot url. Now paste it in your mastodon search.", "success")
-      });
-    })
-  Array
-    .from(document.getElementsByClassName("btn_action_boost"))
-    .forEach(currentButton => {
-      currentButton.addEventListener('click', event => {
-        showSnacbar("Not (yet) supported. Copy link to toot instead.")
-      });
-    })
-  Array
-    .from(document.getElementsByClassName("btn_action_favorite"))
-    .forEach(currentButton => {
-      currentButton.addEventListener('click', event => {
-        showSnacbar("Not (yet) supported. Copy link to toot instead.")
-      });
-    })
-}
+function addPostLoadListeners() {
+  addClickListenerForId('down_arrow', function() {
+    loadPageContent(g_targetUserData, g_lastTootId)
+  })
 
-function addContentWarningListeners() {
-  Array
-    .from(document.getElementsByClassName("content_warning"))
-    .forEach(btnCW => {
-      btnCW.addEventListener('click', event => {
 
-        Array
-          .from(document.getElementsByClassName(`hidden_${event.target.dataset.tootId}`))
-          .forEach(hiddenElement => {
-            if (hiddenElement.nodeName == "IMG") {
-              hiddenElement.classList.toggle("blur");
-            } else {
-              if (hiddenElement.style.visibility == 'hidden') {
-                hiddenElement.style.visibility = 'visible'
-              } else {
-                hiddenElement.style.visibility = 'hidden'
-              }
-            }
-          })
-        
-        // showSnacbar(event.target.dataset.tootId)
-      });
-    })
-}
+  addClickListenerForEachOfClass("btn_action_copy", (/** @type MouseEvent */ event) => {
+    const prentDiv = event.target.closest('.single_tweet_wrap');
+    log.d("Clicked copy:" + prentDiv.dataset.tootUrl)
+    copyToClipboard(prentDiv.dataset.tootUrl)
 
-function getUserToots(userData, lastId, callback) {
-  const args = [
-    'exclude_reblogs=true',
-    'limit=500',
-  ]
-  if (lastId) {
-    args.push(`max_id=${lastId}`)
+    showSnacSuccess("Copied toot url. Now paste it in your mastodon search.")
+  })
+
+  if (isLoggedIn()) {
+    Array.from(document.getElementsByClassName('toot_footer_btn'))
+      .forEach(element => {
+        if (element.classList.contains("svg_icon")) {
+          element.classList.add("enabled")
+        }
+      })
   }
 
-  JRequest
-    .get(`https://${userData.serverName}/api/v1/accounts/${userData.id}/statuses?${args.join("&")}`)
-    .then(function (result) {
-      const resultToots = JSON.parse(result)
-      log.t("All toots returned:", resultToots)
+  addClickListenerForEachOfClass("btn_action_boost", (/** @type MouseEvent */ event) => {
+    if (isLoggedIn()) {
+      const prentDiv = event.target.closest('.single_tweet_wrap');
+      const btn = event.target.closest('.toot_footer_btn')
+      const loginData = getDataCookie()
+      if (!btn.classList.contains('active')) {
+        MastodonApi.boost(
+          loginData.server,
+          loginData.bearer_token,
+          prentDiv.dataset.tootId
+        )
+          .then(_ => {
+            console.log("Successfully boosted.")
+          })
+        btn.classList.add("active")
+      } else {
+        MastodonApi.unboost(
+          loginData.server,
+          loginData.bearer_token,
+          prentDiv.dataset.tootId
+        )
+          .then(_ => {
+            console.log("Successfully unboosted.")
+          })
+        btn.classList.remove("active")
+      }
+    } else {
+      showSnacError("Please log in or just copy the link.")
+    }
+  })
 
-      //TODO: maybe map with ID of last toot in case someone boosts a lot for infiniscroll
-      callback(
-        resultToots
-        .filter(toot => !toot['reblog'] && !toot['in_reply_to_id'] && !toot['in_reply_to_account_id'])
-      )
-    })
+
+  addClickListenerForEachOfClass("btn_action_favorite", (/** @type MouseEvent */ event) => {
+    if (isLoggedIn()) {
+      const prentDiv = event.target.closest('.single_tweet_wrap');
+      const btn = event.target.closest('.toot_footer_btn')
+
+      const loginData = getDataCookie()
+      if (!btn.classList.contains('active')) {
+        MastodonApi.favorite(
+          loginData.server,
+          loginData.bearer_token,
+          prentDiv.dataset.tootId
+        )
+          .then(_ => {
+            console.log("Successfully faved.")
+          })
+        btn.classList.add("active")
+      } else {
+        MastodonApi.unfavorite(
+          loginData.server,
+          loginData.bearer_token,
+          prentDiv.dataset.tootId
+        )
+          .then(_ => {
+            console.log("Successfully unfaved.")
+          })
+        btn.classList.remove("active")
+      }
+    } else {
+      showSnacError("Please log in or just copy the link.")
+    }
+  })
+
+
+  addClickListenerForEachOfClass("content_warning", (/** @type MouseEvent */ event) => {
+    Array
+      .from(document.getElementsByClassName(`hidden_${event.target.dataset.tootId}`))
+      .forEach(hiddenElement => {
+        toggleHiddenElement(hiddenElement)
+      })
+  })
+
 }
+
 
 function checkInfiniteScroll() {
   const endOfPage = window.innerHeight + window.pageYOffset >= document.body.offsetHeight;
- 
+
   if (endOfPage) {
-    loadPageContent(accountInfo, lastTootId)
+    loadPageContent(g_targetUserData, g_lastTootId)
   }
 };
 
@@ -251,34 +287,92 @@ function loaderOn() {
   document.getElementById("down_arrow").style.display = "none";
 }
 
-function popup() {
-  // Get the modal
-  var modal = document.getElementById("modal_container");
+function openLoginModal() {
 
-  // Get the button that opens the modal
-  var btn = document.getElementById("myBtn");
+  showLoginModal()
 
-  // Get the <span> element that closes the modal
-  var span = document.getElementsByClassName("close")[0];
-
-  // When the user clicks on the button, open the modal
-  btn.onclick = function() {
-    modal.style.display = "block";
+  document.getElementById("login_form_submit").onsubmit = function() { 
+    /** @type {HTMLInputElement} */
+    // @ts-ignore
+    const inputElement = document.getElementById("input_server")
+    const value = inputElement.value.trim().toLowerCase()
+    performLogin(value)
+    return false // prevent default behavior
   }
-
-  // When the user clicks on <span> (x), close the modal
-  span.onclick = function() {
-    modal.style.display = "none";
-  }
-
-  // When the user clicks anywhere outside of the modal, close it
-  window.onclick = function(event) {
-    if (event.target == modal) {
-          modal.style.display = "none";
-    }
-  } 
 }
 
-document.addEventListener("DOMContentLoaded", function(){
+/**
+ * @param {string} server
+ */
+function performLogin(server) {
+  const data = { 'server': server }
+  setDataCookie(data) // overwrite old info
+
+  MastodonApi.requestNewApiApp('justmytoots_test', server, document.location.href)
+    .then(function(result) {
+      console.log(result)
+      const resultData = JSON.parse(result)
+      appendDataCookie({
+        client_id: resultData.client_id,
+        client_secret: resultData.client_secret,
+      })
+
+      clearCodeTokenFromUrl() // in case something whent really wrong last time remove leftovers
+
+      const loginData = getDataCookie()
+      MastodonApi.requestLoginPage(
+        loginData.server,
+        loginData.client_id,
+        document.location.href
+      )
+    })
+}
+
+
+async function handleLoginPartTwoOrContinue() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const currentCookieData = getDataCookie()
+
+  if (urlParams.has('code')
+    && 'client_id' in currentCookieData
+    && !('bearer_token' in currentCookieData)) {
+
+    log.i("Continuing login...")
+
+    // returned from login
+    appendDataCookie({ code: urlParams.get('code') })
+    clearCodeTokenFromUrl()
+
+    try {
+      const loginData = getDataCookie()
+      const rawResultData = await MastodonApi.requestBearerToken(
+        loginData.server,
+        loginData.code,
+        loginData.client_id,
+        loginData.client_secret,
+        document.location.href
+      );
+      const resultData = JSON.parse(rawResultData);
+
+      appendDataCookie({ bearer_token: resultData.access_token });
+
+      log.i("Login complete");
+    } catch (error) {
+      showSnacError("Error validating login. Please try again.");
+      log.e("Error during login. Deleting partial login data.", error);
+      deleteDataCookie();
+    }
+  } else {
+    return Promise.resolve()
+  }
+}
+
+function isLoggedIn() {
+  const currentCookieData = getDataCookie()
+  return 'bearer_token' in currentCookieData
+}
+
+
+document.addEventListener("DOMContentLoaded", function() {
   main();
 });

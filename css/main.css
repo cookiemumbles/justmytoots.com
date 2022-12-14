@@ -14,6 +14,10 @@ a:hover {
   /* TODO: Makes text of clickable toots blue on hover*/
 }
 
+h1 {
+  color: var(--color_blue);
+}
+
 #content {
   width: 600px;
 
@@ -42,8 +46,19 @@ li {
   border-color: var(--color_dark2);
 }
 
+.large_button {
+  background-color: var(--bgColor);
+  padding: 16px;
+  margin: 0;
+  font-size: 16px;
+}
+
 #header {
   margin-bottom: 1em;
+}
+
+#btn_help {
+  float: right;
 }
 
 
@@ -162,12 +177,24 @@ li {
   fill: var(--color_light2);
 }
 
-.svg_button {
-  fill: var(--color_light2);
-}
-.svg_button:hover {
+.svg_icon.enabled:hover {
   fill: var(--color_blue);
 }
+
+.btn_action_favorite.active {
+  fill: var(--color_yellow);
+}
+
+.btn_action_boost.active {
+  fill: var(--color_green);
+}
+
+/* .svg_button { */
+/*   fill: var(--color_light2); */
+/* } */
+/* .svg_button:hover { */
+/*   fill: var(--color_blue); */
+/* } */
 
 .svg_icon_line {
   stroke: var(--color_light2);

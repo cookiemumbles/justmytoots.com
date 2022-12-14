@@ -12,6 +12,8 @@
     --color_light3: rgb(148, 159, 168);
 
     --color_blue: #1da1f2;
+    --color_yellow: #ca8f04; /* from masto */
+    --color_green: #01a439; /* from masto */
     
     
     --bg_color: var(--color_dark);
@@ -41,6 +43,11 @@ textarea {
   background-color: var(--bg_color);
   resize: none; /*remove the resize handle on the bottom right*/
 }
+
+iframe {
+  border: none;
+}
+
 
 button {
   background-color: var(--bg_color);
