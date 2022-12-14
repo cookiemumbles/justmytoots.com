@@ -1,5 +1,6 @@
-import { wrapIn, createElement } from '/js/ui/HtmlBuilder.js';
+import { wrapIn, createElement } from './HtmlBuilder.js';
 
+/** @param {Error} error */
 export function displayMissingUserMessage(error) {
   console.debug("Displaying error:", error)
   renderError(
@@ -9,12 +10,14 @@ export function displayMissingUserMessage(error) {
       this:</br>
       <a href='https://justmytoots.com/@cookie_mumbles@ohai.social'>
         https://justmytoots.com/@cookie_mumbles@ohai.social
-      </a>
+      </a></br>
+      See help for more info.
     `
   )
 
 }
 
+/** @param {Error} error */
 export function displayServerError(error) {
   console.debug("Displaying error:", error)
   renderError(
@@ -31,6 +34,10 @@ export function displayServerError(error) {
   )
 }
 
+/**
+ * @param {string} title
+ * @param {string} messageHtml
+ */
 function renderError(title, messageHtml) {
   document.getElementById("loader_wrapper").innerHTML = ''
 
