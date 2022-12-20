@@ -1,7 +1,7 @@
 @charset "UTF-8";
 @import '/css/base.css';
 @import '/css/icons.css';
-@import '/css/popup.css';
+@import '/css/modal.css';
 
 a {
   color: var(--text_color);
@@ -101,6 +101,7 @@ li {
 .toot_header_names {
   flex: 1;
   display:flex;
+	flex-wrap: wrap;
 }
 
 .toot_user_name {
@@ -119,7 +120,9 @@ li {
 .content_warning {
   font-weight: lighter;
   /* font-style: italic; */
-  padding: 0.4em;
+  padding: 0.5em 1em;
+  background-color: var(--color_dark3);
+  border-radius: 10px;
 }
 
 .blur {
