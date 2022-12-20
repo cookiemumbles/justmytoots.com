@@ -1,6 +1,4 @@
 @charset "UTF-8";
-/* POPUP */
-/* ============================================================ */
 
 /* The Modal (background) */
 #modal_background {
@@ -27,6 +25,17 @@
   /* height: 70%; /1* Could be more or less, depending on screen size *1/ */
 }
 
+/* Modal Content/Box */
+#modal_container.image {
+  background-color: var(--color_dark3);
+  margin: 15% auto; /* 15% from the top and centered */
+  padding: 0;
+  border: 1px solid #888;
+  /* width: 500px; */
+  width: 80%; /* Could be more or less, depending on screen size */
+  /* height: 70%; /1* Could be more or less, depending on screen size *1/ */
+}
+
 .modal_header {
   border-bottom: 1px solid #888;
   display: inline-block;
@@ -41,7 +50,7 @@
  /* The snackbar - position it at the bottom and in the middle of the screen */
 #snackbar {
   min-width: 250px; /* Set a default minimum width */
-  background-color: var(--color_dark2); /* Black background color */
+  background-color: var(--color_dark2);
   color: #fff; /* White text color */
   text-align: center; /* Centered text */
   border-radius: 2px; /* Rounded borders */
