@@ -12,7 +12,7 @@ export default class Logger {
   constructor() {
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.has('log')) {
-      this.logLevel = urlParams.get('log')
+      this.logLevel = Number.parseInt(urlParams.get('log'))
       switch (urlParams.get('log')) {
         case 'e':
           this.logLevel = this.ERROR
@@ -36,32 +36,38 @@ export default class Logger {
     }
   }
 
+  /** Error log
+   * @param {...any} args */
   e(...args) {
     console.error(...args)
   }
 
-  /** Normal logging */
+  /** Warning log
+   * @param {[]} args */
   w(...args) {
     if (this.logLevel >= this.WARN) {
       console.warn(...args)
     }
   }
 
-  /** Normal logging */
+  /** Normal logging
+   * @param {...any} args */
   i(...args) {
     if (this.logLevel >= this.INFO) {
       console.log(...args)
     }
   }
 
-  /** Normal logging */
+  /** Debug log, written to console.log
+   * @param {...any} args */
   d(...args) {
     if (this.logLevel >= this.DEBUG) {
       console.log(...args)
     }
   }
 
-  /** Normal logging */
+  /** Trace log, written to console.log
+   * @param {...any} args */
   t(...args) {
     if (this.logLevel >= this.TRACE) {
       console.log(...args)
