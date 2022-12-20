@@ -36,7 +36,7 @@ function main() {
   }
 
   handleLoginPartTwoOrContinue()
-    .then(() => { 
+    .then(() => {
       const loginData = getDataCookie();
       if ('bearer_token' in loginData) {
         return MastodonApi
@@ -126,13 +126,21 @@ function loadPageContent(targetUserData, lastId) {
 }
 
 /**
- * @param {{ id: string; }[]} toots
+ * @param {[{
+ *    id: string;
+ *    url: string;
+ *    created_at?: string;
+ *    sensitive?: boolean;
+ *    spoiler_text: string;
+ *    localized_url?: string;
+ *    account: { acct: string; }
+ *    }]} toots
  */
 function loadToots(toots) {
   log.d("Loading toots:", toots)
 
   let loginData = getDataCookie()
-  toots.forEach(( /** @type {{ id: string  }} */toot) => {
+  toots.forEach((toot) => {
     if (isLoggedIn()) {
 
       // https://ohai.social/@cookie_mumbles/109512725350000401
@@ -291,7 +299,7 @@ function openLoginModal() {
 
   showLoginModal()
 
-  document.getElementById("login_form_submit").onsubmit = function() { 
+  document.getElementById("login_form_submit").onsubmit = function() {
     /** @type {HTMLInputElement} */
     // @ts-ignore
     const inputElement = document.getElementById("input_server")

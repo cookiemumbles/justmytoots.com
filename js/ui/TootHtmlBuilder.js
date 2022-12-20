@@ -39,9 +39,7 @@ export default class TootHtmlBuilder {
     )
   }
 
-  /**
-     * @param {string} aviUrl
-     */
+  /** @param {string} aviUrl */
   createAviDiv(aviUrl) {
     return wrapIn('div', {class: "avi_container"},
       createElement('img', { class: "avi", src: aviUrl, width:'48px', height:'48px' })
@@ -118,14 +116,14 @@ export default class TootHtmlBuilder {
           "svg_icon_retweet_active",
           { class:`toot_footer_btn svg_icon btn_action_boost ${(boosted) ? "active" : ""}`, width:"24", height:"24" }
         ),
-        createElement('div', {class:"toot_footer_txt"}, reblogsCount),
+        createElement('div', {class:"toot_footer_txt"}, reblogsCount.toString()),
       ]),
       wrapIn('div', { class: "toot_footer_item"}, [
         createSvgRef(
           "svg_icon_star",
           { class:`toot_footer_btn svg_icon btn_action_favorite ${(favorited) ? "active" : ""}`, width:"24", height:"24" }
         ),
-        createElement('div', {class:"toot_footer_txt"}, favoritesCount),
+        createElement('div', {class:"toot_footer_txt"}, favoritesCount.toString()),
       ]),
       wrapIn('div', { class: "toot_footer_item"},
         createSvgRef("svg_icon_copy", {
@@ -145,14 +143,12 @@ export default class TootHtmlBuilder {
         return "< 1m"
       case minutes < 60:
         return minutes.toFixed() + "m"
-        break;
       case (minutes / 60 < 24):
         return (minutes / 60).toFixed() + "h"
       default:
         let month = new Date(date).toLocaleString('default', { month: 'short' });
         let day = new Date(date).getDate();
         return `${month} ${day}`
-      break;
     }
   }
 
