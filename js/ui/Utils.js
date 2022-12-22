@@ -3,11 +3,13 @@
  * @param {string} classname
  * @param {EventListenerOrEventListenerObject} eventListener
  */
-export function addClickListenerForEachOfClass(classname, eventListener) {
+export function replaceClickListenerForEachOfClass(classname, eventListener) {
   Array
     .from(document.getElementsByClassName(classname))
     .forEach(currentElement => {
-      currentElement.addEventListener('click', eventListener);
+      const clone = currentElement.cloneNode(true);
+      clone.addEventListener('click', eventListener);
+      currentElement.parentNode.replaceChild(clone, currentElement);
     })
 }
 
