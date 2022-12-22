@@ -132,7 +132,7 @@ function loadPageContent(targetUserData, lastId) {
  *    created_at?: string;
  *    sensitive?: boolean;
  *    spoiler_text: string;
- *    localized_url?: string;
+ *    localized_toot_url?: string;
  *    account: { acct: string; }
  *    }]} toots
  */
@@ -146,7 +146,8 @@ function loadToots(toots) {
       // https://ohai.social/@cookie_mumbles/109512725350000401
       // https://techhub.social/@cookie_mumbles@ohai.social/109512725627345234
       // https://${server}/@${handle}/${toot.id}
-      toot['localized_url'] = `https://${loginData.server}/@${g_targetUserData.handle}/${toot.id}`
+      toot['localized_profile_url'] = `https://${loginData.server}/${g_targetUserData.handle}`
+      toot['localized_toot_url'] = `https://${loginData.server}/${g_targetUserData.handle}/${toot.id}`
     }
     document.getElementById('tweet_list')
       .appendChild(new TootHtmlBuilder().createTootDomItem(toot));

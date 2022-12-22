@@ -9,8 +9,9 @@ export default class TootHtmlBuilder {
      *    created_at?: string;
      *    sensitive?: boolean;
      *    spoiler_text: string;
-     *    localized_url?: string;
-     *    account: { acct: string; }
+     *    localized_toot_url?: string;
+     *    localized_profile_url?: string;
+     *    account: { acct: string; url:string; }
      *    }} toot
      */
   createTootDomItem(toot) {
@@ -24,11 +25,11 @@ export default class TootHtmlBuilder {
         'data-toot-url': toot.url,
       },
         [
-          this.createAviDiv(toot["account"]["avatar"]),
+          this.createAviDiv(toot["account"]["avatar"], (toot.localized_profile_url) ? toot.localized_profile_url : toot.account.url),
           wrapIn('div', {class:"toot_content"}, [
             this.createTweetHeader(toot["account"]["display_name"], '@' + toot["account"]["username"], toot.created_at),
             this.createContentWarningDiv(toot.sensitive, toot.id, toot.spoiler_text),
-            wrapIn('a', {'href': (toot.localized_url) ? toot.localized_url : toot.url }, [
+            wrapIn('a', {'href': (toot.localized_toot_url) ? toot.localized_toot_url : toot.url }, [
               this.createTweetContent(toot.sensitive, toot.id, toot['content']),
             ]),
             this.createAttachmentsDiv(toot['media_attachments'], toot.id, toot.sensitive),
@@ -39,10 +40,13 @@ export default class TootHtmlBuilder {
     )
   }
 
-  /** @param {string} aviUrl */
-  createAviDiv(aviUrl) {
-    return wrapIn('div', {class: "avi_container"},
-      createElement('img', { class: "avi", src: aviUrl, width:'48px', height:'48px' })
+  /**
+   * @param {string} imageUrl
+   * @param {string} profileUrl
+   * */
+  createAviDiv(imageUrl, profileUrl) {
+    return wrapIn('a', {href: profileUrl, class: "avi_container"},
+      createElement('img', { class: "avi", src: imageUrl, width:'48px', height:'48px' })
     )
   }
 
