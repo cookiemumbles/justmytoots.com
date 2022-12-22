@@ -62,10 +62,10 @@ export default class TootHtmlBuilder {
   }
 
   /**
-     * @param {boolean} isSensitive
-     * @param {string} tootId
-     * @param {string} contentWarningText
-     */
+   * @param {boolean} isSensitive
+   * @param {string} tootId
+   * @param {string} contentWarningText
+   */
   createContentWarningDiv(isSensitive, tootId, contentWarningText) {
     return wrapIn('div', {class:"toot_content_warning_container"},
       (isSensitive) ? [

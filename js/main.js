@@ -4,7 +4,7 @@ import { showSnacError, showSnacSuccess } from './ui/Snacbar.js';
 import { test_toots } from './testData.js';
 import { displayServerError, displayMissingUserMessage } from './ui/ErrorScreen.js';
 import Logger from './utils/Logger.js';
-import { showHelpModal, showLoginModal } from './ui/Modal.js';
+import { showHelpModal, showImageModal, showLoginModal } from './ui/Modal.js';
 import { setDataCookie, getDataCookie, appendDataCookie, deleteDataCookie } from './utils/Cookie.js';
 import MastodonApi from './utils/MastodonApi.js';
 import { addClickListenerForEachOfClass, addClickListenerForId, toggleHiddenElement } from './ui/Utils.js';
@@ -270,6 +270,11 @@ function addPostLoadListeners() {
       })
   })
 
+  addClickListenerForEachOfClass("twit_pic", (/** @type MouseEvent */ event) => {
+    /** @type HTMLImageElement  */
+    const img = event.target
+    showImageModal(img.src)
+  })
 }
 
 
