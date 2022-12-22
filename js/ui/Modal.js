@@ -1,4 +1,5 @@
 import { wrapIn, createElement } from './HtmlBuilder.js';
+import { addClickListenerForId } from './Utils.js';
 
 export function showModal() {
   let modal = document.getElementById("modal_background");
@@ -14,11 +15,9 @@ export function addHideListeners() {
   }
 
   
-  window.onclick = function(/** @type MouseEvent */ event) {
-    if (event.target == document.getElementById("modal_background")) {
-      hideModal()
-    }
-  } 
+  addClickListenerForId("modal_background", () => {
+        hideModal()
+  })
 
 }
 
