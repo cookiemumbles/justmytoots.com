@@ -23,8 +23,11 @@ export function addHideListeners() {
 }
 
 export function hideModal() {
-  let modal = document.getElementById("modal_background");
+  const modal = document.getElementById("modal_background");
   modal.style.display = "none";
+
+  const parentContainer = document.getElementById("modal_container");
+  parentContainer.classList.remove("image")
 }
 
 
@@ -76,4 +79,16 @@ export function showHelpModal() {
     <h4>Code and Issues</h4>
     <a href='https://github.com/cookiemumbles/justmytoots.com'>justmytoots.com@github.com</a>
     `))
+}
+
+/** @param {string} src */
+export function showImageModal(src) {
+  const parentContainer = document.getElementById("modal_container");
+  parentContainer.classList.add("image")
+  const container = document.getElementById("modal_content");
+  container.innerHTML = ""
+  container.appendChild( createElement('img', {
+    src: src
+  }))
+  showModal()
 }

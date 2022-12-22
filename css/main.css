@@ -47,7 +47,7 @@ li {
 }
 
 .large_button {
-  background-color: var(--bgColor);
+  background-color: var(--bg_color);
   padding: 16px;
   margin: 0;
   font-size: 16px;

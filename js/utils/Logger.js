@@ -43,7 +43,7 @@ export default class Logger {
   }
 
   /** Warning log
-   * @param {[]} args */
+   * @param {...any} args */
   w(...args) {
     if (this.logLevel >= this.WARN) {
       console.warn(...args)
