@@ -7,7 +7,7 @@ import Logger from './utils/Logger.js';
 import { showHelpModal, showImageModal, showLoginModal } from './ui/Modal.js';
 import { setDataCookie, getDataCookie, appendDataCookie, deleteDataCookie } from './utils/Cookie.js';
 import MastodonApi from './utils/MastodonApi.js';
-import { addClickListenerForEachOfClass, addClickListenerForId, toggleHiddenElement } from './ui/Utils.js';
+import { replaceClickListenerForEachOfClass, addClickListenerForId, toggleHiddenElement } from './ui/Utils.js';
 import { clearCodeTokenFromUrl, getUserDataFromUrl } from './utils/Browser.js';
 
 var g_targetUserData = null
@@ -181,7 +181,7 @@ function addPostLoadListeners() {
   })
 
 
-  addClickListenerForEachOfClass("btn_action_copy", (/** @type MouseEvent */ event) => {
+  replaceClickListenerForEachOfClass("btn_action_copy", (/** @type MouseEvent */ event) => {
     const prentDiv = event.target.closest('.single_tweet_wrap');
     log.d("Clicked copy:" + prentDiv.dataset.tootUrl)
     copyToClipboard(prentDiv.dataset.tootUrl)
@@ -198,7 +198,7 @@ function addPostLoadListeners() {
       })
   }
 
-  addClickListenerForEachOfClass("btn_action_boost", (/** @type MouseEvent */ event) => {
+  replaceClickListenerForEachOfClass("btn_action_boost", (/** @type MouseEvent */ event) => {
     if (isLoggedIn()) {
       const prentDiv = event.target.closest('.single_tweet_wrap');
       const btn = event.target.closest('.toot_footer_btn')
@@ -230,7 +230,7 @@ function addPostLoadListeners() {
   })
 
 
-  addClickListenerForEachOfClass("btn_action_favorite", (/** @type MouseEvent */ event) => {
+  replaceClickListenerForEachOfClass("btn_action_favorite", (/** @type MouseEvent */ event) => {
     if (isLoggedIn()) {
       const prentDiv = event.target.closest('.single_tweet_wrap');
       const btn = event.target.closest('.toot_footer_btn')
@@ -263,7 +263,7 @@ function addPostLoadListeners() {
   })
 
 
-  addClickListenerForEachOfClass("content_warning", (/** @type MouseEvent */ event) => {
+  replaceClickListenerForEachOfClass("content_warning", (/** @type MouseEvent */ event) => {
     Array
       .from(document.getElementsByClassName(`hidden_${event.target.dataset.tootId}`))
       .forEach(hiddenElement => {
@@ -271,7 +271,7 @@ function addPostLoadListeners() {
       })
   })
 
-  addClickListenerForEachOfClass("twit_pic", (/** @type MouseEvent */ event) => {
+  replaceClickListenerForEachOfClass("twit_pic", (/** @type MouseEvent */ event) => {
     /** @type HTMLImageElement  */
     const img = event.target
     showImageModal(img.src)
