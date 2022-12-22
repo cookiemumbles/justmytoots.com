@@ -5,16 +5,16 @@ export function getUserDataFromUrl() {
   var handle = getUserHandle()
   const splitAccount = handle.split("@")
   if (splitAccount.length == 2) {
-    userData.handle = handle
     userData.server = splitAccount[1]
     userData.userName = splitAccount[0]
+    userData.handle = `@${userData.userName}@${userData.server}`
   } else if (splitAccount.length == 3) {
-    userData.handle = handle
     if (splitAccount[0] != "" || splitAccount[2] == "") {
       throw new Error(`Invalid username ${handle}`)
     }
     userData.server = splitAccount[2]
     userData.userName = splitAccount[1]
+    userData.handle = `@${userData.userName}@${userData.server}`
   } else {
     throw new Error(`Invalid username ${handle}`)
   }
