@@ -14,10 +14,11 @@ export function addHideListeners() {
     hideModal()
   }
 
-  
-  addClickListenerForId("modal_background", () => {
-        hideModal()
-  })
+  window.onclick = function(/** @type MouseEvent */ event) {
+    if (event.target == document.getElementById("modal_background")) {
+      hideModal()
+    }
+  } 
 
 }
 
