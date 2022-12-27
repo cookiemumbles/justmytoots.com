@@ -18,6 +18,7 @@ var log = new Logger()
 // NOTE:
 // Disable pagespeed: url/?PageSpeed=off
 // https://stackoverflow.com/a/49243560/3968618
+// https://www.typescriptlang.org/docs/handbook/type-checking-javascript-files.html
 
 function main() {
   const urlParams = new URLSearchParams(window.location.search);
@@ -322,7 +323,10 @@ function performLogin(server) {
   const data = { 'server': server }
   setDataCookie(data) // overwrite old info
 
-  MastodonApi.requestNewApiApp('justmytoots_test', server, document.location.href)
+  // there can be some weird whitespace characters in there for some reason
+  const callbackUrl = decodeURIComponent(window.location.href.toString())
+
+  MastodonApi.requestNewApiApp('justmytoots_test', server, callbackUrl)
     .then(function(result) {
       console.log(result)
       const resultData = JSON.parse(result)
@@ -337,7 +341,7 @@ function performLogin(server) {
       MastodonApi.requestLoginPage(
         loginData.server,
         loginData.client_id,
-        document.location.href
+        callbackUrl
       )
     })
 }
@@ -357,6 +361,9 @@ async function handleLoginPartTwoOrContinue() {
     appendDataCookie({ code: urlParams.get('code') })
     clearCodeTokenFromUrl()
 
+    // there can be some weird whitespace characters in there for some reason
+    const callbackUrl = decodeURIComponent(window.location.href.toString())
+
     try {
       const loginData = getDataCookie()
       const rawResultData = await MastodonApi.requestBearerToken(
@@ -364,7 +371,7 @@ async function handleLoginPartTwoOrContinue() {
         loginData.code,
         loginData.client_id,
         loginData.client_secret,
-        document.location.href
+        callbackUrl
       );
       const resultData = JSON.parse(rawResultData);
 
