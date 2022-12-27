@@ -1,0 +1,27 @@
+name: Selenium tests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ selenium-testing ]
+
+jobs:
+  sel_test_on_chrome:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Gradle Wraper Cache
+        uses: actions/cache@v1
+        with:
+          path: ~/.gradle/wrapper/
+          key: ${{ runner.OS }}-gradle-wraper-cache
+
+      - name: Set up JDK
+        uses: actions/setup-java@v1
+        with:
+          java-version: 17
+
+      - name: Run Tests on Chrome
+        run: cd selenium-test && ./gradlew test -Dbrowser=chrome-headless
