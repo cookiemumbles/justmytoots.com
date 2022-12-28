@@ -24,7 +24,8 @@ class GeneralAndLoggedOutTest {
         }
     }
 
-    private val serverRoot = "http://localhost:8008"
+//    private val serverRoot = "http://localhost:8008"
+    private val serverRoot = "https://staging.justmytoots.com"
 
     @Test
     fun `without user`() {

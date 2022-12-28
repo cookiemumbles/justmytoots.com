@@ -2,12 +2,11 @@ package com.justmytoots
 
 import io.github.bonigarcia.wdm.WebDriverManager
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
-import org.openqa.selenium.firefox.FirefoxDriver
 import java.time.Duration
 
 class LoggedInTest {
@@ -24,9 +23,11 @@ class LoggedInTest {
         }
     }
 
-    private val serverRoot = "http://localhost:8008"
+//    private val serverRoot = "http://localhost:8008"
+    private val serverRoot = "https://staging.justmytoots.com"
 
     @Test
+    @Disabled
     fun `should login correctly`() {
         with(driver) {
             // given
