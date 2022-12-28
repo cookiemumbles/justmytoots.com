@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
+import org.openqa.selenium.firefox.FirefoxDriver
+import org.openqa.selenium.firefox.FirefoxOptions
 import java.time.Duration
 
 class LoggedInTest {
@@ -17,9 +19,15 @@ class LoggedInTest {
         @BeforeAll
         @JvmStatic
         internal fun beforeAll() {
-            driver = WebDriverManager.firefoxdriver().create()
-//            WebDriverManager.firefoxdriver().setup()
-//            driver = FirefoxDriver()
+//            val options = webdriver.FirefoxOptions()
+//            options.headless = True
+//            webdriver.Firefox(options=options)
+//            val firefoxdriver = WebDriverManager.firefoxdriver()
+//            driver = firefoxdriver.create()
+            WebDriverManager.firefoxdriver().setup()
+            val options = FirefoxOptions()
+            options.setHeadless(true)
+            driver = FirefoxDriver(options)
         }
     }
 

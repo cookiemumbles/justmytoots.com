@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test
 import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.firefox.FirefoxDriver
+import org.openqa.selenium.firefox.FirefoxOptions
 import java.time.Duration
 
 class GeneralAndLoggedOutTest {
@@ -18,9 +19,13 @@ class GeneralAndLoggedOutTest {
         @BeforeAll
         @JvmStatic
         internal fun beforeAll() {
-            driver = WebDriverManager.firefoxdriver().create()
+//            driver = WebDriverManager.firefoxdriver().create()
 //            WebDriverManager.firefoxdriver().setup()
 //            driver = FirefoxDriver()
+            WebDriverManager.firefoxdriver().setup()
+            val options = FirefoxOptions()
+            options.setHeadless(true)
+            driver = FirefoxDriver(options)
         }
     }
 
@@ -59,7 +64,7 @@ class GeneralAndLoggedOutTest {
             get("$serverRoot?acct=cookie_mumbles@ohai.social")
 
             assertThat(
-                waitForElement(By.className("single_tweet_wrap"))
+                waitForElement(By.className("single_tweet_wrap"), Duration.ofSeconds(3))
                     .waitForAllElements(By.tagName("li"))
             ).hasSizeGreaterThan(5)
         }
