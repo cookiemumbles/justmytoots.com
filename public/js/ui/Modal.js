@@ -13,12 +13,15 @@ export function addHideListeners() {
     hideModal()
   }
 
-  window.onclick = function(/** @type MouseEvent */ event) {
+  document.addEventListener('touchstart', hideIfBackground); // for mobile
+  window.onclick = hideIfBackground
+}
+
+/** @param {MouseEvent} event */
+function hideIfBackground(event) {
     if (event.target == document.getElementById("modal_background")) {
       hideModal()
     }
-  } 
-
 }
 
 export function hideModal() {
