@@ -1,5 +1,4 @@
 import { wrapIn, createElement } from './HtmlBuilder.js';
-import { addClickListenerForId } from './Utils.js';
 
 export function showModal() {
   let modal = document.getElementById("modal_background");
