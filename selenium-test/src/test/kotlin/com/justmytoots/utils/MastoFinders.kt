@@ -1,0 +1,16 @@
+package com.justmytoots.utils
+
+import org.openqa.selenium.By
+import org.openqa.selenium.WebDriver
+import java.time.Duration
+
+fun WebDriver.mastoFindBoostButton() =
+    waitForElements(By.className("detailed-status__button"))[1].findElement(By.tagName("button"))
+
+fun WebDriver.mastoFindFaveButton() =
+    waitForElements(By.className("detailed-status__button"))[2].findElement(By.tagName("button"))
+
+fun WebDriver.mastoFindPassField() = waitForElement(By.id("user_password"), Duration.ofSeconds(5))
+
+fun WebDriver.mastoFindEmailField() =
+    waitForElement(By.id("user_email"), Duration.ofSeconds(5))
