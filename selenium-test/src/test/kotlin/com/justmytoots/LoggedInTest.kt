@@ -85,7 +85,7 @@ class LoggedInTest {
             firstToot.getTootTextElement().click()
             assertThat(mastoFindBoostButton().getClases()).contains("active")
 
-            //finally
+            // finally
             mastoFindBoostButton().click()
         }
     }
@@ -111,7 +111,7 @@ class LoggedInTest {
             firstToot.getTootTextElement().click()
             assertThat(mastoFindFaveButton().getClases()).contains("active")
 
-            //finally
+            // finally
             mastoFindFaveButton().click()
         }
     }
@@ -127,7 +127,8 @@ class LoggedInTest {
             findFirstToot().getAvi().click()
 
             // then
-            assertThat(currentUrl).isEqualTo("https://techhub.social/@cookie_mumbles@mastodon.social")
+            assertThat(currentUrl)
+                .isEqualTo("https://techhub.social/@cookie_mumbles@mastodon.social")
         }
     }
 

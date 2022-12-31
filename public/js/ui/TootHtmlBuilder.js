@@ -100,7 +100,7 @@ export default class TootHtmlBuilder {
     return wrapIn('div', {},
       attatchments.map(attatchment => {
         return createElement('img', {
-          class: (isSensitive) ? `twit_pic hidden_${tootId} blur` : 'twit_pic',
+          class: (isSensitive) ? `toot_pic hidden_${tootId} blur` : 'toot_pic',
           src: attatchment['preview_url']
         })
       })

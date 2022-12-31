@@ -6,6 +6,7 @@ import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
+import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
 
 class GeneralAndLoggedOutTest {
@@ -196,6 +197,28 @@ class GeneralAndLoggedOutTest {
 
             // then
             assertThat(currentUrl).isEqualTo("https://mastodon.social/@cookie_mumbles")
+        }
+    }
+
+    @ParameterizedTest
+    @MethodSource("getDrivers")
+    fun `clicking image preview`(driver: WebDriver) {
+        with(driver) {
+            // given
+            get("${getServer()}?acct=cookie_mumbles@mastodon.social&testdata=true")
+            waitForPageLoaded()
+            assertThat(findModalBackground().isDisplayed).isFalse()
+
+            // when
+            findElements(By.className("toot_pic")).first().click()
+            // then
+            assertThat(findModalBackground().isDisplayed).isTrue()
+
+            // when
+            findModalClose().click()
+            // then
+            assertThat(findModalBackground().isDisplayed).isFalse()
+            assertThat(findSnacbar().getClases()).containsOnly("tweet_footer") // no enabled
         }
     }
 }

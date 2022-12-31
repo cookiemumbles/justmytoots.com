@@ -272,7 +272,7 @@ function addPostLoadListeners() {
       })
   })
 
-  replaceClickListenerForEachOfClass("twit_pic", (/** @type MouseEvent */ event) => {
+  replaceClickListenerForEachOfClass("toot_pic", (/** @type MouseEvent */ event) => {
     /** @type HTMLImageElement  */
     const img = event.target
     showImageModal(img.src)
