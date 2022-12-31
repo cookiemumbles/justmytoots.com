@@ -86,7 +86,7 @@ export default class TootHtmlBuilder {
   createTweetContent(isSensitive, tootId, text) {
     return createElement(
       'div',
-      { class: `hidden_${tootId}`, style: (isSensitive) ?  'visibility: hidden' : '' },
+      { class: `toot_text hidden_${tootId}`, style: (isSensitive) ?  'visibility: hidden' : '' },
       text
     )
   }

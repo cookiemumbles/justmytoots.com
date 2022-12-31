@@ -1,91 +1,84 @@
 package com.justmytoots
 
-import io.github.bonigarcia.wdm.WebDriverManager
+import com.justmytoots.utils.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
-import org.junit.jupiter.api.Test
-import org.openqa.selenium.By
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.MethodSource
 import org.openqa.selenium.WebDriver
-import org.openqa.selenium.firefox.FirefoxDriver
-import org.openqa.selenium.firefox.FirefoxOptions
-import java.time.Duration
 
 class GeneralAndLoggedOutTest {
 
     companion object {
-        private lateinit var driver: WebDriver
+        private lateinit var drivers: List<WebDriver>
 
         @BeforeAll
         @JvmStatic
         internal fun beforeAll() {
-//            driver = WebDriverManager.firefoxdriver().create()
-//            WebDriverManager.firefoxdriver().setup()
-//            driver = FirefoxDriver()
-            WebDriverManager.firefoxdriver().setup()
-            val options = FirefoxOptions()
-            options.setHeadless(true)
-            driver = FirefoxDriver(options)
+            drivers = startDrivers()
+        }
+
+        @AfterAll
+        @JvmStatic
+        internal fun afterAll() {
+            drivers.closeUnlessTesting()
+        }
+
+        @JvmStatic
+        fun getDrivers(): List<WebDriver> {
+            return drivers
         }
     }
 
-//    private val serverRoot = "http://localhost:8008"
-    private val serverRoot = "https://staging.justmytoots.com"
-
-    @Test
-    fun `without user`() {
+    @ParameterizedTest
+    @MethodSource("getDrivers")
+    fun `without user`(driver: WebDriver) {
         with(driver) {
-            get("$serverRoot")
+            get(getServer())
 
-            assertThat(
-                findElement(By.className("tweet_text"))
-                    .findElement(By.tagName("h3"))
-                    .text
-            ).isEqualTo("ERROR: No username found.")
+            assertThat(findPageError().getErrorTitle().text).isEqualTo("ERROR: No username found.")
         }
     }
 
-    @Test
-    fun `with broken user`() {
+    @ParameterizedTest
+    @MethodSource("getDrivers")
+    fun `with broken user`(driver: WebDriver) {
         with(driver) {
-            get("$serverRoot?acct=cookie_mumbles@ohai.social.com")
+            get("${getServer()}?acct=cookie_mumbles@mastodon.social.com")
 
-            assertThat(
-                waitForElement(By.className("tweet_text"))
-                    .findElement(By.tagName("h3"))
-                    .text
-            ).isEqualTo("ERROR: Unable to connect to server.")
+            assertThat(findPageError().getErrorTitle().text)
+                .isEqualTo("ERROR: Unable to connect to server.")
         }
     }
 
-    @Test
-    fun `should load toots`() {
+    @ParameterizedTest
+    @MethodSource("getDrivers")
+    fun `should load toots`(driver: WebDriver) {
         with(driver) {
-            get("$serverRoot?acct=cookie_mumbles@ohai.social")
+            get("${getServer()}?acct=cookie_mumbles@mastodon.social")
 
-            assertThat(
-                waitForElement(By.className("single_tweet_wrap"), Duration.ofSeconds(3))
-                    .waitForAllElements(By.tagName("li"))
-            ).hasSizeGreaterThan(5)
+            assertThat(findToots()).hasSizeGreaterThan(5)
         }
     }
 
-    @Test
-    fun `should show help`() {
+    @ParameterizedTest
+    @MethodSource("getDrivers")
+    fun `should show help`(driver: WebDriver) {
         with(driver) {
             // given
-            get("$serverRoot")
-            assertThat(findElement(By.id("modal_background")).isDisplayed).isFalse()
+            get("${getServer()}")
+            assertThat(findModalBackground().isDisplayed).isFalse()
 
             // when
-            findElement(By.id("btn_help")).click()
+            findHelpBtn().click()
             // then
-            assertThat(findElement(By.id("modal_background")).isDisplayed).isTrue()
+            assertThat(findModalBackground().isDisplayed).isTrue()
 
             // when
-            findElement(By.id("model_close")).click()
+            findModalClose().click()
             // then
-            assertThat(findElement(By.id("modal_background")).isDisplayed).isFalse()
+            assertThat(findModalBackground().isDisplayed).isFalse()
 
             // TODO: This is probably why it doesn't work on ios
             // // when
@@ -96,27 +89,113 @@ class GeneralAndLoggedOutTest {
         }
     }
 
-    @Test
-    fun `should show login`() {
+    @ParameterizedTest
+    @MethodSource("getDrivers")
+    fun `should show login`(driver: WebDriver) {
         with(driver) {
             // given
-            get("$serverRoot?acct=cookie_mumbles@ohai.social&log=d")
-            assertThat(findElement(By.id("modal_background")).isDisplayed).isFalse()
+            get("${getServer()}?acct=cookie_mumbles@mastodon.social")
+            assertThat(findModalBackground().isDisplayed).isFalse()
 
             // when
-            findElement(By.id("btn_login")).click()
+            findLoginBtn().click()
             // then
-            assertThat(findElement(By.id("modal_background")).isDisplayed).isTrue()
+            assertThat(findModalBackground().isDisplayed).isTrue()
 
             // when
-            findElement(By.id("model_close")).click()
+            findModalClose().click()
             // then
-            assertThat(findElement(By.id("modal_background")).isDisplayed).isFalse()
+            assertThat(findModalBackground().isDisplayed).isFalse()
         }
     }
 
-    private fun WebDriver.waitForPageLoaded() {
-        waitForElement(By.className("single_tweet_wrap"), Duration.ofSeconds(3))
-            .waitForAllElements(By.tagName("li"))
+    @ParameterizedTest
+    @MethodSource("getDrivers")
+    fun `boost should show snacbar with error`(driver: WebDriver) {
+        with(driver) {
+            // given
+            get("${getServer()}?acct=cookie_mumbles@mastodon.social")
+            assertThat(findSnacbar().getClases()).containsOnly("tweet_footer") // no enabled
+            waitForPageLoaded()
+
+            // when
+            findFirstToot().getBoostBtn().click()
+
+            // then
+            val snacbar = findSnacbar()
+            assertThat(snacbar.getClases()).containsOnly("tweet_footer", "show")
+            assertThat(snacbar.getSnacText().text).isEqualTo("Please log in or just copy the link.")
+        }
+    }
+
+    @ParameterizedTest
+    @MethodSource("getDrivers")
+    fun `favorite should show snacbar with error`(driver: WebDriver) {
+        with(driver) {
+            // given
+            get("${getServer()}?acct=cookie_mumbles@mastodon.social")
+            assertThat(findSnacbar().getClases()).containsOnly("tweet_footer") // no enabled
+            waitForPageLoaded()
+
+            // when
+            findFirstToot().getFaveBtn().click()
+
+            // then
+            val snacbar = findSnacbar()
+            assertThat(snacbar.getClases()).containsOnly("tweet_footer", "show")
+            assertThat(snacbar.getSnacText().text).isEqualTo("Please log in or just copy the link.")
+        }
+    }
+
+    @ParameterizedTest
+    @MethodSource("getDrivers")
+    fun `copy should show snacbar with info`(driver: WebDriver) {
+        with(driver) {
+            // given
+            get("${getServer()}?acct=cookie_mumbles@mastodon.social")
+            assertThat(findSnacbar().getClases()).containsOnly("tweet_footer") // no enabled
+            waitForPageLoaded()
+
+            // when
+            findFirstToot().getCopyBtn().click()
+
+            // then
+            val snacbar = findSnacbar()
+            assertThat(snacbar.getClases()).containsOnly("tweet_footer", "show")
+            assertThat(snacbar.getSnacText().text)
+                .isEqualTo("Copied toot url. Now paste it in your mastodon search.")
+        }
+    }
+
+    @ParameterizedTest
+    @MethodSource("getDrivers")
+    fun `clicking a toot should open the toots`(driver: WebDriver) {
+        with(driver) {
+            // given
+            get("${getServer()}?acct=cookie_mumbles@mastodon.social")
+            waitForPageLoaded()
+
+            // when
+            findFirstToot().getTootTextElement().click()
+
+            // then
+            assertThat(currentUrl).startsWith("https://mastodon.social/@cookie_mumbles")
+        }
+    }
+
+    @ParameterizedTest
+    @MethodSource("getDrivers")
+    fun `clicking an avi should open the user profile`(driver: WebDriver) {
+        with(driver) {
+            // given
+            get("${getServer()}?acct=cookie_mumbles@mastodon.social")
+            waitForPageLoaded()
+
+            // when
+            findFirstToot().getAvi().click()
+
+            // then
+            assertThat(currentUrl).isEqualTo("https://mastodon.social/@cookie_mumbles")
+        }
     }
 }
