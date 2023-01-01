@@ -117,14 +117,14 @@ export default class TootHtmlBuilder {
     return wrapIn('div', { class: "tweet_footer"}, [
       wrapIn('div', { class: "toot_footer_item"}, [
         createSvgRef(
-          "svg_icon_retweet_active",
+          "svg_icon_boost",
           { class:`toot_footer_btn svg_icon btn_action_boost ${(boosted) ? "active" : ""}`, width:"24", height:"24" }
         ),
         createElement('div', {class:"toot_footer_txt"}, reblogsCount.toString()),
       ]),
       wrapIn('div', { class: "toot_footer_item"}, [
         createSvgRef(
-          "svg_icon_star",
+          "svg_icon_fave",
           { class:`toot_footer_btn svg_icon btn_action_favorite ${(favorited) ? "active" : ""}`, width:"24", height:"24" }
         ),
         createElement('div', {class:"toot_footer_txt"}, favoritesCount.toString()),

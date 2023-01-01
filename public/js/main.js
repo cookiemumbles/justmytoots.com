@@ -7,7 +7,7 @@ import Logger from './utils/Logger.js';
 import { showHelpModal, showImageModal, showLoginModal } from './ui/Modal.js';
 import { setDataCookie, getDataCookie, appendDataCookie, deleteDataCookie } from './utils/Cookie.js';
 import MastodonApi from './utils/MastodonApi.js';
-import { replaceClickListenerForEachOfClass, addClickListenerForId, toggleHiddenElement } from './ui/Utils.js';
+import { addClickListenerForId, toggleHiddenElement, addUniqueClickListenerForEachOfClass } from './ui/Utils.js';
 import { clearCodeTokenFromUrl, getUserDataFromUrl } from './utils/Browser.js';
 
 var g_targetUserData = null
@@ -161,7 +161,7 @@ function loadToots(toots) {
 
 
 function addInitialListeners() {
-  addClickListenerForId("btn_login", (/** @type MouseEvent */ event) => {
+  addClickListenerForId("loginEvent", "btn_login", (/** @type MouseEvent */ event) => {
     if (event.target.textContent == "Logout") {
       deleteDataCookie()
       document.getElementById("btn_login").textContent = "Login"
@@ -170,19 +170,19 @@ function addInitialListeners() {
     }
   })
 
-  addClickListenerForId("btn_help", () => {
+  addClickListenerForId("helpEvent", "btn_help", () => {
     showHelpModal()
   })
 }
 
 
 function addPostLoadListeners() {
-  addClickListenerForId('down_arrow', function() {
+  addClickListenerForId("loadMoreEvent", 'down_arrow', function() {
     loadPageContent(g_targetUserData, g_lastTootId)
   })
 
 
-  replaceClickListenerForEachOfClass("btn_action_copy", (/** @type MouseEvent */ event) => {
+  addUniqueClickListenerForEachOfClass("copyEvent", "btn_action_copy", (/** @type MouseEvent */ event) => {
     const prentDiv = event.target.closest('.single_tweet_wrap');
     log.d("Clicked copy:" + prentDiv.dataset.tootUrl)
     copyToClipboard(prentDiv.dataset.tootUrl)
@@ -199,7 +199,7 @@ function addPostLoadListeners() {
       })
   }
 
-  replaceClickListenerForEachOfClass("btn_action_boost", (/** @type MouseEvent */ event) => {
+  addUniqueClickListenerForEachOfClass("boostClickEvent", "btn_action_boost", (/** @type MouseEvent */ event) => {
     if (isLoggedIn()) {
       const prentDiv = event.target.closest('.single_tweet_wrap');
       const btn = event.target.closest('.toot_footer_btn')
@@ -231,7 +231,7 @@ function addPostLoadListeners() {
   })
 
 
-  replaceClickListenerForEachOfClass("btn_action_favorite", (/** @type MouseEvent */ event) => {
+  addUniqueClickListenerForEachOfClass("favoriteClickEvent", "btn_action_favorite", (/** @type MouseEvent */ event) => {
     if (isLoggedIn()) {
       const prentDiv = event.target.closest('.single_tweet_wrap');
       const btn = event.target.closest('.toot_footer_btn')
@@ -264,7 +264,7 @@ function addPostLoadListeners() {
   })
 
 
-  replaceClickListenerForEachOfClass("content_warning", (/** @type MouseEvent */ event) => {
+  addUniqueClickListenerForEachOfClass("contentWarningClickEvent", "content_warning", (/** @type MouseEvent */ event) => {
     Array
       .from(document.getElementsByClassName(`hidden_${event.target.dataset.tootId}`))
       .forEach(hiddenElement => {
@@ -272,7 +272,7 @@ function addPostLoadListeners() {
       })
   })
 
-  replaceClickListenerForEachOfClass("toot_pic", (/** @type MouseEvent */ event) => {
+  addUniqueClickListenerForEachOfClass("tootPicClickEvent", "toot_pic", (/** @type MouseEvent */ event) => {
     /** @type HTMLImageElement  */
     const img = event.target
     showImageModal(img.src)
