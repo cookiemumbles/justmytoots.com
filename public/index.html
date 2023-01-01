@@ -40,12 +40,28 @@
         <path d="M872.3,458.4c-18.9,0-35.4,16.5-35.4,35.4v425.2l0,0H90.3c-2.4,0-7.1-2.4-9.4-4.7V165.5c2.4-2.4,7.1-2.4,11.8-2.4h413.4c18.9,0,35.4-16.5,35.4-35.4c0-18.9-16.5-35.4-35.4-35.4H92.7C52.5,92.2,10,113.5,10,156v763.1c0,40.2,44.9,70.9,80.3,70.9H851c14.2,0,56.7-4.7,56.7-70.9V493.8C907.7,474.9,891.2,458.4,872.3,458.4z"/><path d="M976.2,16.6c-16.5-11.8-37.8-7.1-49.6,9.5L503.7,623.8L324.2,387.5c-11.8-16.5-33.1-18.9-49.6-7.1c-16.5,11.8-18.9,33.1-7.1,49.6l210.3,274l0,0c0,2.4,2.4,2.4,2.4,4.7l2.4,2.4l0,0c0,0,0,0,2.4,0c2.4,2.4,4.7,2.4,7.1,2.4h2.4c2.4,0,7.1,2.4,9.5,2.4l0,0l0,0l0,0l0,0c2.4,0,7.1,0,9.4-2.4h2.4c2.4,0,4.7-2.4,7.1-4.7c0,0,0,0,2.4,0l0,0l2.4-2.4c2.4,0,2.4,0,4.7-2.4l0,0L983.3,66.2C995.1,49.7,990.4,28.4,976.2,16.6z"/>
       </g>
 
+      <g id='svg_icon_three_dots'>
+        <circle cx="5" cy="5" r="2"/>
+        <circle cx="12" cy="5" r="2"/>
+        <circle cx="19" cy="5" r="2"/>
+      </g>
+
     </svg>
 
     <div id="content">
       <div id="header">
         <button id="btn_login" class="large_button bordered">Login</button>
-        <button id="btn_help" class="large_button bordered">Help</button>
+        <div tabindex="0" class="menu">
+          <div id='menu_default_item' class="bordered menu_item large_button svg_icon enabled">
+            <svg class="" width="24" height="10" viewBox="0 0 24 10">
+              <use href="#svg_icon_three_dots"></use>
+            </svg>
+          </div>
+          <ul class="menu_content">
+            <li><button id="btn_filters" class="bordered">Filters</button></li>
+            <li><button id="btn_about" class="bordered">About</button></li>
+          </ul>
+        </div>
       </div>
 
       <div id="tweet_list_wrap" class="bordered">

@@ -4,7 +4,7 @@ import { showSnacError, showSnacSuccess } from './ui/Snacbar.js';
 import { test_toots } from './testData.js';
 import { displayServerError, displayMissingUserMessage } from './ui/ErrorScreen.js';
 import Logger from './utils/Logger.js';
-import { showHelpModal, showImageModal, showLoginModal } from './ui/Modal.js';
+import { showAboutModal, showFiltersModal, showImageModal, showLoginModal } from './ui/Modal.js';
 import { setDataCookie, getDataCookie, appendDataCookie, deleteDataCookie } from './utils/Cookie.js';
 import MastodonApi from './utils/MastodonApi.js';
 import { addClickListenerForId, toggleHiddenElement, addUniqueClickListenerForEachOfClass } from './ui/Utils.js';
@@ -170,8 +170,11 @@ function addInitialListeners() {
     }
   })
 
-  addClickListenerForId("helpEvent", "btn_help", () => {
-    showHelpModal()
+  addClickListenerForId("filtersEvent", "btn_filters", () => {
+    showFiltersModal()
+  })
+  addClickListenerForId("aboutEvent", "btn_about", () => {
+    showAboutModal()
   })
 }
 
