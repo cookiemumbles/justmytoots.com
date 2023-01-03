@@ -176,6 +176,22 @@ function addInitialListeners() {
   addClickListenerForId("aboutEvent", "btn_about", () => {
     showAboutModal()
   })
+
+  // document.getElementsByClassName("menu")[0].addEventListener("focusin", (event) => {
+  //   console.log("focus")
+  //   /** @type HTMLElement */ 
+  //   let target = event.target
+    
+  //   target.nextElementSibling.classList.add("active")
+  // })
+
+  // document.getElementsByClassName("menu")[0].addEventListener("focusout", (event) => {
+  //   console.log("lost focus")
+  //   /** @type HTMLElement */ 
+  //   let target = event.target
+    
+  //   target.nextElementSibling.classList.remove("active")
+  // })
 }
 
 

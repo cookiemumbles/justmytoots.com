@@ -223,13 +223,21 @@ li {
     /* clicking on label should toggle the menu */
     pointer-events: none;
 }
-.menu:focus .menu_content {
+.menu:focus .menu_content, .menu:focus-within .menu_content {
     /*  opacity is 1 in opened state (see below) */
     opacity: 1;
     visibility: visible;
     /* don't let pointer-events affect descendant elements */
     pointer-events: auto;
 }
+
+/* .menu_content.active { */
+/*     /1*  opacity is 1 in opened state (see below) *1/ */
+/*     opacity: 1; */
+/*     visibility: visible; */
+/*     /1* don't let pointer-events affect descendant elements *1/ */
+/*     pointer-events: auto; */
+/* } */
 
 /* .svg_tweet_menu { */
 /*   margin: 0; */

@@ -16,7 +16,7 @@ export default class TootHtmlBuilder {
      */
   createTootDomItem(toot) {
     return wrapIn('li',
-      { class: 'bordered single_tweet_li', tabindex: 1 },
+      { class: 'bordered single_tweet_li' },
       wrapIn('div', {
         class: "single_tweet_wrap" ,
         'data-toot-user': toot["account"]["acct"],

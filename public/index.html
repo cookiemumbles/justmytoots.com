@@ -51,13 +51,18 @@
     <div id="content">
       <div id="header">
         <button id="btn_login" class="large_button bordered">Login</button>
-        <div tabindex="0" class="menu">
-          <div id='menu_default_item' class="bordered menu_item large_button svg_icon enabled">
+        <div class="menu">
+          <button
+              id='menu_default_item'
+              class="bordered menu_item large_button svg_icon enabled"
+              aria-expanded="false"
+              aria-controls="menu_content"
+            >
             <svg class="" width="24" height="10" viewBox="0 0 24 10">
               <use href="#svg_icon_three_dots"></use>
             </svg>
-          </div>
-          <ul class="menu_content">
+          </button>
+          <ul id="menu_content" class="menu_content">
             <li><button id="btn_filters" class="bordered">Filters</button></li>
             <li><button id="btn_about" class="bordered">About</button></li>
           </ul>
@@ -81,15 +86,15 @@
     
     <div id="snackbar" class="tweet_footer"></div>
 
-    <div id="modal_background">
+    <div id="modal_background" role="dialog" aria-modal="true">
       <!-- Modal content -->
       <div id="modal_container">
         <div class="modal_header">
-          <span id="model_close">
+          <button id="model_close">
             <svg class="btn_close svg_icon bordered" width="24" height="24" viewBox="0 0 24 24">
               <use href="#svg_icon_close"></use>
             </svg>
-          </span>
+          </button>
         </div>
 
         <div id="modal_content">
