@@ -25,7 +25,7 @@ export default class TootHtmlBuilder {
         'data-toot-url': toot.url,
       },
         [
-          this.createAviDiv(toot["account"]["avatar"], (toot.localized_profile_url) ? toot.localized_profile_url : toot.account.url),
+          this.createAviDiv(toot["account"]["display_name"], toot["account"]["avatar"], (toot.localized_profile_url) ? toot.localized_profile_url : toot.account.url),
           wrapIn('div', {class:"toot_content"}, [
             this.createTweetHeader(toot["account"]["display_name"], '@' + toot["account"]["username"], toot.created_at),
             this.createContentWarningDiv(toot.sensitive, toot.id, toot.spoiler_text),
@@ -41,12 +41,13 @@ export default class TootHtmlBuilder {
   }
 
   /**
+   * @param {string} accountName
    * @param {string} imageUrl
    * @param {string} profileUrl
    * */
-  createAviDiv(imageUrl, profileUrl) {
+  createAviDiv(accountName, imageUrl, profileUrl) {
     return wrapIn('a', {href: profileUrl, class: "avi_container"},
-      createElement('img', { class: "avi", src: imageUrl, width:'48px', height:'48px' })
+      createElement('img', { class: "avi", alt: "Avatar for " + accountName, src: imageUrl, width:'48px', height:'48px' })
     )
   }
 
@@ -101,6 +102,7 @@ export default class TootHtmlBuilder {
       attatchments.map(attatchment => {
         return createElement('img', {
           class: (isSensitive) ? `toot_pic hidden_${tootId} blur` : 'toot_pic',
+          alt: attatchment.description,
           src: attatchment['preview_url']
         })
       })
