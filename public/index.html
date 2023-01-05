@@ -49,10 +49,10 @@
     </svg>
 
     <div id="content">
-      <div id="header">
-        <button id="btn_login" class="large_button bordered">Login</button>
-        <div class="menu">
-          <button
+      <nav id="header" aria-label="Main Navigation">
+        <button type='button' id="btn_login" class="large_button bordered">Login</button>
+        <div class="menu" tabindex="0">
+          <div
               id='menu_default_item'
               class="bordered menu_item large_button svg_icon enabled"
               aria-expanded="false"
@@ -61,13 +61,13 @@
             <svg class="" width="24" height="10" viewBox="0 0 24 10">
               <use href="#svg_icon_three_dots"></use>
             </svg>
-          </button>
+          </div>
           <ul id="menu_content" class="menu_content">
             <li><button id="btn_filters" class="bordered">Filters</button></li>
             <li><button id="btn_about" class="bordered">About</button></li>
           </ul>
         </div>
-      </div>
+      </nav>
 
       <div id="tweet_list_wrap" class="bordered">
         <ul id="tweet_list" class="bordered">

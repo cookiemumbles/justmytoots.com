@@ -3,6 +3,11 @@
 @import '/css/icons.css';
 @import '/css/modal.css';
 
+/*
+ * comma between selector means both
+ * space between two means parent-child relation
+ */
+
 a {
   color: var(--text_color);
   text-decoration: none;
@@ -216,28 +221,20 @@ li {
 .menu {
     position: relative;
     display: inline-block;
-    outline: none;
     float: right;
 }
-.menu:focus {
-    /* clicking on label should toggle the menu */
-    pointer-events: none;
-}
+/* .menu:focus { */
+/*     /1* clicking on label should toggle the menu *1/ */
+/*     pointer-events: none; */
+/* } */
+/* .menu:focus .menu_content, .menu_content:focus .menu_content { */
 .menu:focus .menu_content, .menu:focus-within .menu_content {
     /*  opacity is 1 in opened state (see below) */
     opacity: 1;
     visibility: visible;
     /* don't let pointer-events affect descendant elements */
-    pointer-events: auto;
+    /* pointer-events: auto; */
 }
-
-/* .menu_content.active { */
-/*     /1*  opacity is 1 in opened state (see below) *1/ */
-/*     opacity: 1; */
-/*     visibility: visible; */
-/*     /1* don't let pointer-events affect descendant elements *1/ */
-/*     pointer-events: auto; */
-/* } */
 
 /* .svg_tweet_menu { */
 /*   margin: 0; */
@@ -279,3 +276,18 @@ li {
   /* border: 1px solid; */
   /* border-color: var(--tColorDark2); */
 }
+
+/* #menu_default_item { */
+/*   background-color: var(--bgColor); */
+/*   padding: 16px; */
+/*   margin: 0; */
+/*   font-size: 16px; */
+/* } */
+
+/* .menu_item { */
+/*   background-color: var(--bgColor); */
+/*   padding: 16px; */
+/*   margin: 0; */
+/*   font-size: 16px; */
+/* } */
+

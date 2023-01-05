@@ -44,10 +44,6 @@ textarea {
   resize: none; /*remove the resize handle on the bottom right*/
 }
 
-iframe {
-  border: none;
-}
-
 
 button {
   background-color: var(--bg_color);
