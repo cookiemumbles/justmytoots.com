@@ -3,6 +3,11 @@
 @import '/css/icons.css';
 @import '/css/modal.css';
 
+/*
+ * comma between selector means both
+ * space between two means parent-child relation
+ */
+
 a {
   color: var(--text_color);
   text-decoration: none;
@@ -36,9 +41,9 @@ h1 {
 }
 
 li {
-  padding: 12px 16px;
-  border: 1px solid;
-  border-color: var(--color_dark2);
+  /* padding: 12px 16px; */
+  /* border: 1px solid; */
+  /* border-color: var(--color_dark2); */
 }
 
 .bordered {
@@ -54,10 +59,11 @@ li {
 }
 
 #header {
-  margin-bottom: 1em;
+  margin-bottom: 0.3em;
+  margin-top: 0.1em;
 }
 
-#btn_help {
+#btn_about {
   float: right;
 }
 

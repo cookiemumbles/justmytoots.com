@@ -55,11 +55,11 @@ export function showLoginModal() {
   )
 }
 
-export function showHelpModal() {
+export function showAboutModal() {
   showModal()
   let container = document.getElementById("modal_content");
   container.innerHTML = ""
-  container.appendChild(createElement('h1', {}, "Help"))
+  container.appendChild(createElement('h1', {}, "About"))
   container.appendChild(createElement('p', {}, `
     This little page displays the toots but not the boosts for a user. It helps
     people that want to showcase their toots, for example when doing jokes,
