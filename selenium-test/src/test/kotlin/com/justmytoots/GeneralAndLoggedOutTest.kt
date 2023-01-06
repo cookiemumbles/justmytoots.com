@@ -72,7 +72,7 @@ class GeneralAndLoggedOutTest {
             assertThat(findModalBackground().isDisplayed).isFalse()
 
             // when
-            findHelpBtn().click()
+            findAboutBtn().click()
             // then
             assertThat(findModalBackground().isDisplayed).isTrue()
 

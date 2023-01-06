@@ -172,6 +172,7 @@ li {
 }
 
 .toot_footer_txt {
+  color: var(--text_color);
 }
 
 
@@ -182,19 +183,31 @@ li {
   margin-right: 0.2em;
 }
 
-.svg_icon {
+button .svg_icon {
   fill: var(--color_light2);
 }
 
-.svg_icon.enabled:hover {
+button .svg_icon {
+  fill: var(--color_light2);
+}
+
+button.active .svg_icon:hover {
   fill: var(--color_blue);
 }
 
-.btn_action_favorite.active {
+/* .svg_icon { */
+/*   fill: var(--color_light2); */
+/* } */
+
+/* .svg_icon.enabled:hover { */
+/*   fill: var(--color_blue); */
+/* } */
+
+.btn_action_favorite.active .svg_icon {
   fill: var(--color_yellow);
 }
 
-.btn_action_boost.active {
+.btn_action_boost.active .svg_icon {
   fill: var(--color_green);
 }
 
