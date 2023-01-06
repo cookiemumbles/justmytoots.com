@@ -84,6 +84,8 @@ export function createSvgRef(refId, attributes) {
   }
   // use setAttributeNS because otherwise the capitalisation breaks the svgs
   element.setAttributeNS(null, "viewBox", `0 0 ${attributes["width"]} ${attributes["height"]}`)
-  element.innerHTML = `<use href='#${refId}'/>`
+  element.innerHTML = `
+    ${(attributes['title']) ? `<title>${attributes['title']}</title>` : "" }
+    <use href='#${refId}'/>`
   return element
 }

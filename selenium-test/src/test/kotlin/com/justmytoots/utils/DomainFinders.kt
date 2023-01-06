@@ -27,7 +27,7 @@ fun WebElement.getCopyBtn() = findElement(By.className("btn_action_copy"))
 
 fun WebDriver.findLoginBtn() = findElement(By.id("btn_login"))
 
-fun WebDriver.findHelpBtn() = findElement(By.id("btn_help"))
+fun WebDriver.findAboutBtn() = findElement(By.id("btn_about"))
 
 fun WebDriver.findModalBackground() = findElement(By.id("modal_background"))
 

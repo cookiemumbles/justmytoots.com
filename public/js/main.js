@@ -196,9 +196,7 @@ function addPostLoadListeners() {
   if (isLoggedIn()) {
     Array.from(document.getElementsByClassName('toot_footer_btn'))
       .forEach(element => {
-        if (element.classList.contains("svg_icon")) {
-          element.classList.add("enabled")
-        }
+        element.disabled = false
       })
   }
 
@@ -217,6 +215,7 @@ function addPostLoadListeners() {
             console.log("Successfully boosted.")
           })
         btn.classList.add("active")
+        btn.title = "Unboost"
       } else {
         MastodonApi.unboost(
           loginData.server,
@@ -227,6 +226,7 @@ function addPostLoadListeners() {
             console.log("Successfully unboosted.")
           })
         btn.classList.remove("active")
+        btn.title = "Boost"
       }
     } else {
       showSnacError("Please log in or just copy the link.")
@@ -241,25 +241,29 @@ function addPostLoadListeners() {
 
       const loginData = getDataCookie()
       if (!btn.classList.contains('active')) {
-        MastodonApi.favorite(
-          loginData.server,
-          loginData.bearer_token,
-          prentDiv.dataset.tootId
-        )
+        MastodonApi
+          .favorite(
+            loginData.server,
+            loginData.bearer_token,
+            prentDiv.dataset.tootId
+          )
           .then(_ => {
             console.log("Successfully faved.")
           })
         btn.classList.add("active")
+        btn.title = "Unfavorite"
       } else {
-        MastodonApi.unfavorite(
-          loginData.server,
-          loginData.bearer_token,
-          prentDiv.dataset.tootId
-        )
+        MastodonApi
+          .unfavorite(
+            loginData.server,
+            loginData.bearer_token,
+            prentDiv.dataset.tootId
+          )
           .then(_ => {
             console.log("Successfully unfaved.")
           })
         btn.classList.remove("active")
+        btn.title = "Favorite"
       }
     } else {
       showSnacError("Please log in or just copy the link.")
