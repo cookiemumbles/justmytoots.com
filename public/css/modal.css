@@ -59,8 +59,9 @@
   bottom: 0px; /* 30px from the bottom */
   border-radius: 10px;
 
+  visibility: hidden;
   opacity: 0;
-  transition: bottom 0.5s, opacity 0.5s;
+  transition: visibility 0.5s, bottom 0.5s, opacity 0.5s;
   transition-timing-function: ease
 }
 
@@ -68,4 +69,6 @@
 #snackbar.show {
   opacity: 1;
   bottom: 30px;
+  visibility: visible;
 }
+
