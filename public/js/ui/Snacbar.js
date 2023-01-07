@@ -40,14 +40,13 @@ function showSnac(text, svgElement) {
     closeAndReopenSnacbarWithNewInfo(text, svgElement)
   } else {
     var snackbar = document.getElementById("snackbar");
-
     snackbar.classList.toggle("show");
-    snackbar.innerHTML = ""
-    snackbar.appendChild(svgElement)
 
-    snackbar.appendChild(
-      createElement('div', { class:'tweet_header'}, text),
-    )
+    var snacIco = document.getElementById("snac_icon");
+    snacIco.appendChild(svgElement)
+
+    var snacAlert = document.getElementById("snac_alert");
+    snacAlert.innerHTML = text
 
     // After 4 seconds, remove the show class from DIV
     latestSnaccbarTimeout = setTimeout(hideSnac, 4000);
