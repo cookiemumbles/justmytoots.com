@@ -46,14 +46,55 @@
         <circle cx="19" cy="5" r="2"/>
       </g>
 
+      <g id="svg_icon_options">
+        <path id="svg_4" d="m10.68477,13.42187l12.69023,0l0,-2.84375l-12.69023,0c-0.6043,-1.6707 -2.16836,-2.84375 -4.0168,-2.84375s-3.4125,1.17305 -4.0168,2.84375l-2.02617,0l0,2.84375l2.02617,0c0.6043,1.6707 2.16836,2.84375 4.0168,2.84375s3.4125,-1.17305 4.0168,-2.84375zm-5.43867,-1.42187c0,-0.78203 0.63984,-1.42187 1.42187,-1.42187s1.42187,0.63984 1.42187,1.42187s-0.63984,1.42187 -1.42187,1.42187s-1.42187,-0.63984 -1.42187,-1.42187z"/>
+        <path id="svg_7" d="m14.48828,23.375c1.84844,0 3.4125,-1.17305 4.0168,-2.84375l4.86992,0l0,-2.84375l-4.86992,0c-0.6043,-1.6707 -2.16836,-2.84375 -4.0168,-2.84375s-3.4125,1.17305 -4.0168,2.84375l-9.84648,0l0,2.84375l9.84648,0c0.6043,1.6707 2.16836,2.84375 4.0168,2.84375zm-1.42187,-4.26562c0,-0.78203 0.63984,-1.42187 1.42187,-1.42187s1.42187,0.63984 1.42187,1.42187s-0.63984,1.42187 -1.42187,1.42187s-1.42187,-0.63984 -1.42187,-1.42187z"/>
+        <path id="svg_10" d="m16.97656,9.15625c1.84844,0 3.4125,-1.17305 4.0168,-2.84375l2.38164,0l0,-2.84375l-2.38164,0c-0.6043,-1.6707 -2.16836,-2.84375 -4.0168,-2.84375c-1.84844,0 -3.4125,1.17305 -4.0168,2.84375l-12.33477,0l0,2.84375l12.33477,0c0.6043,1.6707 2.16836,2.84375 4.0168,2.84375zm1.42187,-4.26562c0,0.78203 -0.63984,1.42187 -1.42187,1.42187s-1.42187,-0.63984 -1.42187,-1.42187s0.63984,-1.42187 1.42187,-1.42187s1.42187,0.63984 1.42187,1.42187z"/>
+      </g>
+
     </svg>
 
     <div id="content">
       <nav id="header" aria-label="Main Navigation">
         <button type='button' id="btn_login" class="large_button bordered">Login</button>
-        <!-- <button type='button' id="btn_config" class="large_button bordered">Config</button> -->
-        <button type='button' id="btn_about" class="large_button bordered">About</button>
+        <div class="nav_right">
+          <button type='button' id="btn_options" class="large_button bordered">Options</button>
+          <button type='button' id="btn_about" class="large_button bordered">About</button>
+        </div>
       </nav>
+
+
+      <div id="options_container" class="bordered">
+        <div>
+
+          <div class="check_option">
+            <label id="checkbox_replies_label" class="switch" for="checkbox_replies">
+              <input type="checkbox" id="checkbox_replies" class="options_checkbox" />
+              <span class="slider round"/>
+                <span class="switch_label">Include replies</span>
+            </label>
+          </div>
+
+          <div class="check_option">
+            <label id="checkbox_media_label" class="switch" for="checkbox_media">
+              <input type="checkbox" id="checkbox_media" class="options_checkbox" />
+              <span class="slider round"/>
+                <span class="switch_label">Only with media</span>
+            </label>
+          </div>
+
+          <div class="check_option">
+            <label id="checkbox_public_label" class="switch" for="checkbox_public">
+              <input type="checkbox" id="checkbox_public" class="options_checkbox" />
+              <span class="slider round"/>
+                <span class="switch_label">Only public toots.</span>
+            </label>
+          </div>
+
+        </div>
+        <button type='button' id="btn_apply_options" class="large_button bordered">Apply</button>
+      </div>
+
 
       <div id="tweet_list_wrap" class="bordered">
         <ul id="tweet_list" class="bordered">
