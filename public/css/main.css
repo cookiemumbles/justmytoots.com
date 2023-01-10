@@ -2,10 +2,12 @@
 @import '/css/base.css';
 @import '/css/icons.css';
 @import '/css/modal.css';
+@import 'options.css';
 
 /*
  * comma between selector means both
  * space between two means parent-child relation
+ * https://www.w3schools.com/cssref/css_selectors.php
  */
 
 a {
@@ -63,7 +65,7 @@ li {
   margin-top: 0.1em;
 }
 
-#btn_about {
+.nav_right {
   float: right;
 }
 
@@ -226,3 +228,4 @@ button.active .svg_icon:hover {
 .svg_button_like_active {
   fill: var(--color_blue);
 }
+

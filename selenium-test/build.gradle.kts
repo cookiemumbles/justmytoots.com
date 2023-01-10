@@ -21,4 +21,7 @@ dependencies {
     testImplementation("org.assertj:assertj-core:3.21.0")
 }
 
-tasks.withType<Test> { useJUnitPlatform() }
+tasks.withType<Test> {
+    useJUnitPlatform()
+    testLogging.showStandardStreams = true
+}

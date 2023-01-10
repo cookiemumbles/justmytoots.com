@@ -1,6 +1,7 @@
 package com.justmytoots
 
 import com.justmytoots.utils.*
+import java.time.Duration
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
@@ -8,6 +9,8 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
+import org.openqa.selenium.support.ui.ExpectedConditions
+import org.openqa.selenium.support.ui.WebDriverWait
 
 class GeneralAndLoggedOutTest {
 
@@ -219,6 +222,100 @@ class GeneralAndLoggedOutTest {
             // then
             assertThat(findModalBackground().isDisplayed).isFalse()
             assertThat(findSnacbar().getClases()).containsOnly("tweet_footer") // no enabled
+        }
+    }
+
+    @ParameterizedTest
+    @MethodSource("getDrivers")
+    fun `options menu opens and closes`(driver: WebDriver) {
+        with(driver) {
+            // given
+            get("${getServer()}?acct=cookie_mumbles@mastodon.social&testdata=true")
+            // then
+            assertThat(findOptionsContainer().isDisplayed).isFalse()
+
+            // when
+            findOptionsBtn().click()
+            // then
+            assertThat(findOptionsContainer().isDisplayed).isTrue()
+
+            // when
+            findOptionsBtn().click()
+            WebDriverWait(this, Duration.ofSeconds(1))
+                .until(ExpectedConditions.invisibilityOf(findOptionsContainer()))
+            // then
+            assertThat(findOptionsContainer().isDisplayed).isFalse()
+        }
+    }
+
+    @ParameterizedTest
+    @MethodSource("getDrivers")
+    fun `options checkboxes work`(driver: WebDriver) {
+        with(driver) {
+            // given
+            get("${getServer()}?acct=cookie_mumbles@mastodon.social&testdata=true")
+            findOptionsBtn().click()
+
+            mapOf(
+                    "checkbox_replies" to "replies",
+                    "checkbox_media" to "media_only",
+                    "checkbox_public" to "public_only"
+                )
+                .forEach { checkboxId, paramName ->
+                    val checkbox = findElement(By.id(checkboxId))
+                    val label = findElement(By.id("${checkboxId}_label"))
+                    // initial
+                    assertThat(checkbox.isSelected).isFalse()
+                    assertThat(currentUrl).doesNotContain("$paramName=")
+
+                    // when
+                    label.click()
+                    // then
+                    assertThat(checkbox.isSelected).isTrue()
+                    assertThat(currentUrl).contains("$paramName=true")
+
+                    // when
+                    label.click()
+                    // then
+                    assertThat(checkbox.isSelected).isFalse()
+                    assertThat(currentUrl).doesNotContain("$paramName=true")
+                }
+        }
+    }
+
+    @ParameterizedTest
+    @MethodSource("getDrivers")
+    fun `options filter correctly`(driver: WebDriver) {
+        with(driver) {
+            // given
+            val baseUrl = "${getServer()}?acct=cookie_mumbles@mastodon.social&testdata=true"
+            val tootIdPublicNoMedia = "109472499431799134"
+            val tootIdReply = "109683800922113496"
+            val tootIdUnlisted = "109683797485314862"
+            val tootIdMedia = "109447955769349950"
+
+            get("$baseUrl")
+            assertThat(findToots().mapToTootIds()).contains(tootIdPublicNoMedia)
+            assertThat(findToots().mapToTootIds()).doesNotContain(tootIdReply)
+            assertThat(findToots().mapToTootIds()).contains(tootIdUnlisted)
+            assertThat(findToots().mapToTootIds()).contains(tootIdMedia)
+
+            get("$baseUrl&replies=true")
+            assertThat(findToots().mapToTootIds()).contains(tootIdPublicNoMedia)
+            assertThat(findToots().mapToTootIds()).contains(tootIdReply)
+            assertThat(findToots().mapToTootIds()).contains(tootIdUnlisted)
+            assertThat(findToots().mapToTootIds()).contains(tootIdMedia)
+
+            get("$baseUrl&media_only=true")
+            assertThat(findToots().mapToTootIds()).doesNotContain(tootIdPublicNoMedia)
+            assertThat(findToots().mapToTootIds()).doesNotContain(tootIdReply)
+            assertThat(findToots().mapToTootIds()).doesNotContain(tootIdUnlisted)
+            assertThat(findToots().mapToTootIds()).contains(tootIdMedia)
+
+            get("$baseUrl&public_only=true")
+            assertThat(findToots().mapToTootIds()).contains(tootIdPublicNoMedia)
+            assertThat(findToots().mapToTootIds()).doesNotContain(tootIdReply)
+            assertThat(findToots().mapToTootIds()).doesNotContain(tootIdUnlisted)
         }
     }
 }

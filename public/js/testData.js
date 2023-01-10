@@ -1,3 +1,62 @@
+/**
+ * @typedef {Object} AccountJson
+ * @prop {string} id
+ * @prop {string} username
+ * @prop {string} acct
+ * @prop {string} display_name
+ * @prop {boolean} locked
+ * @prop {boolean} bot
+ * @prop {boolean} discoverable
+ * @prop {boolean} group
+ * @prop {string} created_at
+ * @prop {string} note
+ * @prop {string} url
+ * @prop {string} avatar
+ * @prop {string} avatar_static
+ * @prop {string} header
+ * @prop {string} header_static
+ * @prop {number} followers_count
+ * @prop {number} following_count
+ * @prop {number} statuses_count
+ * @prop {string} last_status_at
+ * @prop {boolean} noindex
+ * @prop {any[]} emojis
+ * @prop {string} [role]
+ * @prop {any[]} fields
+ */
+
+
+/**
+ * @typedef {Object} TootJson
+ * @prop {string} id
+ * @prop {string} created_at
+ * @prop {string} in_reply_to_id
+ * @prop {string} in_reply_to_account_id
+ * @prop {boolean} sensitive
+ * @prop {string} spoiler_text
+ * @prop {string} visibility
+ * @prop {string} language
+ * @prop {string} uri
+ * @prop {string} url
+ * @prop {number} replies_count
+ * @prop {number} reblogs_count
+ * @prop {number} favourites_count
+ * @prop {string} edited_at
+ * @prop {string} content
+ * @prop {any} reblog
+ * @prop {any} application
+ * @prop {string} created_at
+ * @prop {string} [localized_toot_url]
+ * @prop {AccountJson} account
+ * @prop {any[]} media_attachments
+ * @prop {any[]} mentions
+ * @prop {any[]} tags
+ * @prop {any[]} emojis
+ * @prop {any} card
+ * @prop {any} poll
+ */
+
+/** @type {TootJson[]} */
 export const test_toots = [
   {
     "id": "109472499431799134",
@@ -29,7 +88,7 @@ export const test_toots = [
       "created_at": "2022-11-21T00:00:00.000Z",
       "note": "<p>Friendly cis cookie on a quest to make you chuckle</p><p>My toots -&gt; <a href=\"https://justmytoots.com/cookie_mumbles@ohai.social\" target=\"_blank\" rel=\"nofollow noopener noreferrer\"><span class=\"invisible\">https://</span><span class=\"ellipsis\">justmytoots.com/cookie_mumbles</span><span class=\"invisible\">@ohai.social</span></a></p><p>best-of etc on twitter -&gt; <a href=\"https://linktr.ee/cookie_mumbles\" target=\"_blank\" rel=\"nofollow noopener noreferrer\"><span class=\"invisible\">https://</span><span class=\"\">linktr.ee/cookie_mumbles</span><span class=\"invisible\"></span></a></p><p><a href=\"https://ohai.social/tags/fedi22\" class=\"mention hashtag\" rel=\"tag\">#<span>fedi22</span></a><br /><a href=\"https://ohai.social/tags/jokes\" class=\"mention hashtag\" rel=\"tag\">#<span>jokes</span></a> <a href=\"https://ohai.social/tags/fun\" class=\"mention hashtag\" rel=\"tag\">#<span>fun</span></a> <a href=\"https://ohai.social/tags/nobot\" class=\"mention hashtag\" rel=\"tag\">#<span>nobot</span></a> <a href=\"https://ohai.social/tags/joke\" class=\"mention hashtag\" rel=\"tag\">#<span>joke</span></a> <a href=\"https://ohai.social/tags/humor\" class=\"mention hashtag\" rel=\"tag\">#<span>humor</span></a> <a href=\"https://ohai.social/tags/trending\" class=\"mention hashtag\" rel=\"tag\">#<span>trending</span></a> <a href=\"https://ohai.social/tags/funny\" class=\"mention hashtag\" rel=\"tag\">#<span>funny</span></a></p>",
       "url": "https://ohai.social/@cookie_mumbles",
-      "avatar": "https://files.ohai.social/accounts/avatars/109/380/999/955/395/974/original/c814d08a32d2a639.png",
+      "avatar": "https://files.ohai.social/accounts/avatars/109/380/999/955/395/974/original/fcf1fa4565af0718.png",
       "avatar_static": "https://files.ohai.social/accounts/avatars/109/380/999/955/395/974/original/c814d08a32d2a639.png",
       "header": "https://files.ohai.social/accounts/headers/109/380/999/955/395/974/original/9c502235dd1c0795.jpeg",
       "header_static": "https://files.ohai.social/accounts/headers/109/380/999/955/395/974/original/9c502235dd1c0795.jpeg",
@@ -48,8 +107,147 @@ export const test_toots = [
     "emojis": [],
     "card": null,
     "poll": null
-  },
-  {
+  }, {
+    "id": "109683800922113496",
+    "created_at": "2023-01-13T20:33:01.842Z",
+    "in_reply_to_id": "109683797485314862",
+    "in_reply_to_account_id": "109466064772943163",
+    "sensitive": false,
+    "spoiler_text": "",
+    "visibility": "unlisted",
+    "language": "en",
+    "uri": "https://techhub.social/users/cookie_mumbles/statuses/109683800922113496",
+    "url": "https://techhub.social/@cookie_mumbles/109683800922113496",
+    "replies_count": 0,
+    "reblogs_count": 0,
+    "favourites_count": 0,
+    "edited_at": null,
+    "favourited": false,
+    "reblogged": false,
+    "muted": false,
+    "bookmarked": false,
+    "pinned": false,
+    "content": "<p>Looks good. How about replies?</p>",
+    "filtered": [],
+    "reblog": null,
+    "application": {
+      "name": "Web",
+      "website": null
+    },
+    "account": {
+      "id": "109466064772943163",
+      "username": "cookie_mumbles",
+      "acct": "cookie_mumbles",
+      "display_name": "Cookie Codes",
+      "locked": false,
+      "bot": false,
+      "discoverable": true,
+      "group": false,
+      "created_at": "2022-12-06T00:00:00.000Z",
+      "note": "<p>Software developer that makes jokes over at <span class=\"h-card\"><a href=\"https://ohai.social/@cookie_mumbles\" class=\"u-url mention\">@<span>cookie_mumbles</span></a></span> and jokes and chats about software and other stuff here.</p><p>  Creater of <a href=\"https://justmytoots.com\" target=\"_blank\" rel=\"nofollow noopener noreferrer\"><span class=\"invisible\">https://</span><span class=\"\">justmytoots.com</span><span class=\"invisible\"></span></a>   </p><p>Github: <a href=\"https://github.com/cookiemumbles\" target=\"_blank\" rel=\"nofollow noopener noreferrer\"><span class=\"invisible\">https://</span><span class=\"\">github.com/cookiemumbles</span><span class=\"invisible\"></span></a></p>",
+      "url": "https://techhub.social/@cookie_mumbles",
+      "avatar": "https://files.techhub.social/accounts/avatars/109/466/064/772/943/163/original/be9f6fc721dd03a8.png",
+      "avatar_static": "https://files.techhub.social/accounts/avatars/109/466/064/772/943/163/original/be9f6fc721dd03a8.png",
+      "header": "https://files.techhub.social/accounts/headers/109/466/064/772/943/163/original/a5372985ca1dd032.jpeg",
+      "header_static": "https://files.techhub.social/accounts/headers/109/466/064/772/943/163/original/a5372985ca1dd032.jpeg",
+      "followers_count": 26,
+      "following_count": 71,
+      "statuses_count": 125,
+      "last_status_at": "2023-01-13",
+      "noindex": false,
+      "emojis": [],
+      "fields": [
+        {
+          "name": "Main account",
+          "value": "<a href=\"https://ohai.social/@cookie_mumbles\" target=\"_blank\" rel=\"nofollow noopener noreferrer me\"><span class=\"invisible\">https://</span><span class=\"\">ohai.social/@cookie_mumbles</span><span class=\"invisible\"></span></a>",
+          "verified_at": null
+        },
+        {
+          "name": "My Toots",
+          "value": "<a href=\"https://justmytoots.com/@cookie_mumbles@techhub.social\" target=\"_blank\" rel=\"nofollow noopener noreferrer me\"><span class=\"invisible\">https://</span><span class=\"ellipsis\">justmytoots.com/@cookie_mumble</span><span class=\"invisible\">s@techhub.social</span></a>",
+          "verified_at": null
+        }
+      ]
+    },
+    "media_attachments": [],
+    "mentions": [],
+    "tags": [],
+    "emojis": [],
+    "card": null,
+    "poll": null,
+    "localized_profile_url": "https://techhub.social/@cookie_mumbles@techhub.social",
+    "localized_toot_url": "https://techhub.social/@cookie_mumbles@techhub.social/109683800922113496"
+  },{
+    "id": "109683797485314862",
+    "created_at": "2023-01-13T20:32:09.405Z",
+    "in_reply_to_id": null,
+    "in_reply_to_account_id": null,
+    "sensitive": false,
+    "spoiler_text": "",
+    "visibility": "unlisted",
+    "language": "en",
+    "uri": "https://techhub.social/users/cookie_mumbles/statuses/109683797485314862",
+    "url": "https://techhub.social/@cookie_mumbles/109683797485314862",
+    "replies_count": 1,
+    "reblogs_count": 0,
+    "favourites_count": 0,
+    "edited_at": null,
+    "favourited": false,
+    "reblogged": false,
+    "muted": false,
+    "bookmarked": false,
+    "pinned": false,
+    "content": "<p>Let&#39;s see if we can filter out &#39;unlisted&#39; toots.</p>",
+    "filtered": [],
+    "reblog": null,
+    "application": {
+      "name": "Web",
+      "website": null
+    },
+    "account": {
+      "id": "109466064772943163",
+      "username": "cookie_mumbles",
+      "acct": "cookie_mumbles",
+      "display_name": "Cookie Codes",
+      "locked": false,
+      "bot": false,
+      "discoverable": true,
+      "group": false,
+      "created_at": "2022-12-06T00:00:00.000Z",
+      "note": "",
+      "url": "https://techhub.social/@cookie_mumbles",
+      "avatar": "https://files.techhub.social/accounts/avatars/109/466/064/772/943/163/original/be9f6fc721dd03a8.png",
+      "avatar_static": "https://files.techhub.social/accounts/avatars/109/466/064/772/943/163/original/be9f6fc721dd03a8.png",
+      "header": "https://files.techhub.social/accounts/headers/109/466/064/772/943/163/original/a5372985ca1dd032.jpeg",
+      "header_static": "https://files.techhub.social/accounts/headers/109/466/064/772/943/163/original/a5372985ca1dd032.jpeg",
+      "followers_count": 26,
+      "following_count": 71,
+      "statuses_count": 125,
+      "last_status_at": "2023-01-13",
+      "noindex": false,
+      "emojis": [],
+      "fields": [
+        {
+          "name": "Main account",
+          "value": "<a href=\"https://ohai.social/@cookie_mumbles\" target=\"_blank\" rel=\"nofollow noopener noreferrer me\"><span class=\"invisible\">https://</span><span class=\"\">ohai.social/@cookie_mumbles</span><span class=\"invisible\"></span></a>",
+          "verified_at": null
+        },
+        {
+          "name": "My Toots",
+          "value": "<a href=\"https://justmytoots.com/@cookie_mumbles@techhub.social\" target=\"_blank\" rel=\"nofollow noopener noreferrer me\"><span class=\"invisible\">https://</span><span class=\"ellipsis\">justmytoots.com/@cookie_mumble</span><span class=\"invisible\">s@techhub.social</span></a>",
+          "verified_at": null
+        }
+      ]
+    },
+    "media_attachments": [],
+    "mentions": [],
+    "tags": [],
+    "emojis": [],
+    "card": null,
+    "poll": null,
+    "localized_profile_url": "https://techhub.social/@cookie_mumbles@techhub.social",
+    "localized_toot_url": "https://techhub.social/@cookie_mumbles@techhub.social/109683797485314862"
+  },{
     "id": "109463245078881912",
     "created_at": "2022-12-05T21:42:46.756Z",
     "in_reply_to_id": null,
@@ -82,7 +280,7 @@ export const test_toots = [
       "created_at": "2022-11-21T00:00:00.000Z",
       "note": "<p>Friendly cis cookie on a quest to make you chuckle</p><p>My toots -&gt; <a href=\"https://justmytoots.com/cookie_mumbles@ohai.social\" target=\"_blank\" rel=\"nofollow noopener noreferrer\"><span class=\"invisible\">https://</span><span class=\"ellipsis\">justmytoots.com/cookie_mumbles</span><span class=\"invisible\">@ohai.social</span></a></p><p>best-of etc on twitter -&gt; <a href=\"https://linktr.ee/cookie_mumbles\" target=\"_blank\" rel=\"nofollow noopener noreferrer\"><span class=\"invisible\">https://</span><span class=\"\">linktr.ee/cookie_mumbles</span><span class=\"invisible\"></span></a></p><p><a href=\"https://ohai.social/tags/fedi22\" class=\"mention hashtag\" rel=\"tag\">#<span>fedi22</span></a><br /><a href=\"https://ohai.social/tags/jokes\" class=\"mention hashtag\" rel=\"tag\">#<span>jokes</span></a> <a href=\"https://ohai.social/tags/fun\" class=\"mention hashtag\" rel=\"tag\">#<span>fun</span></a> <a href=\"https://ohai.social/tags/nobot\" class=\"mention hashtag\" rel=\"tag\">#<span>nobot</span></a> <a href=\"https://ohai.social/tags/joke\" class=\"mention hashtag\" rel=\"tag\">#<span>joke</span></a> <a href=\"https://ohai.social/tags/humor\" class=\"mention hashtag\" rel=\"tag\">#<span>humor</span></a> <a href=\"https://ohai.social/tags/trending\" class=\"mention hashtag\" rel=\"tag\">#<span>trending</span></a> <a href=\"https://ohai.social/tags/funny\" class=\"mention hashtag\" rel=\"tag\">#<span>funny</span></a></p>",
       "url": "https://ohai.social/@cookie_mumbles",
-      "avatar": "https://files.ohai.social/accounts/avatars/109/380/999/955/395/974/original/c814d08a32d2a639.png",
+      "avatar": "https://files.ohai.social/accounts/avatars/109/380/999/955/395/974/original/fcf1fa4565af0718.png",
       "avatar_static": "https://files.ohai.social/accounts/avatars/109/380/999/955/395/974/original/c814d08a32d2a639.png",
       "header": "https://files.ohai.social/accounts/headers/109/380/999/955/395/974/original/9c502235dd1c0795.jpeg",
       "header_static": "https://files.ohai.social/accounts/headers/109/380/999/955/395/974/original/9c502235dd1c0795.jpeg",
@@ -135,7 +333,7 @@ export const test_toots = [
       "created_at": "2022-11-15T00:00:00.000Z",
       "note": "<p>🏳️‍🌈 He / Him 😋 Twitter refugee 💥 If you want my professional opinion, you’re crazy 👉 More random stuff: <a href=\"http://www.justmytoots.com/professorkiosk@beige.party\" target=\"_blank\" rel=\"nofollow noopener noreferrer\"><span class=\"invisible\">http://www.</span><span class=\"ellipsis\">justmytoots.com/professorkiosk</span><span class=\"invisible\">@beige.party</span></a></p>",
       "url": "https://beige.party/@professorkiosk",
-      "avatar": "https://media.beige.party/accounts/avatars/109/348/062/348/732/026/original/d95af2bf43ad2337.png",
+      "avatar": "https://files.ohai.social/cache/accounts/avatars/109/348/338/288/355/816/original/5f99304e9d0a1fe3.png",
       "avatar_static": "https://media.beige.party/accounts/avatars/109/348/062/348/732/026/original/d95af2bf43ad2337.png",
       "header": "https://media.beige.party/accounts/headers/109/348/062/348/732/026/original/7922b66ee77780b8.jpeg",
       "header_static": "https://media.beige.party/accounts/headers/109/348/062/348/732/026/original/7922b66ee77780b8.jpeg",

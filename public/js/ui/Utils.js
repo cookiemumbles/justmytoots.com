@@ -7,7 +7,7 @@
 export function addUniqueClickListenerForEachOfClass(listenerId, classname, eventListener) {
     Array
         .from(document.getElementsByClassName(classname))
-        .forEach(currentElement => {
+        .forEach((/** @type HTMLElement */ currentElement) => {
             addUniqueEventListener(currentElement, listenerId, 'click', eventListener)
         })
 }
@@ -17,7 +17,7 @@ export function addUniqueClickListenerForEachOfClass(listenerId, classname, even
  * @param {{(event: MouseEvent): void;(): void;(): void;(this: HTMLElement, ev: MouseEvent): any;}} eventListener
  * @param {string} listenerId
  */
-export function addClickListenerForId(listenerId, id, eventListener) {
+export function addUniqueClickListenerForId(listenerId, id, eventListener) {
     addUniqueEventListener(document.getElementById(id), listenerId, 'click', eventListener)
 }
 
@@ -37,8 +37,22 @@ export function toggleHiddenElement(hiddenElement) {
 }
 
 /**
+ * @param {string} listenerId
+ * @param {string} classname
+ * @param {string} eventType
+ * @param {EventListenerOrEventListenerObject} eventListener
+ */
+export function addUniqueListenerForEachOfClass(listenerId, classname, eventType, eventListener) {
+    Array
+        .from(document.getElementsByClassName(classname))
+        .forEach(currentElement => {
+            addUniqueEventListener(currentElement, listenerId, eventType, eventListener)
+        })
+}
+
+/**
  * Adds an event listener, but does not re-add a listener with the same id
- * @param {Element} targetElement
+ * @param {HTMLElement} targetElement
  * @param {string} listenerId
  * @param {string} eventType
  * @param {EventListenerOrEventListenerObject} eventListener
@@ -49,7 +63,7 @@ export function addUniqueEventListener(targetElement, listenerId, eventType, eve
         listenerList = targetElement.dataset.listeners.split(" ")
     }
     if (!listenerList.includes(listenerId)) {
-        targetElement.addEventListener('click', eventListener);
+        targetElement.addEventListener(eventType, eventListener);
         listenerList.push(listenerId)
         targetElement.dataset.listeners = listenerList.join(" ")
     }

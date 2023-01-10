@@ -1,3 +1,4 @@
+import { performLogin } from '../login.js';
 import { wrapIn, createElement } from './HtmlBuilder.js';
 
 export function showModal() {
@@ -53,6 +54,16 @@ export function showLoginModal() {
       createElement('button', {id: "btn_action_login"}, "submit")
     ])
   )
+
+
+  document.getElementById("login_form_submit").onsubmit = function() {
+    /** @type {HTMLInputElement} */
+    // @ts-ignore
+    const inputElement = document.getElementById("input_server")
+    const value = inputElement.value.trim().toLowerCase()
+    performLogin(value)
+    return false // prevent default behavior
+  }
 }
 
 export function showAboutModal() {
