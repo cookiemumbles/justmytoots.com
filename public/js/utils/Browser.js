@@ -35,10 +35,26 @@ export function getUserHandle() {
 }
 
 export function clearCodeTokenFromUrl() {
+  removeUrlSearchParam('code')
+}
+
+/** @param {string} paramName */
+export function removeUrlSearchParam(paramName) {
   const urlParams = new URLSearchParams(window.location.search);
-  while (urlParams.has('code')) { // in case old ones
-    urlParams.delete('code')
+  while (urlParams.has(paramName)) { // in case old ones
+    urlParams.delete(paramName)
   }
+  const newUrl = buildUrl(window.location.href, urlParams)
+  window.history.replaceState({}, "", newUrl);
+}
+
+/**
+ * @param {string} name
+ * @param {string} value
+ */
+export function addUrlSearchParam(name, value) {
+  const urlParams = new URLSearchParams(window.location.search);
+  urlParams.set(name, value)
   const newUrl = buildUrl(window.location.href, urlParams)
   window.history.replaceState({}, "", newUrl);
 }

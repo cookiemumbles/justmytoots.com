@@ -8,7 +8,7 @@ import { showAboutModal, showImageModal, showLoginModal } from './ui/Modal.js';
 import { setDataCookie, getDataCookie, appendDataCookie, deleteDataCookie } from './utils/Cookie.js';
 import MastodonApi from './utils/MastodonApi.js';
 import { addClickListenerForId, toggleHiddenElement, addUniqueClickListenerForEachOfClass } from './ui/Utils.js';
-import { clearCodeTokenFromUrl, getUserDataFromUrl } from './utils/Browser.js';
+import { addUrlSearchParam, clearCodeTokenFromUrl, getUserDataFromUrl, removeUrlSearchParam } from './utils/Browser.js';
 
 var g_targetUserData = null
 var g_lastTootId = null
@@ -170,11 +170,20 @@ function addInitialListeners() {
     }
   })
 
-  // addClickListenerForId("filtersEvent", "btn_config", () => {
-  //   // showFiltersModal()
-  // })
+  addClickListenerForId("toggleOptionsEvent", "btn_options", () => {
+    // showFiltersModal()
+  })
   addClickListenerForId("aboutEvent", "btn_about", () => {
     showAboutModal()
+  })
+
+  const checkbox = document.getElementById('checkbox_replies')
+  checkbox.addEventListener('change', (event) => {
+    if (event.currentTarget.checked) {
+      addUrlSearchParam("replies", "true")
+    } else {
+      removeUrlSearchParam("replies")
+    }
   })
 }
 

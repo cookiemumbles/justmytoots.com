@@ -2,6 +2,7 @@
 @import '/css/base.css';
 @import '/css/icons.css';
 @import '/css/modal.css';
+@import 'options.css';
 
 /*
  * comma between selector means both
@@ -226,3 +227,4 @@ button.active .svg_icon:hover {
 .svg_button_like_active {
   fill: var(--color_blue);
 }
+
