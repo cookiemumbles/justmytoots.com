@@ -1,3 +1,62 @@
+/**
+ * @typedef {Object} AccountJson
+ * @prop {string} id
+ * @prop {string} username
+ * @prop {string} acct
+ * @prop {string} display_name
+ * @prop {boolean} locked
+ * @prop {boolean} bot
+ * @prop {boolean} discoverable
+ * @prop {boolean} group
+ * @prop {string} created_at
+ * @prop {string} note
+ * @prop {string} url
+ * @prop {string} avatar
+ * @prop {string} avatar_static
+ * @prop {string} header
+ * @prop {string} header_static
+ * @prop {number} followers_count
+ * @prop {number} following_count
+ * @prop {number} statuses_count
+ * @prop {string} last_status_at
+ * @prop {boolean} noindex
+ * @prop {any[]} emojis
+ * @prop {string} [role]
+ * @prop {any[]} fields
+ */
+
+
+/**
+ * @typedef {Object} TootJson
+ * @prop {string} id
+ * @prop {string} created_at
+ * @prop {string} in_reply_to_id
+ * @prop {string} in_reply_to_account_id
+ * @prop {boolean} sensitive
+ * @prop {string} spoiler_text
+ * @prop {string} visibility
+ * @prop {string} language
+ * @prop {string} uri
+ * @prop {string} url
+ * @prop {number} replies_count
+ * @prop {number} reblogs_count
+ * @prop {number} favourites_count
+ * @prop {string} edited_at
+ * @prop {string} content
+ * @prop {any} reblog
+ * @prop {any} application
+ * @prop {string} created_at
+ * @prop {string} [localized_toot_url]
+ * @prop {AccountJson} account
+ * @prop {any[]} media_attachments
+ * @prop {any[]} mentions
+ * @prop {any[]} tags
+ * @prop {any[]} emojis
+ * @prop {any} card
+ * @prop {any} poll
+ */
+
+/** @type {TootJson[]} */
 export const test_toots = [
   {
     "id": "109472499431799134",
