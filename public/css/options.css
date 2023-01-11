@@ -1,6 +1,20 @@
 
 #options_container {
-  padding: 12px 16px;
+  visibility: hidden;
+  padding: 0;
+  height: 0;
+  margin: -1px 0; /* so it doesn't take extra height for the border */
+  overflow: hidden;
+  transition: height .5s ease, visibility .5s ease;
+}
+
+#options_container.show {
+  visibility: visible;
+  height: 100px;
+}
+
+.check_option {
+  margin: 12px 16px;
 }
 
 .switch {
@@ -22,7 +36,7 @@
   position: absolute;
   right: 0;
   top: 0;
-  transition: .4s;
+  transition: all .4s ease, visibility 0s;
 }
 
 .slider:before {
@@ -32,7 +46,7 @@
   height: 18px;
   left: 4px;
   position: absolute;
-  transition: .4s;
+  transition: all .4s ease, visibility 0s;
   width: 18px;
 }
 

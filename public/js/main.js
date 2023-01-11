@@ -170,8 +170,14 @@ function addInitialListeners() {
     }
   })
 
-  addClickListenerForId("toggleOptionsEvent", "btn_options", () => {
-    // showFiltersModal()
+  addClickListenerForId("toggleOptionsEvent", "btn_options", (/** @type MouseEvent */ event) => {
+    /** @type HTMLElement */
+    const optionsContainer = document.getElementById("options_container")
+    if (optionsContainer.classList.contains("show")) {
+      optionsContainer.classList.remove("show")
+    } else {
+      optionsContainer.classList.add("show")
+    }
   })
   addClickListenerForId("aboutEvent", "btn_about", () => {
     showAboutModal()
