@@ -10,10 +10,11 @@ import { addInitialListeners, getTargetUserData, loadPageContent, loadToots, set
 
 var log = new Logger()
 
-// NOTE:
+// NOTEs:
 // Disable pagespeed: url/?PageSpeed=off
 // https://stackoverflow.com/a/49243560/3968618
 // https://www.typescriptlang.org/docs/handbook/type-checking-javascript-files.html
+// https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html#types
 
 function main() {
   const urlParams = new URLSearchParams(window.location.search);

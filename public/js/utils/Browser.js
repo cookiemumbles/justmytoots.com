@@ -24,7 +24,7 @@ export function getUserDataFromUrl() {
 
 
 export function getUserHandle() {
-  const urlParams = new URLSearchParams(window.location.search);
+  const urlParams = getUrlParams()
   if (window.location.pathname != "/") {
     return window.location.pathname.slice(1)
   } else if (urlParams.has('acct')) {
@@ -40,7 +40,7 @@ export function clearCodeTokenFromUrl() {
 
 /** @param {string} paramName */
 export function removeUrlSearchParam(paramName) {
-  const urlParams = new URLSearchParams(window.location.search);
+  const urlParams = getUrlParams()
   while (urlParams.has(paramName)) { // in case old ones
     urlParams.delete(paramName)
   }
@@ -53,8 +53,12 @@ export function removeUrlSearchParam(paramName) {
  * @param {string} value
  */
 export function addUrlSearchParam(name, value) {
-  const urlParams = new URLSearchParams(window.location.search);
+  const urlParams = getUrlParams()
   urlParams.set(name, value)
   const newUrl = buildUrl(window.location.href, urlParams)
   window.history.replaceState({}, "", newUrl);
+}
+
+export function getUrlParams() {
+  return new URLSearchParams(window.location.search);
 }

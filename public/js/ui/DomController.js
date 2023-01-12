@@ -1,4 +1,4 @@
-import { addUrlSearchParam, removeUrlSearchParam } from "../utils/Browser.js"
+import { addUrlSearchParam, getUrlParams, removeUrlSearchParam } from "../utils/Browser.js"
 import { deleteDataCookie, getDataCookie } from "../utils/Cookie.js"
 import Logger from "../utils/Logger.js"
 import MastodonApi from "../utils/MastodonApi.js"
@@ -19,6 +19,8 @@ import { addClickListenerForId, addUniqueClickListenerForEachOfClass, toggleHidd
  * @prop {string} [display_name]
  * @prop {string} [url]
  */
+
+/** @typedef { import("../testData.js").TootJson } TootJson */
 
 /** @type {UserData} */
 var g_targetUserData = null
@@ -69,6 +71,7 @@ export function loadPageContent(targetUserData, lastId) {
         }
       })
       .then(function(result) {
+        /** @type {TootJson[]} */
         const resultToots = JSON.parse(result)
         log.t("All toots returned:", resultToots)
 
@@ -77,16 +80,17 @@ export function loadPageContent(targetUserData, lastId) {
         }
 
         return resultToots
-          .filter((/** @type {{ [x: string]: any; }} */ toot) =>
-            !toot['reblog'] && !toot['in_reply_to_id'] && !toot['in_reply_to_account_id'])
+          .filter(toot =>  !toot['reblog'] )
+          .filter(toot => 
+            getUrlParams().get('replies') == 'true'
+            || (!toot['in_reply_to_id'] && !toot['in_reply_to_account_id'])
+          )
       })
       .then(toots => {
         loadToots(toots)
       })
   }
 }
-
-/** @typedef { import("../testData.js").TootJson } TootJson */
 
 /** @param {TootJson[]} toots */
 export function loadToots(toots) {
@@ -177,22 +181,24 @@ function addPostLoadListeners() {
       const btn = target.closest('.toot_footer_btn')
       const loginData = getDataCookie()
       if (!btn.classList.contains('active')) {
-        MastodonApi.boost(
-          loginData.server,
-          loginData.bearer_token,
-          prentDiv.dataset.tootId
-        )
+        MastodonApi
+          .boost(
+            loginData.server,
+            loginData.bearer_token,
+            prentDiv.dataset.tootId
+          )
           .then(_ => {
             console.log("Successfully boosted.")
           })
         btn.classList.add("active")
         btn['title'] = "Unboost"
       } else {
-        MastodonApi.unboost(
-          loginData.server,
-          loginData.bearer_token,
-          prentDiv.dataset.tootId
-        )
+        MastodonApi
+          .unboost(
+            loginData.server,
+            loginData.bearer_token,
+            prentDiv.dataset.tootId
+          )
           .then(_ => {
             console.log("Successfully unboosted.")
           })
