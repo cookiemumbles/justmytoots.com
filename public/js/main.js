@@ -1,5 +1,5 @@
 import { test_toots } from './testData.js';
-import { displayServerError, displayMissingUserMessage } from './ui/ErrorScreen.js';
+import { displayServerError, displayMissingUserMessage, displayOfflineMessage } from './ui/ErrorScreen.js';
 import Logger from './utils/Logger.js';
 import { getDataCookie } from './utils/Cookie.js';
 import MastodonApi from './utils/MastodonApi.js';
@@ -17,6 +17,9 @@ var log = new Logger()
 
 function main() {
   addInitialListeners()
+  displayOfflineMessage()
+  return
+
   updateOptionsStates()
   try {
     setTargetUserData(getUserDataFromUrl())
