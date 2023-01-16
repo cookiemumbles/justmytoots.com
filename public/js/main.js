@@ -1,5 +1,5 @@
 import { test_toots } from './testData.js';
-import { displayServerError, displayMissingUserMessage, displayOfflineMessage } from './ui/ErrorScreen.js';
+import { displayServerError, displayMissingUserMessage, NoConsentError, displayNoConsentError } from './ui/ErrorScreen.js';
 import Logger from './utils/Logger.js';
 import { getDataCookie } from './utils/Cookie.js';
 import MastodonApi from './utils/MastodonApi.js';
@@ -17,8 +17,6 @@ var log = new Logger()
 
 function main() {
   addInitialListeners()
-  displayOfflineMessage()
-  return
 
   updateOptionsStates()
   try {
@@ -49,21 +47,43 @@ function main() {
       }
     })
     .then((/** @type {object} */ result) => {
-        const resultUserData = JSON.parse(result);
-        log.t('resultUserData:', resultUserData);
-        // merge the values we need into our data
-        const targetUserData = getTargetUserData()
-        targetUserData['id'] = resultUserData['id'];
-        targetUserData['avatar'] = resultUserData['avatar'];
-        targetUserData['display_name'] = resultUserData['display_name'];
-        targetUserData['url'] = resultUserData['url'];
-        log.d("Enriched target user data:", targetUserData);
-        setTargetUserData(targetUserData)
+      const resultUserData = JSON.parse(result);
+      log.t('resultUserData:', resultUserData);
+      const targetUserData = getTargetUserData()
 
-        loadPageContent(targetUserData);
+      // no regex, so special characters in handles/server names can not cause problems
+      const possibleConsentUrls = [
+        `https://justmytoots.com/${targetUserData.handle}`,
+        `https://justmytoots.com/${targetUserData.userName}@${targetUserData.server}`,
+      ]
+      console.log(possibleConsentUrls)
+      if (
+        possibleConsentUrls.some(consUrl => resultUserData['note'].includes(consUrl)) ||
+        /** @type Array */(resultUserData['fields']).some(element =>
+          possibleConsentUrls.some(consUrl => element.value.includes(consUrl))
+        )
+      ) {
+        log.d("consent granted")
+      } else {
+        throw new NoConsentError(targetUserData)
+      }
+
+      // merge the values we need into our data
+      targetUserData['id'] = resultUserData['id'];
+      targetUserData['avatar'] = resultUserData['avatar'];
+      targetUserData['display_name'] = resultUserData['display_name'];
+      targetUserData['url'] = resultUserData['url'];
+      log.d("Enriched target user data:", targetUserData);
+      setTargetUserData(targetUserData)
+
+      loadPageContent(targetUserData);
     })
     .catch((/** @type {Error} */ error) => {
-      displayServerError(error)
+      if (error instanceof NoConsentError) {
+        displayNoConsentError(error)
+      } else {
+        displayServerError(error)
+      }
     })
 }
 

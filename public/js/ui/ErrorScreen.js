@@ -1,52 +1,18 @@
 import { wrapIn, createElement } from './HtmlBuilder.js';
 
-/** @param {Error} error */
-export function displayOfflineMessage() {
+/** @param {NoConsentError} error */
+export function displayNoConsentError(error) {
+  console.debug("Displaying error:", error)
   renderError(
-    `Temporarily offline for privicy conserns`,
+    `ERROR: ${error.message}`,
     `
-      <p>
-      It has come to my attention that people are freaking out about this page
-      because 1) it looks like a scraper, 2) google indexes the page if it
-      finds a link somewhere outside of mastodon and 3) it allows you to look
-      at someone's toots from a central place outside of mastodon WITHOUT
-      GIVING CONSENT.
-      </p>
-      <ol>
-        <li>
-          Arguably least important but let's get out of the way: this is not
-          a scraper. The user directly requests information, connecting from the
-          users broser directly to the mastodon servers that host the toots.
-          Nothing ever touchs the server. See the source code <a
-          href='https://github.com/cookiemumbles/justmytoots.com'>on Github</a>
-          for more details on how it works.
-        </li>
-        <li>
-          Uptill now this page has not prevented indexing and <b>it should never
-          allow that!</b> I'll fix this by telling google to not index the page
-          asap.
-        </li>
-        <li>
-          This was always meant as a tool to showcase your work if you want it
-          to, never for anyone to to have a peek at other people's toots. I
-          will add a check to only show toots from people that explicitly put
-          the link (to their own toots) into their profile.
-        </li>
-      </ol>
-      <p>
-        I'm listening to the conserns and will fix them before taking the page
-        online again.
-        </p>
-        <p>
-        If you have any questions or more conserns than I've
-        outlined here, post <a
-        href='https://github.com/cookiemumbles/justmytoots.com/issues'>an issue
-        on Github</a> or toot at me on mastodon here: <a
-        href='https://techhub.social/@cookie_mumbles'>@cookie_mumbles</a>.
-      </p>
+      JustMyToots only supports opt-in for this service. If you want this page
+      to display your toots, you simply put your justmytoots.com url either
+      into your mastodon bio or into the profile metadata. Your url will look
+      something like this:</br>
+      <b>https://justmytoots.com/@<em>user</em>@<em>example.social</em></b>
     `
   )
-
 }
 
 /** @param {Error} error */
@@ -109,4 +75,16 @@ function renderError(title, messageHtml) {
       )
     )
   );
+}
+
+
+export class NoConsentError extends Error {
+  /** @type import('./DomController.js').UserData */
+  userData = null
+  /** @param {import('./DomController.js').UserData} userData */
+  constructor(userData) {
+    super(`No consent for ${userData.handle}`);
+    this.userData = userData
+    this.name = "NoConsentError";
+  }
 }

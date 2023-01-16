@@ -32,15 +32,15 @@ var log = new Logger()
 
 
 export function addInitialListeners() {
-  // addUniqueClickListenerForId("loginEvent", "btn_login", (/** @type MouseEvent */ event) => {
-  //   const target = /** @type HTMLButtonElement */ (event.target)
-  //   if (target.textContent == "Logout") {
-  //     deleteDataCookie()
-  //     document.getElementById("btn_login").textContent = "Login"
-  //   } else {
-  //     showLoginModal()
-  //   }
-  // })
+  addUniqueClickListenerForId("loginEvent", "btn_login", (/** @type MouseEvent */ event) => {
+    const target = /** @type HTMLButtonElement */ (event.target)
+    if (target.textContent == "Logout") {
+      deleteDataCookie()
+      document.getElementById("btn_login").textContent = "Login"
+    } else {
+      showLoginModal()
+    }
+  })
 
   addUniqueClickListenerForId("toggleOptionsEvent", "btn_options", (/** @type MouseEvent */ event) => {
     /** @type HTMLElement */
