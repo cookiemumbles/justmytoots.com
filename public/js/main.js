@@ -56,7 +56,6 @@ function main() {
         `https://justmytoots.com/${targetUserData.handle}`,
         `https://justmytoots.com/${targetUserData.userName}@${targetUserData.server}`,
       ]
-      console.log(possibleConsentUrls)
       if (
         possibleConsentUrls.some(consUrl => resultUserData['note'].includes(consUrl)) ||
         /** @type Array */(resultUserData['fields']).some(element =>
