@@ -49,7 +49,7 @@ class GeneralAndLoggedOutTest {
     @MethodSource("getDrivers")
     fun `with broken user`(driver: WebDriver) {
         with(driver) {
-            get("${getServer()}?acct=cookie_mumbles@mastodon.social.com")
+            get("${getServer()}?acct=cookie_mumbles@ohai.social.com")
 
             assertThat(findPageError().getErrorTitle().text)
                 .isEqualTo("ERROR: Unable to connect to server.")
@@ -60,7 +60,7 @@ class GeneralAndLoggedOutTest {
     @MethodSource("getDrivers")
     fun `should load toots`(driver: WebDriver) {
         with(driver) {
-            get("${getServer()}?acct=cookie_mumbles@mastodon.social")
+            get("${getServer()}?acct=cookie_mumbles@ohai.social")
 
             assertThat(findToots()).hasSizeGreaterThan(5)
         }
@@ -98,7 +98,7 @@ class GeneralAndLoggedOutTest {
     fun `should show login`(driver: WebDriver) {
         with(driver) {
             // given
-            get("${getServer()}?acct=cookie_mumbles@mastodon.social")
+            get("${getServer()}?acct=cookie_mumbles@ohai.social")
             assertThat(findModalBackground().isDisplayed).isFalse()
 
             // when
@@ -118,7 +118,7 @@ class GeneralAndLoggedOutTest {
     fun `boost should show snacbar with error`(driver: WebDriver) {
         with(driver) {
             // given
-            get("${getServer()}?acct=cookie_mumbles@mastodon.social")
+            get("${getServer()}?acct=cookie_mumbles@ohai.social")
             assertThat(findSnacbar().getClases()).containsOnly("tweet_footer") // no enabled
             waitForPageLoaded()
 
@@ -137,7 +137,7 @@ class GeneralAndLoggedOutTest {
     fun `favorite should show snacbar with error`(driver: WebDriver) {
         with(driver) {
             // given
-            get("${getServer()}?acct=cookie_mumbles@mastodon.social")
+            get("${getServer()}?acct=cookie_mumbles@ohai.social")
             assertThat(findSnacbar().getClases()).containsOnly("tweet_footer") // no enabled
             waitForPageLoaded()
 
@@ -156,7 +156,7 @@ class GeneralAndLoggedOutTest {
     fun `copy should show snacbar with info`(driver: WebDriver) {
         with(driver) {
             // given
-            get("${getServer()}?acct=cookie_mumbles@mastodon.social")
+            get("${getServer()}?acct=cookie_mumbles@ohai.social")
             assertThat(findSnacbar().getClases()).containsOnly("tweet_footer") // no enabled
             waitForPageLoaded()
 
@@ -176,14 +176,14 @@ class GeneralAndLoggedOutTest {
     fun `clicking a toot should open the toots`(driver: WebDriver) {
         with(driver) {
             // given
-            get("${getServer()}?acct=cookie_mumbles@mastodon.social")
+            get("${getServer()}?acct=cookie_mumbles@ohai.social")
             waitForPageLoaded()
 
             // when
             findFirstToot().getTootTextElement().click()
 
             // then
-            assertThat(currentUrl).startsWith("https://mastodon.social/@cookie_mumbles")
+            assertThat(currentUrl).startsWith("https://ohai.social/@cookie_mumbles")
         }
     }
 
@@ -192,14 +192,14 @@ class GeneralAndLoggedOutTest {
     fun `clicking an avi should open the user profile`(driver: WebDriver) {
         with(driver) {
             // given
-            get("${getServer()}?acct=cookie_mumbles@mastodon.social")
+            get("${getServer()}?acct=cookie_mumbles@ohai.social")
             waitForPageLoaded()
 
             // when
             findFirstToot().getAvi().click()
 
             // then
-            assertThat(currentUrl).isEqualTo("https://mastodon.social/@cookie_mumbles")
+            assertThat(currentUrl).isEqualTo("https://ohai.social/@cookie_mumbles")
         }
     }
 
@@ -208,7 +208,7 @@ class GeneralAndLoggedOutTest {
     fun `clicking image preview`(driver: WebDriver) {
         with(driver) {
             // given
-            get("${getServer()}?acct=cookie_mumbles@mastodon.social&testdata=true")
+            get("${getServer()}?acct=cookie_mumbles@ohai.social&testdata=true")
             waitForPageLoaded()
             assertThat(findModalBackground().isDisplayed).isFalse()
 
@@ -230,7 +230,7 @@ class GeneralAndLoggedOutTest {
     fun `options menu opens and closes`(driver: WebDriver) {
         with(driver) {
             // given
-            get("${getServer()}?acct=cookie_mumbles@mastodon.social&testdata=true")
+            get("${getServer()}?acct=cookie_mumbles@ohai.social&testdata=true")
             // then
             assertThat(findOptionsContainer().isDisplayed).isFalse()
 
@@ -253,7 +253,7 @@ class GeneralAndLoggedOutTest {
     fun `options checkboxes work`(driver: WebDriver) {
         with(driver) {
             // given
-            get("${getServer()}?acct=cookie_mumbles@mastodon.social&testdata=true")
+            get("${getServer()}?acct=cookie_mumbles@ohai.social&testdata=true")
             findOptionsBtn().click()
 
             mapOf(
@@ -288,7 +288,7 @@ class GeneralAndLoggedOutTest {
     fun `options filter correctly`(driver: WebDriver) {
         with(driver) {
             // given
-            val baseUrl = "${getServer()}?acct=cookie_mumbles@mastodon.social&testdata=true"
+            val baseUrl = "${getServer()}?acct=cookie_mumbles@ohai.social&testdata=true"
             val tootIdPublicNoMedia = "109472499431799134"
             val tootIdReply = "109683800922113496"
             val tootIdUnlisted = "109683797485314862"

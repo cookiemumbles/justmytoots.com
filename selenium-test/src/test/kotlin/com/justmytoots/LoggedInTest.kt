@@ -23,10 +23,13 @@ class LoggedInTest {
             drivers = startDrivers()
             drivers.forEach {
                 with(it) {
-                    get("${getServer()}?acct=cookie_mumbles@mastodon.social&log=d")
+                    get("${getServer()}?acct=cookie_mumbles@ohai.social&log=d")
                     findLoginBtn().click()
                     findElement(By.id("input_server")).sendKeys("techhub.social")
                     findElement(By.id("btn_action_login")).click()
+                    if (System.getenv("MASTO_LOGIN_TEST_USER") == null || System.getenv("MASTO_LOGIN_TEST_PASS") == null) {
+                        throw Exception("Please set environment variables with login data")
+                    }
                     mastoFindEmailField().sendKeys(System.getenv("MASTO_LOGIN_TEST_USER"))
                     mastoFindPassField().sendKeys(System.getenv("MASTO_LOGIN_TEST_PASS"))
                     findElement(By.name("button")).click()
@@ -54,7 +57,7 @@ class LoggedInTest {
     @MethodSource("getDrivers")
     fun `should load toots`(driver: WebDriver) {
         with(driver) {
-            get("${getServer()}?acct=cookie_mumbles@mastodon.social")
+            get("${getServer()}?acct=cookie_mumbles@ohai.social")
 
             assertThat(
                     waitForElement(By.className("single_tweet_wrap"), Duration.ofSeconds(3))
@@ -69,7 +72,7 @@ class LoggedInTest {
     fun `boost should change to active and perform action`(driver: WebDriver) {
         with(driver) {
             // given
-            get("${getServer()}?acct=cookie_mumbles@mastodon.social")
+            get("${getServer()}?acct=cookie_mumbles@ohai.social")
             assertThat(findSnacbar().getClases()).containsOnly("tweet_footer") // no enabled
             val firstToot = findFirstToot()
             val boostBtn = firstToot.getBoostBtn()
@@ -95,7 +98,7 @@ class LoggedInTest {
     fun `favorite should change to active and perform action`(driver: WebDriver) {
         with(driver) {
             // given
-            get("${getServer()}?acct=cookie_mumbles@mastodon.social")
+            get("${getServer()}?acct=cookie_mumbles@ohai.social")
             assertThat(findSnacbar().getClases()).containsOnly("tweet_footer") // no enabled
             val firstToot = findFirstToot()
             val faveBtn = firstToot.getFaveBtn()
@@ -121,14 +124,14 @@ class LoggedInTest {
     fun `clicking an avi should open the localized user profile`(driver: WebDriver) {
         with(driver) {
             // given
-            get("${getServer()}?acct=cookie_mumbles@mastodon.social")
+            get("${getServer()}?acct=cookie_mumbles@ohai.social")
 
             // when
             findFirstToot().getAvi().click()
 
             // then
             assertThat(currentUrl)
-                .isEqualTo("https://techhub.social/@cookie_mumbles@mastodon.social")
+                .isEqualTo("https://techhub.social/@cookie_mumbles@ohai.social")
         }
     }
 
@@ -138,7 +141,7 @@ class LoggedInTest {
         // NOTE: Same as in GeneralAndLoggedOutTest
         with(driver) {
             // given
-            get("${getServer()}?acct=cookie_mumbles@mastodon.social&log=d")
+            get("${getServer()}?acct=cookie_mumbles@ohai.social&log=d")
             assertThat(findSnacbar().getClases()).containsOnly("tweet_footer") // no enabled
             waitForPageLoaded()
 
