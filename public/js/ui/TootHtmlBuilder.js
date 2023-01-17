@@ -29,7 +29,7 @@ export default class TootHtmlBuilder {
           wrapIn('div', {class:"toot_content"}, [
             this.createTweetHeader(toot["account"]["display_name"], '@' + toot["account"]["username"], toot.created_at),
             this.createContentWarningDiv(toot.sensitive, toot.id, toot.spoiler_text),
-            wrapIn('a', {'href': (toot.localized_toot_url) ? toot.localized_toot_url : toot.url }, [
+            wrapIn('a', { class: 'no_hover', 'href': (toot.localized_toot_url) ? toot.localized_toot_url : toot.url }, [
               this.createTweetContent(toot.sensitive, toot.id, toot['content']),
             ]),
             this.createAttachmentsDiv(toot['media_attachments'], toot.id, toot.sensitive),

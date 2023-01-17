@@ -13,12 +13,15 @@
 a {
   color: var(--text_color);
   text-decoration: none;
-  display: block;
 }
 
 a:hover {
-  /* color: var(--color_blue); */
+  color: var(--color_blue);
   /* TODO: Makes text of clickable toots blue on hover*/
+}
+
+.no_hover:hover {
+  color: var(--text_color);
 }
 
 h1 {
