@@ -124,7 +124,7 @@ export default class TootHtmlBuilder {
         }, 
           createSvgRef("svg_icon_boost", { class:`svg_icon`, width:"24", height:"24" }),
         ),
-        createElement('div', { class:"toot_footer_txt"}, reblogsCount.toString()),
+        createElement('div', { class:"toot_footer_txt text_boost_count"}, reblogsCount.toString()),
       ]),
       wrapIn('div', { class: "toot_footer_item"}, [
         wrapIn('button', {
@@ -133,7 +133,7 @@ export default class TootHtmlBuilder {
         }, 
           createSvgRef( "svg_icon_fave", { class:`svg_icon`, width:"24", height:"24" }),
         ),
-        createElement('div', {class:"toot_footer_txt"}, favoritesCount.toString()),
+        createElement('div', {class:"toot_footer_txt text_favorite_count"}, favoritesCount.toString()),
       ]),
       wrapIn('div', { class: "toot_footer_item"},
         wrapIn('button', { title:"Copy link", class: "toot_footer_btn btn_action_copy" }, 
