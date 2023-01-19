@@ -193,6 +193,8 @@ function addPostLoadListeners() {
       const prentDiv = /** @type HTMLElement */ (target.closest('.single_tweet_wrap'))
       const btn = target.closest('.toot_footer_btn')
       const loginData = getDataCookie()
+
+      const txtCount = /** @type HTMLElement */ (prentDiv.querySelector('.text_boost_count'))
       if (!btn.classList.contains('active')) {
         MastodonApi
           .boost(
@@ -201,6 +203,7 @@ function addPostLoadListeners() {
             prentDiv.dataset.tootId
           )
           .then(_ => {
+            txtCount.textContent = (parseInt(txtCount.textContent) + 1).toString()
             console.log("Successfully boosted.")
           })
         btn.classList.add("active")
@@ -213,6 +216,7 @@ function addPostLoadListeners() {
             prentDiv.dataset.tootId
           )
           .then(_ => {
+            txtCount.textContent = (parseInt(txtCount.textContent) - 1).toString()
             console.log("Successfully unboosted.")
           })
         btn.classList.remove("active")
@@ -229,6 +233,7 @@ function addPostLoadListeners() {
       const target = /** @type HTMLButtonElement */ (event.target)
       const prentDiv = /** @type HTMLElement */ (target.closest('.single_tweet_wrap'))
       const btn = /** @type HTMLButtonElement */ (target.closest('.toot_footer_btn'))
+      const txtCount = /** @type HTMLElement */ (prentDiv.querySelector('.text_favorite_count'))
 
       const loginData = getDataCookie()
       if (!btn.classList.contains('active')) {
@@ -239,6 +244,7 @@ function addPostLoadListeners() {
             prentDiv.dataset.tootId
           )
           .then(_ => {
+            txtCount.textContent = (parseInt(txtCount.textContent) + 1).toString()
             console.log("Successfully faved.")
           })
         btn.classList.add("active")
@@ -251,6 +257,7 @@ function addPostLoadListeners() {
             prentDiv.dataset.tootId
           )
           .then(_ => {
+            txtCount.textContent = (parseInt(txtCount.textContent) - 1).toString()
             console.log("Successfully unfaved.")
           })
         btn.classList.remove("active")
