@@ -1,15 +1,15 @@
 
 export default class Logger {
 
-  ERROR = 0
-  WARN  = 1
-  INFO  = 2
-  DEBUG = 3
-  TRACE = 4
-
-  logLevel = this.INFO
-
   constructor() {
+    this.ERROR = 0
+    this.WARN  = 1
+    this.INFO  = 2
+    this.DEBUG = 3
+    this.TRACE = 4
+
+    this.logLevel = this.INFO
+
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.has('log')) {
       this.logLevel = Number.parseInt(urlParams.get('log'))

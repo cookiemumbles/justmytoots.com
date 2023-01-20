@@ -1,0 +1,29 @@
+{
+  "name": "justmytoots.com",
+  "version": "1.0.0",
+  "description": "This is a little website that works as an extension to Mastodon. It displays the toots but not the boosts for a particular user. It helps people that want to showcase their toots, for example when doing jokes, drawings, photos or any other form of content people might want to look back through.",
+  "main": "js/main.js",
+  "scripts": {
+    "clean": "rm -fr public",
+    "cleanCache": "npm cache clean --force",
+    "buildCss": "mkdir -p public/css && cat css/*.css | npx csso > public/css/main.css",
+    "buildJs": "mkdir -p public/js && npx google-closure-compiler 'js/**.js' --js_output_file public/js/main.js",
+    "buildHtml": "cp index.html public/",
+    "copyRootFiles": "cp .htaccess favicon.ico robots.txt public/",
+    "build": "for t in clean buildCss buildJs buildHtml copyRootFiles; do npm run $t; done"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://cookie_mumbles@github.com/cookiemumbles/justmytoots.com.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cookiemumbles/justmytoots.com/issues"
+  },
+  "homepage": "https://github.com/cookiemumbles/justmytoots.com#readme",
+  "dependencies": {
+    "csso-cli": "^4.0.1",
+    "google-closure-compiler": "^20230103.0.0"
+  }
+}

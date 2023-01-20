@@ -80,7 +80,7 @@ function renderError(title, messageHtml) {
 
 export class NoConsentError extends Error {
   /** @type import('./DomController.js').UserData */
-  userData = null
+  // userData = null
   /** @param {import('./DomController.js').UserData} userData */
   constructor(userData) {
     super(`No consent for ${userData.handle}`);
