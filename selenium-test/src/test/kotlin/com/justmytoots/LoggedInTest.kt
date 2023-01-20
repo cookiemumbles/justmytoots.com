@@ -27,7 +27,10 @@ class LoggedInTest {
                     findLoginBtn().click()
                     findElement(By.id("input_server")).sendKeys("techhub.social")
                     findElement(By.id("btn_action_login")).click()
-                    if (System.getenv("MASTO_LOGIN_TEST_USER") == null || System.getenv("MASTO_LOGIN_TEST_PASS") == null) {
+                    if (
+                        System.getenv("MASTO_LOGIN_TEST_USER") == null ||
+                            System.getenv("MASTO_LOGIN_TEST_PASS") == null
+                    ) {
                         throw Exception("Please set environment variables with login data")
                     }
                     mastoFindEmailField().sendKeys(System.getenv("MASTO_LOGIN_TEST_USER"))
@@ -130,8 +133,7 @@ class LoggedInTest {
             findFirstToot().getAvi().click()
 
             // then
-            assertThat(currentUrl)
-                .isEqualTo("https://techhub.social/@cookie_mumbles@ohai.social")
+            assertThat(currentUrl).isEqualTo("https://techhub.social/@cookie_mumbles@ohai.social")
         }
     }
 
