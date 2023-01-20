@@ -83,13 +83,6 @@ class GeneralAndLoggedOutTest {
             findModalClose().click()
             // then
             assertThat(findModalBackground().isDisplayed).isFalse()
-
-            // TODO: This is probably why it doesn't work on ios
-            // // when
-            // findElement(By.id("btn_help")).click()
-            // findElement(By.id("modal_background")).click()
-            // // then
-            // assertThat(findElement(By.id("modal_background")).isDisplayed).isFalse()
         }
     }
 
