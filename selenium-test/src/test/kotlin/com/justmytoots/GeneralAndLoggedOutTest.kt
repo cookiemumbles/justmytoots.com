@@ -169,14 +169,14 @@ class GeneralAndLoggedOutTest {
     fun `clicking a toot should open the toots`(driver: WebDriver) {
         with(driver) {
             // given
-            get("${getServer()}?acct=cookie_mumbles@ohai.social")
+            get("${getServer()}?acct=cookie_mumbles@techhub.social")
             waitForPageLoaded()
 
             // when
             findFirstToot().getTootTextElement().click()
 
             // then
-            assertThat(currentUrl).startsWith("https://ohai.social/@cookie_mumbles")
+            assertThat(currentUrl).startsWith("https://techhub.social/@cookie_mumbles")
         }
     }
 

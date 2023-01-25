@@ -61,6 +61,16 @@ li {
   padding: 16px;
   margin: 0;
   font-size: 16px;
+  font-weight: bold;
+}
+
+.large_button:focus {
+  border-radius: 1em;
+}
+
+.large_button:hover {
+  background-color: var(--color_dark2);
+  border-radius: 1em;
 }
 
 #header {
@@ -174,10 +184,28 @@ li {
 
 .toot_footer_btn {
   margin-right: 1em;
+  padding: 5px;
+  height: 36px;
+  width: 36px;
+}
+
+.toot_footer_btn:focus {
+  border-radius: 50%;
+}
+
+.toot_footer_btn:hover {
+  background-color: var(--color_dark2);
+  border-radius: 50%;
+}
+
+.toot_footer_btn:hover .svg_icon {
+  fill: var(--color_blue);
 }
 
 .toot_footer_txt {
   color: var(--text_color);
+  /* height: 34px; */
+  margin: auto 0;
 }
 
 

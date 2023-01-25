@@ -183,7 +183,7 @@ function addPostLoadListeners() {
   if (isLoggedIn()) {
     Array.from(document.getElementsByClassName('toot_footer_btn'))
       .forEach((/** @type HTMLElement */ element) => {
-        element["disabled"] = false
+        element.classList.add("enabled")
       })
   }
 
