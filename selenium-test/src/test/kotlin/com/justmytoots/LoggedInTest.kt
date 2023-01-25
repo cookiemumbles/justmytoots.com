@@ -75,7 +75,7 @@ class LoggedInTest {
     fun `boost should change to active and perform action`(driver: WebDriver) {
         with(driver) {
             // given
-            get("${getServer()}?acct=cookie_mumbles@ohai.social")
+            get("${getServer()}?acct=cookie_mumbles@techhub.social")
             assertThat(findSnacbar().getClases()).containsOnly("tweet_footer") // no enabled
             val firstToot = findFirstToot()
             val boostBtn = firstToot.getBoostBtn()
@@ -101,7 +101,7 @@ class LoggedInTest {
     fun `favorite should change to active and perform action`(driver: WebDriver) {
         with(driver) {
             // given
-            get("${getServer()}?acct=cookie_mumbles@ohai.social")
+            get("${getServer()}?acct=cookie_mumbles@techhub.social")
             assertThat(findSnacbar().getClases()).containsOnly("tweet_footer") // no enabled
             val firstToot = findFirstToot()
             val faveBtn = firstToot.getFaveBtn()

@@ -5,7 +5,7 @@ import org.openqa.selenium.WebDriver
 import org.openqa.selenium.firefox.FirefoxDriver
 import org.openqa.selenium.firefox.FirefoxOptions
 
-val localDebugging = false
+val localDebugging = true
 
 fun getServer() = if (isCi()) "https://staging.justmytoots.com" else "http://localhost:8008"
 

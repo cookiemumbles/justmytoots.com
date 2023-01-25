@@ -136,7 +136,7 @@ export default class TootHtmlBuilder {
         createElement('div', {class:"toot_footer_txt text_favorite_count"}, favoritesCount.toString()),
       ]),
       wrapIn('div', { class: "toot_footer_item"},
-        wrapIn('button', { title:"Copy link", class: "toot_footer_btn btn_action_copy" }, 
+        wrapIn('button', { title:"Copy link", class: "toot_footer_btn btn_action_copy enabled" }, 
           createSvgRef("svg_icon_copy", { class:"svg_icon", width:"24", height:"24" }),
         )
       )

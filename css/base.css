@@ -55,10 +55,6 @@ button {
   margin: 0;
 }
 
-button:hover {
-  color: var(--color_blue);
-}
-
 ul {
   list-style: none;
   padding: 0;
