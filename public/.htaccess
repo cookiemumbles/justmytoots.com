@@ -1,0 +1,9 @@
+# ModRewrite activate
+RewriteEngine On
+
+# Let files and folder through
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# rewrite URL
+RewriteRule (.+) index.html?acct=$0 [L,QSA]

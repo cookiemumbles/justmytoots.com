@@ -10,6 +10,7 @@
     "buildJs": "mkdir -p public/js && npx google-closure-compiler 'js/**.js' --js_output_file public/js/main.js",
     "buildHtml": "cp index.html public/",
     "copyRootFiles": "cp .htaccess favicon.ico robots.txt public/",
+    "config": "npm config list",
     "build": "for t in clean buildCss buildJs buildHtml copyRootFiles; do npm run $t; done"
   },
   "repository": {
