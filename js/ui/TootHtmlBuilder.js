@@ -27,10 +27,14 @@ export default class TootHtmlBuilder {
         [
           this.createAviDiv(toot["account"]["display_name"], toot["account"]["avatar"], (toot.localized_profile_url) ? toot.localized_profile_url : toot.account.url),
           wrapIn('div', {class:"toot_content"}, [
-            this.createTweetHeader(toot["account"]["display_name"], '@' + toot["account"]["username"], toot.created_at),
+            this.createTweetHeader(
+              this.emojify(toot["account"]["display_name"],
+              toot.account.emojis), '@' + toot["account"]["username"],
+              toot.created_at
+            ),
             this.createContentWarningDiv(toot.sensitive, toot.id, toot.spoiler_text),
             wrapIn('a', { class: 'no_hover', 'href': (toot.localized_toot_url) ? toot.localized_toot_url : toot.url }, [
-              this.createTweetContent(toot.sensitive, toot.id, toot['content']),
+              this.createTweetContent(toot.sensitive, toot.id, this.emojify(toot['content'], toot.emojis)),
             ]),
             this.createAttachmentsDiv(toot['media_attachments'], toot.id, toot.sensitive),
             this.createTootFooterDiv(toot['reblogs_count'], toot['favourites_count'], toot['favourited'], toot['reblogged']),
@@ -159,6 +163,21 @@ export default class TootHtmlBuilder {
         let day = new Date(date).getDate();
         return `${month} ${day}`
     }
+  }
+
+  /** 
+   * @param {string} text
+   * @param {any[]} emojis
+   */
+  emojify(text, emojis) {
+    emojis.forEach(emojiMapping => {
+      text = text.replaceAll(
+        `:${emojiMapping.shortcode}:`,
+        createElement('img', { alt: emojiMapping.shortcode, src: emojiMapping.url, width:'16px', height:'16px' })
+          .outerHTML
+      )
+    })
+    return text
   }
 
 }
