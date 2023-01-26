@@ -11,6 +11,9 @@
     "buildHtml": "cp index.html public/",
     "copyRootFiles": "cp .htaccess favicon.ico robots.txt public/",
     "config": "npm config list",
+    "noSsl": "npm config set strict-ssl false",
+    "rmProxy": "npm config rm proxy; npm config rm https-proxy",
+    "noHttps": "npm config set registry='http://registry.npmjs.org/'",
     "build": "for t in clean buildCss buildJs buildHtml copyRootFiles; do npm run $t; done"
   },
   "repository": {
