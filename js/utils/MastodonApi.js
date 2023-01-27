@@ -17,6 +17,20 @@ export default class MastodonApi {
   }
 
 
+  /**
+   * docs: https://docs.joinmastodon.org/methods/accounts/#verify_credentials
+   * request: GET /api/v1/accounts/verify_credentials HTTP/1.1
+   * @param {string} server
+   * @param {string|undefined} [bearerToken]
+   */
+  static verifyCredentials(server, bearerToken) {
+    return JRequest.request('GET',
+      `https://${server}/api/v1/accounts/verify_credentials`,
+      {},
+      getAppropriateHeaders(bearerToken)
+    )
+  }
+
   // TODO: update docs: requires plain read permission
   /**
    * docs: https://docs.joinmastodon.org/methods/apps/#verify_credentials
@@ -25,7 +39,7 @@ export default class MastodonApi {
    * @param {string} clientId
    * @param {string|undefined} [bearerToken]
    */
-  static verifyCredentials(server, clientId, bearerToken) {
+  static verifyAppCredentials(server, clientId, bearerToken) {
     return JRequest.request('GET',
       buildUrl(`https://${server}/api/v1/apps/verify_credentials`, {
         client_id: clientId,
@@ -181,6 +195,6 @@ function getAppropriateHeaders(bearerToken) {
 }
 
 function getScopes() {
-  // return "write:favourites write:statuses read:statuses"
-  return "write:favourites write:statuses read" // need plain read to verify credentials
+  // wuold need plain read to verify app credentials
+  return "write:favourites write:statuses read:statuses read:accounts"
 }

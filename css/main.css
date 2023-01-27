@@ -76,10 +76,21 @@ li {
 #header {
   margin-bottom: 0.3em;
   margin-top: 0.1em;
+  display: flex;
 }
 
-.nav_right {
+#nav_left {
+  flex: 1;
+  display: flex;
+}
+
+.small_avi {
+  padding: 10px;
+}
+
+#nav_right {
   float: right;
+  align-self: end;
 }
 
 
