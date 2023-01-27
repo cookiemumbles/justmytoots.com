@@ -5,7 +5,8 @@ import { getDataCookie } from './utils/Cookie.js';
 import MastodonApi from './utils/MastodonApi.js';
 import { getUrlParams, getUserDataFromUrl } from './utils/Browser.js';
 import { handleLoginPartTwoOrContinue, verifyLoginOrContinue } from './login.js';
-import { addInitialListeners, getTargetUserData, loadPageContent, loadToots, setTargetUserData, updateOptionsStates } from './ui/DomController.js';
+import { addInitialListeners, displayLoggedInState, loadPageContent, loadToots, updateOptionsStates } from './ui/DomController.js';
+import { getTargetUserData, setTargetUserData } from './utils/MemoryData.js';
 
 var log = new Logger()
 
@@ -33,7 +34,7 @@ function main() {
 
   handleLoginPartTwoOrContinue()
     .then(() => {
-      verifyLoginOrContinue()
+      return verifyLoginOrContinue()
     })
     .then(() => {
       const loginData = getDataCookie();
@@ -75,6 +76,7 @@ function main() {
       log.d("Enriched target user data:", targetUserData);
       setTargetUserData(targetUserData)
 
+      displayLoggedInState()
       loadPageContent(targetUserData);
     })
     .catch((/** @type {Error} */ error) => {

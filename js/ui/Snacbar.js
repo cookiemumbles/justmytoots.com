@@ -1,4 +1,4 @@
-import { createElement, createSvgRef } from './HtmlBuilder.js';
+import { createSvgRef } from './HtmlBuilder.js';
 
 var latestSnaccbarTimeout = null
 var latestReshowTimeout = null

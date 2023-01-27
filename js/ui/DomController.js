@@ -2,31 +2,16 @@ import { addUrlSearchParam, getUrlParams, removeUrlSearchParam } from "../utils/
 import { deleteDataCookie, getDataCookie } from "../utils/Cookie.js"
 import Logger from "../utils/Logger.js"
 import MastodonApi from "../utils/MastodonApi.js"
+import { getLastTootId, getLoggedInUserData, getTargetUserData, setLastTootId } from "../utils/MemoryData.js"
 import { copyToClipboard } from "../utils/System.js"
+import { createElement } from "./HtmlBuilder.js"
 import { showAboutModal, showImageModal, showLoginModal } from "./Modal.js"
 import { showSnacError, showSnacSuccess } from "./Snacbar.js"
-import TootHtmlBuilder from "./TootHtmlBuilder.js"
-import { addUniqueClickListenerForId, addUniqueClickListenerForEachOfClass, addUniqueEventListener, addUniqueListenerForEachOfClass, toggleHiddenElement } from "./Utils.js"
+import { createTootDomItem } from "./TootHtmlBuilder.js"
+import { addUniqueClickListenerForId, addUniqueClickListenerForEachOfClass, addUniqueListenerForEachOfClass, toggleHiddenElement } from "./Utils.js"
 
-
-/**
- * @typedef {Object} UserData
- * @prop {string} server
- * @prop {string} userName
- * @prop {string} handle
- * @prop {string} [id]
- * @prop {string} [avatar]
- * @prop {string} [display_name]
- * @prop {string} [url]
- */
 
 /** @typedef { import("../testData.js").TootJson } TootJson */
-
-/** @type {UserData} */
-var g_targetUserData = null
-
-/** @type string */
-var g_lastTootId = null
 
 var log = new Logger()
 
@@ -36,7 +21,7 @@ export function addInitialListeners() {
     const target = /** @type HTMLButtonElement */ (event.target)
     if (target.textContent == "Logout") {
       deleteDataCookie()
-      document.getElementById("btn_login").textContent = "Login"
+      location.reload()
     } else {
       showLoginModal()
     }
@@ -79,6 +64,18 @@ export function updateOptionsStates() {
     })
 }
 
+export function displayLoggedInState() {
+  const data = getLoggedInUserData()
+  if (data) {
+    document.getElementById("btn_login").textContent = "Logout"
+    const aviImage = createElement('img', { class: "avi small_avi", alt: `Avi for ${data.username}`, src: data.avatar, width:'32px', height:'32px' })
+
+    const headerDiv = document.getElementById("nav_left")
+    const loginButton = headerDiv.firstChild
+    headerDiv.insertBefore(aviImage, loginButton)
+  }
+}
+
 const OPT_REPLIES = 'replies'
 const OPT_MEDIA_ONLY = 'media_only'
 const OPT_PUBLIC_ONLY = 'public_only'
@@ -96,7 +93,7 @@ function checkboxIdToParamName(id) {
 }
 
 /**
- * @param {UserData} targetUserData
+ * @param {import("../utils/MemoryData.js").UserData} targetUserData
  * @param {string} [lastId]
  */
 export function loadPageContent(targetUserData, lastId) {
@@ -156,7 +153,7 @@ export function loadToots(toots) {
       toot['localized_toot_url'] = `https://${loginData.server}/${getTargetUserData().handle}/${toot.id}`
     }
     document.getElementById('tweet_list')
-      .appendChild(new TootHtmlBuilder().createTootDomItem(toot));
+      .appendChild(createTootDomItem(toot));
   })
 
   loaderOff()
@@ -313,26 +310,3 @@ export function loaderOff() {
   document.getElementById("down_arrow").style.display = "inline-block";
 }
 
-
-
-
-
-/** @param {UserData} targetUserData */
-export function setTargetUserData(targetUserData) {
-  g_targetUserData = targetUserData
-}
-
-/** @returns {UserData} */
-export function getTargetUserData() {
-  return g_targetUserData
-}
-
-/** @param {string} lastTootId */
-export function setLastTootId(lastTootId) {
-  g_lastTootId = lastTootId
-}
-
-/** @returns string */
-export function getLastTootId() {
-  return g_lastTootId
-}

@@ -90,7 +90,7 @@ export default class JRequest {
 
 /**
  * @param {string | URL} inputUrl
- * @param {string | string[][] | Record<string, string> | URLSearchParams} querryParams
+ * @param {string | string[][] | Record<string, any> | URLSearchParams} querryParams
  */
 export function buildUrl(inputUrl, querryParams) {
   const url = new URL(inputUrl);

@@ -38,10 +38,10 @@ class LoggingInTest {
     fun `should login and out correctly`(driver: WebDriver) {
         with(driver) {
             // given
-            get("${getServer()}?acct=cookie_mumbles@mastodon.social")
+            get("${getServer()}?acct=cookie_mumbles@ohai.social")
 
             // when
-            get("${getServer()}?acct=cookie_mumbles@mastodon.social&log=d")
+            get("${getServer()}?acct=cookie_mumbles@ohai.social&log=d")
             findLoginBtn().click()
             findElement(By.id("input_server")).sendKeys("techhub.social")
             findElement(By.id("btn_action_login")).click()

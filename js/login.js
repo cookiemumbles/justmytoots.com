@@ -3,30 +3,9 @@ import MastodonApi from './utils/MastodonApi.js';
 import Logger from './utils/Logger.js';
 import { clearCodeTokenFromUrl } from './utils/Browser.js';
 import { showSnacError } from './ui/Snacbar.js';
+import { setLoggedInUserData } from './utils/MemoryData.js';
 
 var log = new Logger()
-
-export function verifyLoginOrContinue() {
-  const loginData = getDataCookie();
-  if ('bearer_token' in loginData) {
-    return MastodonApi
-      .verifyCredentials(loginData.server, loginData.client_id, loginData.bearer_token)
-      .then(() => {
-        log.i("credentials valid")
-        document.getElementById("btn_login").textContent = "Logout"
-        Promise.resolve(true)
-      })
-      .catch((/** @type {Error} */ error) => {
-        log.w("Credentials appear invalid. Deleting persisted values.");
-        log.e(error);
-        deleteDataCookie();
-        showSnacError("Login error. Please try again.")
-        Promise.resolve(false)
-      })
-  } else {
-    return Promise.resolve(false)
-  }
-}
 
 
 /**
@@ -41,7 +20,7 @@ export function performLogin(server) {
 
   MastodonApi.requestNewApiApp('justmytoots_test', server, callbackUrl)
     .then(function(result) {
-      console.log(result)
+      log.t("requesting api app result:", result)
       const resultData = JSON.parse(result)
       appendDataCookie({
         client_id: resultData.client_id,
@@ -57,6 +36,30 @@ export function performLogin(server) {
         callbackUrl
       )
     })
+}
+
+export function verifyLoginOrContinue() {
+  const loginData = getDataCookie();
+  if ('bearer_token' in loginData) {
+    return MastodonApi
+      .verifyCredentials(loginData.server, loginData.bearer_token)
+      .then((result) => {
+        log.i("credentials valid")
+        const loggedInUserData = JSON.parse(result)
+        log.t("Logged in user data:", loggedInUserData)
+        setLoggedInUserData(loggedInUserData)
+        return Promise.resolve(true)
+      })
+      .catch((/** @type {Error} */ error) => {
+        log.w("Credentials appear invalid. Deleting persisted values.");
+        log.e(error);
+        deleteDataCookie();
+        showSnacError("Login error. Please try again.")
+        return Promise.resolve(false)
+      })
+  } else {
+    return Promise.resolve(false)
+  }
 }
 
 export async function handleLoginPartTwoOrContinue() {

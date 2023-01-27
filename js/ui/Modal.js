@@ -42,10 +42,16 @@ export function showLoginModal() {
   container.appendChild(createElement('p', {}, "Login to favorite and boost directly on the page."))
   container.appendChild(createElement('p', {}, `
     Don't worry, your login data is <b>only saved locally</b> and uses <b>a
-    cookie</b> to save it on your machine. The premissions are to favorite
-    (<em>write:favourites</em> permission), boost (<em>write:statuses</em>
-    permission) and to verify the credentials (inexplicable broad <em>read</em>
-    permission).
+    cookie</b> to save it on your device. The premissions are:`))
+  container.appendChild(createElement('ul', {}, `
+      <li><code>read:statuses</code> - to read the useres toots</li>
+      <li><code>write:favourites</code> - favorite</li>
+      <li><code>write:statuses</code> - boost</li>
+      <li><code>read:accounts</code> - verify the credentials and show the current logged-in user</li>
+    `))
+  container.appendChild(createElement('p', {}, `You are welcome to look into the <b>
+    <a href='https://github.com/cookiemumbles/justmytoots.com/blob/main/js/utils/MastodonApi.js#L183'>sourcecode on github</a>
+    </b> to see for yourself.
     `))
 
   container.appendChild(

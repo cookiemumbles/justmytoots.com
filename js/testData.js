@@ -47,6 +47,7 @@
  * @prop {any} application
  * @prop {string} created_at
  * @prop {string} [localized_toot_url]
+ * @prop {string} [localized_profile_url]
  * @prop {AccountJson} account
  * @prop {any[]} media_attachments
  * @prop {any[]} mentions
