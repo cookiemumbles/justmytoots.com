@@ -2,6 +2,8 @@ import { wrapIn, createSvgRef, createElement } from './HtmlBuilder.js';
 
 /** @param {import('../testData.js').TootJson} toot */
 export function createTootDomItem(toot) {
+  // @ts-ignore
+  const hasContentWarning = (/** @type boolean */ (toot.spoiler_text))
   return wrapIn('li',
     { class: 'bordered single_tweet_li' },
     wrapIn('div', {
@@ -19,11 +21,11 @@ export function createTootDomItem(toot) {
               toot.account.emojis), '@' + toot["account"]["username"],
             toot.created_at
           ),
-          createContentWarningDiv(toot.sensitive, toot.id, toot.spoiler_text),
+          createContentWarningDiv(hasContentWarning, toot.id, toot.spoiler_text),
           wrapIn('a', { class: 'no_hover', 'href': (toot.localized_toot_url) ? toot.localized_toot_url : toot.url }, [
-            createTweetContent(toot.sensitive, toot.id, emojify(toot['content'], toot.emojis)),
+            createTweetContent(hasContentWarning, toot.id, emojify(toot['content'], toot.emojis)),
           ]),
-          createAttachmentsDiv(toot['media_attachments'], toot.id, toot.sensitive),
+          createAttachmentsDiv(toot['media_attachments'], toot.id, hasContentWarning),
           createTootFooterDiv(toot['reblogs_count'], toot['favourites_count'], toot['favourited'], toot['reblogged']),
         ]),
       ]
@@ -58,41 +60,41 @@ function createTweetHeader(displayName, handle, createDate) {
 }
 
 /**
- * @param {boolean} isSensitive
+ * @param {boolean} hasContentWarning
  * @param {string} tootId
  * @param {string} contentWarningText
  */
-function createContentWarningDiv(isSensitive, tootId, contentWarningText) {
+function createContentWarningDiv(hasContentWarning, tootId, contentWarningText) {
   return wrapIn('div', {class:"toot_content_warning_container"},
-    (isSensitive) ? [
+    (hasContentWarning) ? [
       createElement('div', { class: "content_warning", 'data-toot-id': tootId }, contentWarningText)
     ] : []
   )
 }
 
 /**
- * @param {boolean} isSensitive
+ * @param {boolean} hasContentWarning
  * @param {string} tootId
  * @param {string} text
  */
-function createTweetContent(isSensitive, tootId, text) {
+function createTweetContent(hasContentWarning, tootId, text) {
   return createElement(
     'div',
-    { class: `toot_text hidden_${tootId}`, style: (isSensitive) ?  'visibility: hidden' : '' },
+    { class: `toot_text hidden_${tootId}`, style: (hasContentWarning) ?  'visibility: hidden' : '' },
     text
   )
 }
 
 /**
- * @param {boolean} isSensitive
+ * @param {boolean} hasContentWarning
  * @param {string} tootId
  * @param {any[]} attatchments
  */
-function createAttachmentsDiv(attatchments, tootId, isSensitive) {
+function createAttachmentsDiv(attatchments, tootId, hasContentWarning) {
   return wrapIn('div', {},
     attatchments.map(attatchment => {
       return createElement('img', {
-        class: (isSensitive) ? `toot_pic hidden_${tootId} blur` : 'toot_pic',
+        class: (hasContentWarning) ? `toot_pic hidden_${tootId} blur` : 'toot_pic',
         alt: attatchment.description,
         src: attatchment['preview_url']
       })
