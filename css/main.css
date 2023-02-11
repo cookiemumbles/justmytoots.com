@@ -45,12 +45,6 @@ h1 {
   justify-content: center;
 }
 
-li {
-  /* padding: 12px 16px; */
-  /* border: 1px solid; */
-  /* border-color: var(--color_dark2); */
-}
-
 .bordered {
   border: 1px solid;
   border-color: var(--color_dark2);
@@ -60,17 +54,12 @@ li {
   background-color: var(--bg_color);
   padding: 16px;
   margin: 0;
-  font-size: 16px;
-  font-weight: bold;
-}
-
-.large_button:focus {
   border-radius: 1em;
+  font-weight: bold;
 }
 
 .large_button:hover {
   background-color: var(--color_dark2);
-  border-radius: 1em;
 }
 
 #header {
@@ -150,11 +139,16 @@ li {
 }
 
 .content_warning {
-  font-weight: lighter;
-  /* font-style: italic; */
   padding: 0.5em 1em;
   background-color: var(--color_dark3);
   border-radius: 10px;
+  width: 100%;
+  text-align: start;
+  margin: 0.5em 0;
+}
+
+.content_warning:hover {
+  background-color: var(--color_dark2);
 }
 
 .blur {

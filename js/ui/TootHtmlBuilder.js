@@ -67,7 +67,7 @@ function createTweetHeader(displayName, handle, createDate) {
 function createContentWarningDiv(hasContentWarning, tootId, contentWarningText) {
   return wrapIn('div', {class:"toot_content_warning_container"},
     (hasContentWarning) ? [
-      createElement('div', { class: "content_warning", 'data-toot-id': tootId }, contentWarningText)
+      createElement('button', { class: "content_warning", 'data-toot-id': tootId }, contentWarningText)
     ] : []
   )
 }
