@@ -1,4 +1,5 @@
 node_modules
+public
 .tags*
 .git
 .DS_Store
