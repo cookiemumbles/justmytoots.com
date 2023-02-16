@@ -7,7 +7,8 @@
     "clean": "rm -fr public",
     "cleanCache": "npm cache clean --force",
     "buildCss": "mkdir -p public/css && cat css/*.css | npx csso > public/css/main.css",
-    "buildJs": "mkdir -p public/js && npx google-closure-compiler 'js/**.js' --js_output_file public/js/main.js",
+    "buildJsOld": "mkdir -p public/js && npx google-closure-compiler 'js/**.js' --js_output_file public/js/main.js",
+    "buildJs": "mkdir -p public/js && npx rollup js/main.js --format cjs | npx terser --compress -o public/js/main.js",
     "buildHtml": "cp index.html public/",
     "copyRootFiles": "cp .htaccess favicon.ico robots.txt public/",
     "build": "for t in clean buildCss buildJs buildHtml copyRootFiles; do npm run $t; done",
@@ -27,6 +28,7 @@
   "homepage": "https://github.com/cookiemumbles/justmytoots.com#readme",
   "dependencies": {
     "csso-cli": "^4.0.1",
-    "google-closure-compiler": "^20230103.0.0"
+    "rollup": "^3.15.0",
+    "terser": "^5.16.3"
   }
 }
