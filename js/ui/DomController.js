@@ -1,4 +1,4 @@
-import { addUrlSearchParam, getUrlParams, removeUrlSearchParam } from "../utils/Browser.js"
+import { addUrlSearchParam, removeUrlSearchParam } from "../utils/Browser.js"
 import { deleteDataCookie, getDataCookie } from "../utils/Cookie.js"
 import Logger from "../utils/Logger.js"
 import MastodonApi from "../utils/MastodonApi.js"
@@ -9,6 +9,7 @@ import { showAboutModal, showImageModal, showLoginModal } from "./Modal.js"
 import { showSnacError, showSnacSuccess } from "./Snacbar.js"
 import { createTootDomItem } from "./TootHtmlBuilder.js"
 import { addUniqueClickListenerForId, addUniqueClickListenerForEachOfClass, addUniqueListenerForEachOfClass, toggleHiddenElement } from "./Utils.js"
+import { getForcedOptions, getValueForOption, Options } from "../utils/Options.js";
 
 
 /** @typedef { import("../testData.js").TootJson } TootJson */
@@ -60,7 +61,13 @@ export function updateOptionsStates() {
   Array
     .from(document.getElementsByClassName('options_checkbox'))
     .forEach((/** @type HTMLInputElement */ checkbox) => {
-      checkbox.checked = getUrlParams().get(checkboxIdToParamName(checkbox.id)) == 'true'
+      const paramName = checkboxIdToParamName(checkbox.id)
+      checkbox.checked = getValueForOption(paramName) == 'true'
+      if (getForcedOptions()[paramName]) {
+        checkbox.classList.add("forced")
+        const label = checkbox.parentNode.querySelector(".switch_label")
+        label.textContent = label.textContent + " (forced by user)"
+      }
     })
 }
 
@@ -76,19 +83,15 @@ export function displayLoggedInState() {
   }
 }
 
-const OPT_REPLIES = 'replies'
-const OPT_MEDIA_ONLY = 'media_only'
-const OPT_PUBLIC_ONLY = 'public_only'
-
 /** @param {string} id */
 function checkboxIdToParamName(id) {
   switch (id) {
     case 'checkbox_replies':
-      return OPT_REPLIES
+      return Options.REPLIES
     case 'checkbox_media':
-      return OPT_MEDIA_ONLY
+      return Options.MEDIA_ONLY
     case 'checkbox_public':
-      return OPT_PUBLIC_ONLY
+      return Options.PUBLIC_ONLY
   }
 }
 
@@ -132,15 +135,15 @@ export function loadToots(toots) {
   toots
     .filter(toot =>  !toot['reblog'] )
     .filter(toot => 
-      getUrlParams().get(OPT_REPLIES) == 'true'
+      getValueForOption(Options.REPLIES) == 'true'
       || (!toot['in_reply_to_id'] && !toot['in_reply_to_account_id'])
     )
     .filter(toot => 
-      getUrlParams().get(OPT_PUBLIC_ONLY) != 'true'
+      getValueForOption(Options.PUBLIC_ONLY) != 'true'
       || toot['visibility'] == 'public' 
     )
     .filter(toot => 
-      getUrlParams().get(OPT_MEDIA_ONLY) != 'true'
+      getValueForOption(Options.MEDIA_ONLY) != 'true'
       || toot['media_attachments'].length > 0
     )
     .forEach((toot) => {

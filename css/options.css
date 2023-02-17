@@ -30,7 +30,7 @@
 }
 
 .switch input:focus + .slider.round {
-  outline: solid;
+  outline: solid white;
   transition: none;
 }
 
@@ -58,8 +58,14 @@
   width: 18px;
 }
 
+
 input:checked + .slider {
   background-color: #66bb6a;
+}
+input.forced + .slider {
+  background-color: gray;
+  color: gray;
+  outline-color: white;
 }
 
 input:checked + .slider:before {
@@ -79,7 +85,7 @@ input:checked + .slider:before {
 	left: 60px;
 	display: block;
 	position: absolute;
-	width: 150px;
+	width: 500px;
 	top: 0;
 }
 
