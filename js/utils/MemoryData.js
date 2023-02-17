@@ -20,6 +20,7 @@ var g_lastTootId = null
 /** @type {import("../testData").AccountJson} */
 var g_accountData = null
 
+var g_optionsData = null
 
 /** @param {UserData} targetUserData */
 export function setTargetUserData(targetUserData) {
@@ -48,4 +49,13 @@ export function setLoggedInUserData(accountData) {
 
 export function getLoggedInUserData() {
   return g_accountData
+}
+
+/** @param {any} optionsData */
+export function setOptions(optionsData) {
+  g_optionsData = optionsData
+}
+
+export function getOptions() {
+  return g_optionsData
 }

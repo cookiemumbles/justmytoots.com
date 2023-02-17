@@ -7,6 +7,7 @@ import { getUrlParams, getUserDataFromUrl } from './utils/Browser.js';
 import { handleLoginPartTwoOrContinue, verifyLoginOrContinue } from './login.js';
 import { addInitialListeners, displayLoggedInState, loadPageContent, loadToots, updateOptionsStates } from './ui/DomController.js';
 import { getTargetUserData, setTargetUserData } from './utils/MemoryData.js';
+import { setForcedOptions } from './utils/Options.js';
 
 var log = new Logger()
 
@@ -19,7 +20,6 @@ var log = new Logger()
 function main() {
   addInitialListeners()
 
-  updateOptionsStates()
   try {
     setTargetUserData(getUserDataFromUrl())
   } catch (e) {
@@ -52,18 +52,27 @@ function main() {
       log.t('resultUserData:', resultUserData);
       const targetUserData = getTargetUserData()
 
-      // no regex, so special characters in handles/server names can not cause problems
-      const possibleConsentUrls = [
-        `https://justmytoots.com/${targetUserData.handle}`,
-        `https://justmytoots.com/${targetUserData.userName}@${targetUserData.server}`,
-      ]
-      if (
-        possibleConsentUrls.some(consUrl => resultUserData['note'].includes(consUrl)) ||
-        /** @type Array */(resultUserData['fields']).some(element =>
-          possibleConsentUrls.some(consUrl => element.value.includes(consUrl))
-        )
-      ) {
+      const regex = new RegExp(
+        `https://(www.)?justmytoots.com/@?${targetUserData.userName}@${targetUserData.server}(.*)`
+      )
+      const urlsGivingConsent = Array.from(resultUserData['fields'])
+        .map(field => field.value)
+        .concat(resultUserData['note'])
+        // now is array of all texts that could have an url
+        .flatMap(text => text.match(/(https?:\/\/[^\s\"]+)/g))
+        .filter(it => (it)) // remove 'null' matches
+        .filter((/** @type string */ it) => regex.test(it.toLowerCase())) // matches validation regex
+
+
+      urlsGivingConsent.map(it => {
+        // the [2] match group has the ?prop=value&prop=value elements
+        setForcedOptions(htmlDecode(regex.exec(it)[2]))
+      })
+      updateOptionsStates()
+
+      if (urlsGivingConsent.length > 0) {
         log.d("consent granted")
+
       } else {
         throw new NoConsentError(targetUserData)
       }
@@ -88,6 +97,11 @@ function main() {
     })
 }
 
+/** @param {string} input */
+function htmlDecode(input) {
+  var doc = new DOMParser().parseFromString(input, "text/html");
+  return doc.documentElement.textContent;
+}
 
 document.addEventListener("DOMContentLoaded", function() {
   main();
