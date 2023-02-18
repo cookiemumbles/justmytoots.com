@@ -14,6 +14,17 @@ import { getForcedOptions, getValueForOption, Options } from "../utils/Options.j
 
 /** @typedef { import("../testData.js").TootJson } TootJson */
 
+/** 
+ * @see https://docs.joinmastodon.org/entities/Status/#visibility
+ * @enum {string}
+ */
+const Visibility = {
+  PUBLIC : "public", // Visible to everyone, shown in public timelines.
+  UNLISTED : "unlisted", // Visible to public, but not included in public timelines.
+  PRIVATE : "private", // Visible to followers only, and to any mentioned users.
+  DIRECT : "direct" // Visible only to mentioned users.
+};
+
 var log = new Logger()
 
 
@@ -134,13 +145,14 @@ export function loadToots(toots) {
   let loginData = getDataCookie()
   toots
     .filter(toot =>  !toot['reblog'] )
+    .filter(toot => toot['visibility'] != Visibility.DIRECT)
     .filter(toot => 
       getValueForOption(Options.REPLIES) == 'true'
       || (!toot['in_reply_to_id'] && !toot['in_reply_to_account_id'])
     )
     .filter(toot => 
       getValueForOption(Options.PUBLIC_ONLY) != 'true'
-      || toot['visibility'] == 'public' 
+      || toot['visibility'] == Visibility.PUBLIC 
     )
     .filter(toot => 
       getValueForOption(Options.MEDIA_ONLY) != 'true'
