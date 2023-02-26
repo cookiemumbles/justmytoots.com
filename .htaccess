@@ -5,7 +5,8 @@ RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 
-Modpagespeed Off
+# broken now?
+# Modpagespeed Off
 
 # rewrite URL
 RewriteRule (.+) index.html?acct=$0 [L,QSA]
