@@ -55,13 +55,18 @@ function main() {
       const regex = new RegExp(
         `https://(www.)?justmytoots.com/@?${targetUserData.userName}@${targetUserData.server}(.*)`
       )
+      log.t("Searching for urls matching:", regex)
       const urlsGivingConsent = Array.from(resultUserData['fields'])
         .map(field => field.value)
         .concat(resultUserData['note'])
         // now is array of all texts that could have an url
         .flatMap(text => text.match(/(https?:\/\/[^\s\"]+)/g))
         .filter(it => (it)) // remove 'null' matches
-        .filter((/** @type string */ it) => regex.test(it.toLowerCase())) // matches validation regex
+        .map(it => {
+          log.t("Url found in profile:", it)
+          return it
+        })
+        .filter((/** @type string */ it) => regex.test(it)) // matches validation regex
 
 
       urlsGivingConsent.map(it => {
