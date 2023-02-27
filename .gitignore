@@ -3,3 +3,5 @@ public
 .tags*
 .git
 .DS_Store
+dist
+*.log
