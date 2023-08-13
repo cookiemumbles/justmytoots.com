@@ -4,4 +4,5 @@ public
 .git
 .DS_Store
 dist
+tmp-dist
 *.log
