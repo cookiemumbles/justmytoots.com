@@ -1,3 +1,4 @@
+import { ErrorResponse } from '../utils/JRequest.js';
 import { wrapIn, createElement } from './HtmlBuilder.js';
 
 /** @param {NoConsentError} error */
@@ -30,6 +31,45 @@ export function displayMissingUserMessage(error) {
     `
   )
 
+}
+
+export function displayUnauthorizedErrorResponse(error) {
+  console.debug("Displaying error:", error)
+  renderError(
+    `Authorization required`,
+    `
+      <p>
+        This user appears to be on a server that requires authorization to view
+        things. You can simply use the button at the top to login.
+      </p>
+      <p>
+        And don't worry, your data is only stored on your device. See the about
+        page for a link to the sourcecode if you like to check for yourself.
+      </p>
+    `
+  )
+}
+
+/** @param {ErrorResponse} error */
+export function displayGeneralErrorResponse(error) {
+  console.debug("Displaying error:", error)
+  renderError(
+    `ERROR: [${error.httpCode}] ${error.statusText}`,
+    `
+      <p>
+        <b>Requested:</b></br>
+        ${error.requestUrl}
+      </p>
+      <p>
+        <b>Response:</b></br>
+        ${error.response}
+      </p>
+      This might mean the server is currently unavailable, or the
+      identifier you've entered is not correct. Check if url with the
+      user is correct (see example below) or try again later.
+      </br>
+    `
+  )
 }
 
 /** @param {Error} error */

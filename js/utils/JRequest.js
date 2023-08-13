@@ -56,11 +56,12 @@ export default class JRequest {
         if (this.status >= 200 && this.status < 300) {
           resolve(xhr.response);
         } else {
-          reject(new Error(
-            `[${this.status}] ${xhr.statusText} (${xhr.response})`,
-          // @ts-ignore
-            {cause: `Http status error connecting to ${url}`}
-          ));
+          reject(new ErrorResponse(
+            this.status,
+            xhr.statusText,
+            xhr.response,
+            url
+          ))
         }
       };
       xhr.onerror = function () {
@@ -96,4 +97,30 @@ export function buildUrl(inputUrl, querryParams) {
   const url = new URL(inputUrl);
   url.search = new URLSearchParams(querryParams).toString()
   return url
+}
+
+export class ErrorResponse extends Error {
+  /** @type {number} */
+  httpCode = 0
+   /** @type {string} */
+  statusText = ""
+  /** @type {any} */
+  response = ""
+  /** @type {string | URL} */
+  requestUrl = ""
+  /**
+     * @param {number} httpCode
+     * @param {string} statusText
+     * @param {any} response
+     * @param {string | URL} requestUrl
+     */
+  constructor(httpCode, statusText, response, requestUrl) {
+    super(`[${httpCode}] ${statusText}.\nRequested:${requestUrl}\n Response:\n${response}`);
+    this.name = "ErrorResponse";
+
+    this.httpCode = httpCode
+    this.statusText = statusText
+    this.response = response
+    this.requestUrl = requestUrl
+  }
 }
