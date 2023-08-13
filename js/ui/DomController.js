@@ -1,6 +1,5 @@
 import { addUrlSearchParam, removeUrlSearchParam } from "../utils/Browser.js"
-import { deleteDataCookie, getDataCookie } from "../utils/Cookie.js"
-import Logger from "../utils/Logger.js"
+import LoggerLive from "../utils/LoggerLive.js"
 import MastodonApi from "../utils/MastodonApi.js"
 import { getLastTootId, getLoggedInUserData, getTargetUserData, setLastTootId } from "../utils/MemoryData.js"
 import { copyToClipboard } from "../utils/System.js"
@@ -10,6 +9,7 @@ import { showSnacError, showSnacSuccess } from "./Snacbar.js"
 import { createTootDomItem } from "./TootHtmlBuilder.js"
 import { addUniqueClickListenerForId, addUniqueClickListenerForEachOfClass, addUniqueListenerForEachOfClass, toggleHiddenElement } from "./Utils.js"
 import { getForcedOptions, getValueForOption, Options } from "../utils/Options.js";
+import CookieStore from "../utils/CookieStore.js"
 
 
 /** @typedef { import("../testData.js").TootJson } TootJson */
@@ -25,14 +25,15 @@ const Visibility = {
   DIRECT : "direct" // Visible only to mentioned users.
 };
 
-var log = new Logger()
+var log = new LoggerLive()
 
 
 export function addInitialListeners() {
   addUniqueClickListenerForId("loginEvent", "btn_login", (/** @type MouseEvent */ event) => {
     const target = /** @type HTMLButtonElement */ (event.target)
     if (target.textContent == "Logout") {
-      deleteDataCookie()
+      const cookieStore = new CookieStore()
+      cookieStore.reset()
       location.reload()
     } else {
       showLoginModal()
@@ -114,8 +115,8 @@ export function loadPageContent(targetUserData, lastId) {
   if (!isLoading()) {
     loaderOn()
 
-    Promise
-      .resolve(getDataCookie())
+    return Promise
+      .resolve(new CookieStore().getData())
       .then(loginData => {
         if ('bearer_token' in loginData) {
           return MastodonApi
@@ -142,7 +143,8 @@ export function loadPageContent(targetUserData, lastId) {
 export function loadToots(toots) {
   log.d("Loading toots:", toots)
 
-  let loginData = getDataCookie()
+  const cookieStore = new CookieStore()
+  let loginData = cookieStore.getData()
   toots
     .filter(toot =>  !toot['reblog'] )
     .filter(toot => toot['visibility'] != Visibility.DIRECT)
@@ -204,7 +206,8 @@ function addPostLoadListeners() {
       const target = /** @type HTMLButtonElement */ (event.target)
       const prentDiv = /** @type HTMLElement */ (target.closest('.single_tweet_wrap'))
       const btn = target.closest('.toot_footer_btn')
-      const loginData = getDataCookie()
+      const cookieStore = new CookieStore()
+      const loginData = cookieStore.getData()
 
       const txtCount = /** @type HTMLElement */ (prentDiv.querySelector('.text_boost_count'))
       if (!btn.classList.contains('active')) {
@@ -247,7 +250,8 @@ function addPostLoadListeners() {
       const btn = /** @type HTMLButtonElement */ (target.closest('.toot_footer_btn'))
       const txtCount = /** @type HTMLElement */ (prentDiv.querySelector('.text_favorite_count'))
 
-      const loginData = getDataCookie()
+      const cookieStore = new CookieStore()
+      const loginData = cookieStore.getData()
       if (!btn.classList.contains('active')) {
         MastodonApi
           .favorite(
@@ -310,7 +314,8 @@ export function isLoading() {
 }
 
 export function isLoggedIn() {
-  const currentCookieData = getDataCookie()
+  const cookieStore = new CookieStore()
+  const currentCookieData = cookieStore.getData()
   return 'bearer_token' in currentCookieData
 }
 
