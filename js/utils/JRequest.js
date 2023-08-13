@@ -1,4 +1,4 @@
-import Logger from './Logger.js';
+import LoggerLive from './LoggerLive.js';
 
 export default class JRequest {
 
@@ -80,7 +80,7 @@ export default class JRequest {
       }
 
 
-      const log = new Logger()
+      const log = new LoggerLive()
       log.d(`Requesting: ${url}`, jsonData)
       log.t("headers:", headers)
 

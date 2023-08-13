@@ -1,16 +1,16 @@
 import { test_toots } from './testData.js';
-import { displayServerError, displayMissingUserMessage, NoConsentError, displayNoConsentError, displayUnauthorizedErrorResponse, displayGeneralErrorResponse } from './ui/ErrorScreen.js';
-import Logger from './utils/Logger.js';
-import { getDataCookie } from './utils/Cookie.js';
+import LoggerLive from './utils/LoggerLive.js';
+import { displayServerError, displayMissingUserMessage, NoConsentError, displayNoConsentError, displayErrorResponse, displayUnauthorizedErrorResponse, displayGeneralErrorResponse } from './ui/ErrorScreen.js';
 import MastodonApi from './utils/MastodonApi.js';
 import { getUrlParams, getUserDataFromUrl } from './utils/Browser.js';
 import { handleLoginPartTwoOrContinue, verifyLoginOrContinue } from './login.js';
 import { addInitialListeners, displayLoggedInState, loadPageContent, loadToots, updateOptionsStates } from './ui/DomController.js';
 import { getTargetUserData, setTargetUserData } from './utils/MemoryData.js';
 import { setForcedOptions } from './utils/Options.js';
+import CookieStore from './utils/CookieStore.js';
 import { ErrorResponse } from './utils/JRequest.js';
 
-var log = new Logger()
+var log = new LoggerLive()
 
 // NOTEs:
 // Disable pagespeed: url/?PageSpeed=off
@@ -38,9 +38,9 @@ function main() {
       return verifyLoginOrContinue()
     })
     .then(() => {
-      const loginData = getDataCookie();
+      const cookieStore = new CookieStore()
+      const loginData = cookieStore.getData();
       if ('bearer_token' in loginData) {
-        const loginData = getDataCookie();
         return MastodonApi
           .getAccountInfo(loginData.server, getTargetUserData().handle, loginData.bearer_token)
       } else {
@@ -76,12 +76,12 @@ function main() {
       })
       updateOptionsStates()
 
-      if (urlsGivingConsent.length > 0) {
+      // if (urlsGivingConsent.length > 0) {
         log.d("consent granted")
 
-      } else {
-        throw new NoConsentError(targetUserData)
-      }
+      // } else {
+      //   throw new NoConsentError(targetUserData)
+      // }
 
       // merge the values we need into our data
       targetUserData['id'] = resultUserData['id'];
