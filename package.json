@@ -3,13 +3,16 @@
   "version": "1.0.0",
   "description": "This is a little website that works as an extension to Mastodon. It displays the toots but not the boosts for a particular user. It helps people that want to showcase their toots, for example when doing jokes, drawings, photos or any other form of content people might want to look back through.",
   "main": "js/main.js",
+  "type":"module",
   "scripts": {
+    "test": "mocha test/**/*Test.mjs",
+    "start": "node app.cjs",
     "initTemp": "echo init temp...; rm -fr tmp-dist; mkdir tmp-dist",
     "buildCss": "echo build css...; mkdir -p tmp-dist/css && cat css/*.css | npx csso > tmp-dist/css/main.css",
     "buildJs": "echo build js...; mkdir -p tmp-dist/js && npx rollup js/main.js --format cjs | npx terser --compress -o tmp-dist/js/main.js",
     "buildHtml": "echo buildHtml...; cp index.html tmp-dist/",
     "copyRootFiles": "echo copyRootFiles...; cp favicon.ico robots.txt tmp-dist/",
-    "replaceLive": "echo replace live site...; mkdir dist && mv dist dist-bk && mv tmp-dist dist && rm -r dist-bk",
+    "replaceLive": "echo replace live site...; mv dist dist-bk 2>/dev/null || :; mv tmp-dist dist && rm -r dist-bk 2>/dev/null | :",
     "build": "for t in initTemp buildHtml buildCss buildJs copyRootFiles replaceLive; do npm run $t; done"
   },
   "repository": {
@@ -27,5 +30,9 @@
     "express": "^4.18.2",
     "rollup": "^3.15.0",
     "terser": "^5.16.3"
+  },
+  "devDependencies": {
+    "chai": "^4.3.7",
+    "mocha": "^10.2.0"
   }
 }
