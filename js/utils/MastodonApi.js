@@ -59,7 +59,7 @@ export default class MastodonApi {
    * @param {string|undefined} [bearerToken]
    */
   static requestStatusses(server, accountId, fromTootId, bearerToken) {
-    const querryParams = { exclude_reblogs: true, limit: 500 }
+    const querryParams = { exclude_reblogs: true, limit: 100 }
     if (fromTootId) { querryParams.max_id = fromTootId }
 
     return JRequest.request('GET',
