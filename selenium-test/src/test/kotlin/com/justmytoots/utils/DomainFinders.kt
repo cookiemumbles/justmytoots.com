@@ -64,6 +64,6 @@ fun WebDriver.findModalClose() = findElement(By.id("model_close"))
 
 // error page
 
-fun WebDriver.findPageError() = waitForElement(By.className("tweet_text"), Duration.ofSeconds(2))
+fun WebDriver.findPageError() = waitForElement(By.className("toot_content"), Duration.ofSeconds(2))
 
 fun WebElement.getErrorTitle() = findElement(By.tagName("h3"))

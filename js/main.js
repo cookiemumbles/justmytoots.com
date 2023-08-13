@@ -1,5 +1,5 @@
 import { test_toots } from './testData.js';
-import { displayServerError, displayMissingUserMessage, NoConsentError, displayNoConsentError } from './ui/ErrorScreen.js';
+import { displayServerError, displayMissingUserMessage, NoConsentError, displayNoConsentError, displayUnauthorizedErrorResponse, displayGeneralErrorResponse } from './ui/ErrorScreen.js';
 import Logger from './utils/Logger.js';
 import { getDataCookie } from './utils/Cookie.js';
 import MastodonApi from './utils/MastodonApi.js';
@@ -8,6 +8,7 @@ import { handleLoginPartTwoOrContinue, verifyLoginOrContinue } from './login.js'
 import { addInitialListeners, displayLoggedInState, loadPageContent, loadToots, updateOptionsStates } from './ui/DomController.js';
 import { getTargetUserData, setTargetUserData } from './utils/MemoryData.js';
 import { setForcedOptions } from './utils/Options.js';
+import { ErrorResponse } from './utils/JRequest.js';
 
 var log = new Logger()
 
@@ -91,11 +92,17 @@ function main() {
       setTargetUserData(targetUserData)
 
       displayLoggedInState()
-      loadPageContent(targetUserData);
+      return loadPageContent(targetUserData);
     })
     .catch((/** @type {Error} */ error) => {
       if (error instanceof NoConsentError) {
         displayNoConsentError(error)
+      } else if (error instanceof ErrorResponse) {
+        if (error.httpCode == 401) {
+          displayUnauthorizedErrorResponse(error)
+        } else {
+          displayGeneralErrorResponse(error)
+        }
       } else {
         displayServerError(error)
       }
