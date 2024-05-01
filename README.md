@@ -13,15 +13,26 @@ For example for me that would be:
 https://justmytoots.com/@cookie_mumbles@ohai.social
 
 
-## Local setup & Contribution
+## Local setup
 
-The setup is simple. Just clone the repo and run the `./startServer.sh` script
-(assuming you have php installed, otherwise a simple npm/python/whatever server
-should do the trick) to launch a simple server on your local machine at
-`http://localhost:8008`. Then you can request any mastodon user from your local
-machine like this: `http://localhost:8008?acct=@user@example.social`. Notice
-the additional property syntax `?acct=` that is different from the server, as
-the local server does not respect the `.htaccess` rules atm.
+This project is only a static website, but uses npm for some build logic. To
+build the project, first install npm if you haven't already. Then clone the
+repo and start a local server with the following command:
+
+```
+node app.js
+```
+You should now be able to access the locally hosted server at:
+```
+localhost:8008
+```
+
+Then you can request any mastodon user from your local machine like this:
+`http://localhost:8008?acct=@user@example.social`. Notice the additional
+property syntax `?acct=` that is different from the server, as the local server
+does not respect the `.htaccess` rules atm.
+
+## Contribution
 
 If you'd like to contribute, just look through the
 [Issues](https://github.com/cookiemumbles/justmytoots.com/issues/) I've already

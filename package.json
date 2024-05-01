@@ -9,7 +9,7 @@
     "buildJs": "echo build js...; mkdir -p tmp-dist/js && npx rollup js/main.js --format cjs | npx terser --compress -o tmp-dist/js/main.js",
     "buildHtml": "echo buildHtml...; cp index.html tmp-dist/",
     "copyRootFiles": "echo copyRootFiles...; cp favicon.ico robots.txt tmp-dist/",
-    "replaceLive": "echo replace live site...; mv dist dist-bk && mv tmp-dist dist && rm -r dist-bk",
+    "replaceLive": "echo replace live site...; mkdir dist && mv dist dist-bk && mv tmp-dist dist && rm -r dist-bk",
     "build": "for t in initTemp buildHtml buildCss buildJs copyRootFiles replaceLive; do npm run $t; done"
   },
   "repository": {
