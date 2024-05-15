@@ -1,8 +1,8 @@
 import { assert, expect } from 'chai'
 import CookieStore from '../../js/utils/CookieStore.js';
-import StubLogger from './StubLogger.mjs';
+import StubLogger from '../StubLogger.mjs';
 import "../../js/utils/Logger.js";
-import DocumentWrapperStub from './DocumentWrapperStub.mjs';
+import DocumentWrapperStub from '../DocumentWrapperStub.mjs';
 
 describe('CookieStore', () => {
 
