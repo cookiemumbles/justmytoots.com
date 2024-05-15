@@ -39,10 +39,10 @@ export default class CookieStore {
 
   /** @param {{}} jsonData */
   setData(jsonData) {
-    var expirationDate = new Date();
+    const expirationDate = new Date();
     expirationDate.setDate(expirationDate.getDate() + 30);
 
-    var jsonString = JSON.stringify(jsonData);
+    const jsonString = JSON.stringify(jsonData);
     this.documentWrapper.writeCookieString(`data=${jsonString}; expires=${expirationDate.toUTCString()}; path=/`)
   }
 
@@ -53,8 +53,8 @@ export default class CookieStore {
 
   /** @param {{}} inputData */
   appendData(inputData) {
-    let data = this.getData()
-    for (let key in inputData) {
+    const data = this.getData()
+    for (const key in inputData) {
       data[key] = inputData[key]
     }
     this.setData(data)
