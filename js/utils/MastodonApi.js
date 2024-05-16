@@ -1,88 +1,107 @@
 import JRequest from './JRequest.js';
 import { buildUrl } from './JRequest.js';
+import LoggerLive from './LoggerLive.js';
+import MastodonAuth from './MastodonAuth.js';
+import UrlCall from './UrlCall.js';
 
 export default class MastodonApi {
+
+  /** @param {string|undefined} [bearerToken] */
+  constructor(
+    bearerToken = "",
+    httpRequest = new XMLHttpRequest(),
+    providedLogger = new LoggerLive()
+  ) {
+    this.bearerToken = bearerToken
+    this.httpRequest = httpRequest
+    this.logger = providedLogger
+  }
 
   /**
    * @param {string} server
    * @param {string} handle
-   * @param {string|undefined} [bearerToken]
    */
+  getAccountInfo(server, handle) {
+    return new UrlCall(`https://${server}/api/v1/accounts/lookup`, this.httpRequest, this.logger)
+      .withParams({ acct: handle })
+      .addJsonDataHeader()
+      .addHeader('Authorization', 'Bearer ' + this.bearerToken)
+      .get()
+  }
+
+  /** @deprecated Replace with class method. */
   static getAccountInfo(server, handle, bearerToken) {
-    return JRequest.request('GET',
-      `https://${server}/api/v1/accounts/lookup?acct=${handle}`,
-      {},
-      getAppropriateHeaders(bearerToken)
-    )
+    return new MastodonApi(bearerToken).getAccountInfo(server, handle)
   }
 
 
   /**
    * docs: https://docs.joinmastodon.org/methods/accounts/#verify_credentials
    * request: GET /api/v1/accounts/verify_credentials HTTP/1.1
+   *
    * @param {string} server
-   * @param {string|undefined} [bearerToken]
    */
-  static verifyCredentials(server, bearerToken) {
-    return JRequest.request('GET',
-      `https://${server}/api/v1/accounts/verify_credentials`,
-      {},
-      getAppropriateHeaders(bearerToken)
-    )
+  verifyCredentials(server) {
+    return new UrlCall(`https://${server}/api/v1/accounts/verify_credentials`, this.httpRequest, this.logger)
+      .addJsonDataHeader()
+      .addHeader('Authorization', 'Bearer ' + this.bearerToken)
+      .get()
   }
 
-  // TODO: update docs: requires plain read permission
+  /** @deprecated Replace with class method. */
+  static verifyCredentials(server, bearerToken) {
+    return new MastodonApi(bearerToken).verifyCredentials(server)
+  }
+
   /**
    * docs: https://docs.joinmastodon.org/methods/apps/#verify_credentials
    * request: GET https://mastodon.example/api/v1/apps/verify_credentials HTTP/1.1
+   *
    * @param {string} server
    * @param {string} clientId
-   * @param {string|undefined} [bearerToken]
    */
-  static verifyAppCredentials(server, clientId, bearerToken) {
-    return JRequest.request('GET',
-      buildUrl(`https://${server}/api/v1/apps/verify_credentials`, {
-        client_id: clientId,
-      }),
-      {},
-      getAppropriateHeaders(bearerToken)
-    )
+  verifyAppCredentials(server, clientId) {
+    return new UrlCall(`https://${server}/api/v1/apps/verify_credentials`, this.httpRequest, this.logger)
+      .addJsonDataHeader()
+      .addHeader('Authorization', 'Bearer ' + this.bearerToken)
+      .withParams({client_id: clientId})
+      .get()
   }
 
+  /** @deprecated Replace with class method. */
+  static verifyAppCredentials(server, clientId, bearerToken) {
+    return new MastodonApi(bearerToken).verifyAppCredentials(server, clientId)
+  }
 
   /**
    * docs: https://docs.joinmastodon.org/methods/accounts/#statuses
    * request: GET https://mastodon.example/api/v1/accounts/:id/statuses HTTP/1.1
+   *
    * @param {string} server
    * @param {string} accountId
    * @param {string} fromTootId
-   * @param {string|undefined} [bearerToken]
    */
-  static requestStatusses(server, accountId, fromTootId, bearerToken) {
+  requestStatusses(server, accountId, fromTootId) {
     const querryParams = { exclude_reblogs: true, limit: 100 }
     if (fromTootId) { querryParams.max_id = fromTootId }
 
-    return JRequest.request('GET',
-      buildUrl(`https://${server}/api/v1/accounts/${accountId}/statuses`, querryParams),
-      {},
-      getAppropriateHeaders(bearerToken)
-    )
+    return new UrlCall(`https://${server}/api/v1/accounts/${accountId}/statuses`, this.httpRequest, this.logger)
+      .addJsonDataHeader()
+      .addHeader('Authorization', 'Bearer ' + this.bearerToken)
+      .withParams(querryParams)
+      .get()
   }
 
-  /**
-     * docs: https://docs.joinmastodon.org/methods/apps/#create
-     * request: POST https://mastodon.example/api/v1/apps HTTP/1.1
-     * @param {string} name
-     * @param {string} server
-     * @param {string} redirectUrl
-     */
+
+  /** @deprecated Replace with class method. */
+  static requestStatusses(server, accountId, fromTootId, bearerToken) {
+    return new MastodonApi(bearerToken).requestStatusses(server, accountId, fromTootId)
+  }
+
+
+  /** @deprecated Replace with class method. */
   static requestNewApiApp(name, server, redirectUrl) {
-    return JRequest.post(buildUrl(
-      `https://${server}/api/v1/apps`, {
-        client_name: name,
-        redirect_uris: redirectUrl,
-        scopes: getScopes(),
-      }))
+    return new MastodonAuth().requestNewApiApp(name, server, redirectUrl)
   }
 
   /**
@@ -94,13 +113,7 @@ export default class MastodonApi {
    * @param {string} [redirectUrl]
    */
   static requestLoginPage(server, clientId, redirectUrl) {
-    window.location.href = buildUrl(`https://${server}/oauth/authorize`, {
-      response_type: "code",
-      client_id: clientId,
-      redirect_uri: redirectUrl, // document.location.href
-      // "force_login": false,
-      scope: getScopes(),
-    }).toString()
+    window.location.href =  new MastodonAuth().getLoginPageUrl(server, clientId, redirectUrl)
   }
 
   /**
@@ -113,13 +126,7 @@ export default class MastodonApi {
    * @param {string} redirectUrl
    */
   static requestBearerToken(server, code, clientId, clientSecret, redirectUrl) {
-    return JRequest.post(buildUrl(`https://${server}/oauth/token`, {
-      grant_type: 'authorization_code',
-      code: code,
-      client_id: clientId,
-      client_secret: clientSecret,
-      redirect_uri: redirectUrl,
-    }))
+    return new MastodonAuth().requestBearerToken(server, code, clientId, clientSecret, redirectUrl)
   }
 
   /**
@@ -130,6 +137,11 @@ export default class MastodonApi {
    * @param {string} tootId
    */
   static favorite(server, bearerToken, tootId) {
+    return new UrlCall(`https://${server}/api/v1/accounts/${accountId}/statuses`)
+      .addJsonDataHeader()
+      .addHeader('Authorization', 'Bearer ' + bearerToken)
+      .withParams(querryParams)
+      .get()
     return JRequest.request('POST',
       `https://${server}/api/v1/statuses/${tootId}/favourite`,
       {},
