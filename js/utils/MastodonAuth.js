@@ -1,14 +1,15 @@
 import LoggerLive from './LoggerLive.js';
-import UrlCall from './UrlCall.js';
 import { buildUrl } from './JRequest.js';
+import { UrlCallFactory } from './UrlCallFactory.js';
 
 export default class MastodonAuth {
+  /** @param {Logger} [providedLogger=new LoggerLive()]  */
   constructor(
-    httpRequest = new XMLHttpRequest(),
-    providedLogger = new LoggerLive()
+    providedLogger = new LoggerLive(),
+    urlCallFactory = new UrlCallFactory()
   ) {
-    this.httpRequest = httpRequest
     this.logger = providedLogger
+    this.urlCallFactory = urlCallFactory
   }
 
   /**
@@ -20,7 +21,8 @@ export default class MastodonAuth {
    * @param {string} redirectUrl
    */
   requestNewApiApp(name, server, redirectUrl) {
-    return new UrlCall(`https://${server}/api/v1/apps`, this.httpRequest, this.logger)
+    return this.urlCallFactory.build()
+      .withUrl(`https://${server}/api/v1/apps`)
       .withParams({
         client_name: name,
         redirect_uris: redirectUrl,
@@ -58,7 +60,8 @@ export default class MastodonAuth {
    * @param {string} redirectUrl
    */
   requestBearerToken(server, code, clientId, clientSecret, redirectUrl) {
-    return new UrlCall(`https://${server}/oauth/token`, this.httpRequest, this.logger)
+    return this.urlCallFactory.build()
+      .withUrl(`https://${server}/oauth/token`)
       .withParams({
         grant_type: 'authorization_code',
         code: code,
