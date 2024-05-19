@@ -5,16 +5,19 @@ import LoggerLive from './LoggerLive.js';
  */
 export default class UrlCall {
 
-  /** @param {string} url */
   constructor(
-    url,
     httpRequest = new XMLHttpRequest(),
     providedLogger = new LoggerLive()
   ) {
-    this.url = url
     this.httpRequest = httpRequest
-    this.requestHeaders = []
+    this.requestHeaders = {}
     this.logger = providedLogger
+  }
+
+  /** @param {string} url */
+  withUrl(url) {
+    this.url = url
+    return this
   }
 
   /**
@@ -37,7 +40,7 @@ export default class UrlCall {
    * @param {string} headerValue
    */
   addHeader(headerId, headerValue) {
-    this.requestHeaders.push(headerId, headerValue)
+    this.requestHeaders[headerId] = headerValue
     this.httpRequest.setRequestHeader(headerId, headerValue)
     return this
   }
@@ -62,7 +65,8 @@ export default class UrlCall {
    * Returns a Promise that performs the request.
    */
   get() {
-    this.httpRequest.open("GET", this.url);
+    this.requestMethod = "GET"
+    this.httpRequest.open(this.requestMethod, this.url);
     return this.#call()
   }
 
@@ -71,7 +75,8 @@ export default class UrlCall {
    * Returns a Promise that performs the request.
    */
   post() {
-    this.httpRequest.open("POST", this.url);
+    this.requestMethod = "POST"
+    this.httpRequest.open(this.requestMethod, this.url);
     return this.#call()
   }
 
@@ -80,7 +85,8 @@ export default class UrlCall {
    * Returns a Promise that performs the request.
    */
   put() {
-    this.httpRequest.open("PUT", this.url);
+    this.requestMethod = "PUT"
+    this.httpRequest.open(this.requestMethod, this.url);
     return this.#call()
   }
 
@@ -89,7 +95,8 @@ export default class UrlCall {
    * Returns a Promise that performs the request.
    */
   delete() {
-    this.httpRequest.open("DELETE", this.url);
+    this.requestMethod = "DELETE"
+    this.httpRequest.open(this.requestMethod, this.url);
     return this.#call()
   }
 
@@ -160,3 +167,5 @@ export class ErrorResponse extends Error {
     this.requestUrl = requestUrl
   }
 }
+
+

@@ -1,20 +1,20 @@
 import JRequest from './JRequest.js';
-import { buildUrl } from './JRequest.js';
 import LoggerLive from './LoggerLive.js';
 import MastodonAuth from './MastodonAuth.js';
 import UrlCall from './UrlCall.js';
+import { UrlCallFactory } from './UrlCallFactory.js';
 
 export default class MastodonApi {
 
   /** @param {string|undefined} [bearerToken] */
   constructor(
     bearerToken = "",
-    httpRequest = new XMLHttpRequest(),
-    providedLogger = new LoggerLive()
+    providedLogger = new LoggerLive(),
+    urlCallFactory = new UrlCallFactory()
   ) {
     this.bearerToken = bearerToken
-    this.httpRequest = httpRequest
     this.logger = providedLogger
+    this.urlCallFactory = urlCallFactory
   }
 
   /**
@@ -22,7 +22,8 @@ export default class MastodonApi {
    * @param {string} handle
    */
   getAccountInfo(server, handle) {
-    return new UrlCall(`https://${server}/api/v1/accounts/lookup`, this.httpRequest, this.logger)
+    return this.urlCallFactory.build()
+      .withUrl(`https://${server}/api/v1/accounts/lookup`)
       .withParams({ acct: handle })
       .addJsonDataHeader()
       .addHeader('Authorization', 'Bearer ' + this.bearerToken)
@@ -42,7 +43,8 @@ export default class MastodonApi {
    * @param {string} server
    */
   verifyCredentials(server) {
-    return new UrlCall(`https://${server}/api/v1/accounts/verify_credentials`, this.httpRequest, this.logger)
+    return this.urlCallFactory.build()
+      .withUrl(`https://${server}/api/v1/accounts/verify_credentials`)
       .addJsonDataHeader()
       .addHeader('Authorization', 'Bearer ' + this.bearerToken)
       .get()
@@ -61,7 +63,8 @@ export default class MastodonApi {
    * @param {string} clientId
    */
   verifyAppCredentials(server, clientId) {
-    return new UrlCall(`https://${server}/api/v1/apps/verify_credentials`, this.httpRequest, this.logger)
+    return this.urlCallFactory.build()
+      .withUrl(`https://${server}/api/v1/apps/verify_credentials`)
       .addJsonDataHeader()
       .addHeader('Authorization', 'Bearer ' + this.bearerToken)
       .withParams({client_id: clientId})
@@ -85,7 +88,8 @@ export default class MastodonApi {
     const querryParams = { exclude_reblogs: true, limit: 100 }
     if (fromTootId) { querryParams.max_id = fromTootId }
 
-    return new UrlCall(`https://${server}/api/v1/accounts/${accountId}/statuses`, this.httpRequest, this.logger)
+    return this.urlCallFactory.build()
+      .withUrl(`https://${server}/api/v1/accounts/${accountId}/statuses`)
       .addJsonDataHeader()
       .addHeader('Authorization', 'Bearer ' + this.bearerToken)
       .withParams(querryParams)
@@ -137,16 +141,11 @@ export default class MastodonApi {
    * @param {string} tootId
    */
   static favorite(server, bearerToken, tootId) {
-    return new UrlCall(`https://${server}/api/v1/accounts/${accountId}/statuses`)
+    return new UrlCall(`https://${server}/api/v1/statuses/${tootId}/favourite`)
+      .withUrl(`https://${server}/api/v1/statuses/${tootId}/favourite`)
       .addJsonDataHeader()
       .addHeader('Authorization', 'Bearer ' + bearerToken)
-      .withParams(querryParams)
       .get()
-    return JRequest.request('POST',
-      `https://${server}/api/v1/statuses/${tootId}/favourite`,
-      {},
-      getAppropriateHeaders(bearerToken)
-    )
   }
 
   /**
@@ -204,9 +203,4 @@ function getAppropriateHeaders(bearerToken) {
     requestHeaders['Authorization'] = 'Bearer ' + bearerToken
   }
   return requestHeaders
-}
-
-function getScopes() {
-  // wuold need plain read to verify app credentials
-  return "write:favourites write:statuses read:statuses read:accounts"
 }
