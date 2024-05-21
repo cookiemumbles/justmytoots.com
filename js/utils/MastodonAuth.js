@@ -3,11 +3,17 @@ import { buildUrl } from './JRequest.js';
 import { UrlCallFactory } from './UrlCallFactory.js';
 
 export default class MastodonAuth {
-  /** @param {Logger} [providedLogger=new LoggerLive()]  */
+
+  /** 
+   * @param {string} [server]
+   * @param {Logger} [providedLogger=new LoggerLive()]
+   */
   constructor(
+    server = "",
     providedLogger = new LoggerLive(),
     urlCallFactory = new UrlCallFactory()
   ) {
+    this.server = server
     this.logger = providedLogger
     this.urlCallFactory = urlCallFactory
   }
@@ -17,12 +23,11 @@ export default class MastodonAuth {
    * request: POST https://mastodon.example/api/v1/apps HTTP/1.1
    *
    * @param {string} name
-   * @param {string} server
    * @param {string} redirectUrl
    */
-  requestNewApiApp(name, server, redirectUrl) {
+  requestNewApiApp(name, redirectUrl) {
     return this.urlCallFactory.build()
-      .withUrl(`https://${server}/api/v1/apps`)
+      .withUrl(`https://${this.server}/api/v1/apps`)
       .withParams({
         client_name: name,
         redirect_uris: redirectUrl,
@@ -35,12 +40,11 @@ export default class MastodonAuth {
    * docs: https://docs.joinmastodon.org/methods/oauth/#authorize
    * request: GET https://mastodon.example/oauth/authorize HTTP/1.1
    *
-   * @param {string} server
    * @param {string} [clientId]
    * @param {string} [redirectUrl]
    */
-  getLoginPageUrl(server, clientId, redirectUrl) {
-    return buildUrl(`https://${server}/oauth/authorize`, {
+  getLoginPageUrl(clientId, redirectUrl) {
+    return buildUrl(`https://${this.server}/oauth/authorize`, {
       response_type: "code",
       client_id: clientId,
       redirect_uri: redirectUrl, // document.location.href
@@ -53,15 +57,14 @@ export default class MastodonAuth {
   /**
    * docs: https://docs.joinmastodon.org/methods/oauth/#token
    * request: POST https://mastodon.example/oauth/token HTTP/1.1
-   * @param {string} server
    * @param {string} code
    * @param {string} clientId
    * @param {string} clientSecret
    * @param {string} redirectUrl
    */
-  requestBearerToken(server, code, clientId, clientSecret, redirectUrl) {
+  requestBearerToken(code, clientId, clientSecret, redirectUrl) {
     return this.urlCallFactory.build()
-      .withUrl(`https://${server}/oauth/token`)
+      .withUrl(`https://${this.server}/oauth/token`)
       .withParams({
         grant_type: 'authorization_code',
         code: code,

@@ -12,8 +12,8 @@ describe('MastodonAuth', () => {
     const urlCallFactory = new UrlCallStubFactory()
 
     // @ts-ignore
-    new MastodonAuth(new StubLogger(), urlCallFactory)
-      .requestNewApiApp("AppName", "ohai.social", "https://redirect/url")
+    new MastodonAuth("ohai.social", new StubLogger(), urlCallFactory)
+      .requestNewApiApp("AppName", "https://redirect/url")
 
     const urlCall = urlCallFactory.lastBuilt
     expect(urlCall.requestMethod).to.equal('POST')
@@ -23,8 +23,8 @@ describe('MastodonAuth', () => {
 
   it("should build login page url", async () => {
 
-    const resultUrl = new MastodonAuth(new StubLogger(), new UrlCallStubFactory())
-      .getLoginPageUrl("ohai.social", "_my_app_id_", "https://redirect/url")
+    const resultUrl = new MastodonAuth("ohai.social", new StubLogger(), new UrlCallStubFactory())
+      .getLoginPageUrl("_my_app_id_", "https://redirect/url")
 
     expect(resultUrl).to.equal('https://ohai.social/oauth/authorize?response_type=code&client_id=_my_app_id_&redirect_uri=https%3A%2F%2Fredirect%2Furl&scope=write%3Afavourites+write%3Astatuses+read%3Astatuses+read%3Aaccounts')
   })
@@ -34,8 +34,8 @@ describe('MastodonAuth', () => {
     const urlCallFactory = new UrlCallStubFactory()
 
     // @ts-ignore
-    new MastodonAuth(new StubLogger(), urlCallFactory)
-      .requestBearerToken("ohai.social", "_code_", "_clientid_", "_client_secret_", "https://redirect/url")
+    new MastodonAuth("ohai.social", new StubLogger(), urlCallFactory)
+      .requestBearerToken("_code_", "_clientid_", "_client_secret_", "https://redirect/url")
 
     const urlCall = urlCallFactory.lastBuilt
     expect(urlCall.requestMethod).to.equal('POST')
