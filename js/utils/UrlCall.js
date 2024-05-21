@@ -41,7 +41,6 @@ export default class UrlCall {
    */
   addHeader(headerId, headerValue) {
     this.requestHeaders[headerId] = headerValue
-    this.httpRequest.setRequestHeader(headerId, headerValue)
     return this
   }
 
@@ -66,7 +65,6 @@ export default class UrlCall {
    */
   get() {
     this.requestMethod = "GET"
-    this.httpRequest.open(this.requestMethod, this.url);
     return this.#call()
   }
 
@@ -76,7 +74,6 @@ export default class UrlCall {
    */
   post() {
     this.requestMethod = "POST"
-    this.httpRequest.open(this.requestMethod, this.url);
     return this.#call()
   }
 
@@ -86,7 +83,6 @@ export default class UrlCall {
    */
   put() {
     this.requestMethod = "PUT"
-    this.httpRequest.open(this.requestMethod, this.url);
     return this.#call()
   }
 
@@ -96,46 +92,51 @@ export default class UrlCall {
    */
   delete() {
     this.requestMethod = "DELETE"
-    this.httpRequest.open(this.requestMethod, this.url);
     return this.#call()
   }
 
   #call() {
-    const parent = this
+    const urlCall = this
     return new Promise(function (resolve, reject) {
-      parent.httpRequest.onload = function () {
+      urlCall.httpRequest.open(urlCall.requestMethod, urlCall.url);
+
+      for (let key in urlCall.requestHeaders) {
+        urlCall.httpRequest.setRequestHeader(key, urlCall.requestHeaders[key])
+      }
+
+      urlCall.httpRequest.onload = function () {
         if (this.status >= 200 && this.status < 300) {
-          resolve(parent.httpRequest.response);
+          resolve(urlCall.httpRequest.response);
         } else {
           reject(new ErrorResponse(
             this.status,
-            parent.httpRequest.statusText,
-            parent.httpRequest.response,
-            parent.url
+            urlCall.httpRequest.statusText,
+            urlCall.httpRequest.response,
+            urlCall.url
           ))
         }
       };
 
-      parent.httpRequest.onerror = function () {
+      urlCall.httpRequest.onerror = function () {
         reject(new Error(
           `Unable to connect to server.`,
           // @ts-ignore
-          {cause: `Unknown problem connecting to ${parent.url}`}
+          {cause: `Unknown problem connecting to ${urlCall.url}`}
         ));
       };
 
-      parent.httpRequest.ontimeout = function() {
+      urlCall.httpRequest.ontimeout = function() {
         reject(new Error(
           `Connection to server timed out.`,
           // @ts-ignore
-          {cause: `Timeout connecting to ${parent.url}`}
+          {cause: `Timeout connecting to ${urlCall.url}`}
         ));
       }
 
-      parent.logger.d(`Requesting: ${parent.url}`, parent.jsonData)
-      parent.logger.t("headers:", parent.requestHeaders)
+      urlCall.logger.d(`Requesting: ${urlCall.url}`, urlCall.jsonData)
+      urlCall.logger.t("headers:", urlCall.requestHeaders)
 
-      parent.httpRequest.send(JSON.stringify(parent.jsonData));
+      urlCall.httpRequest.send(JSON.stringify(urlCall.jsonData));
 
     })
   }
