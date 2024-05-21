@@ -1,7 +1,6 @@
 import { expect } from 'chai'
 import MastodonApi from '../../js/utils/MastodonApi.js';
 import StubLogger from '../StubLogger.mjs';
-import StubHttpRequest from '../StubHttpRequest.mjs';
 import { UrlCallStubFactory } from './UrlCallStubFactory.js';
 
 
@@ -11,8 +10,8 @@ describe('MastodonApi', () => {
     const urlCallFactory = new UrlCallStubFactory()
 
     // @ts-ignore
-    new MastodonApi("token", new StubLogger(), urlCallFactory)
-      .getAccountInfo("ohai.social", "cookie_mumbles")
+    new MastodonApi("ohai.social", "token", new StubLogger(), urlCallFactory)
+      .getAccountInfo("cookie_mumbles")
 
     const urlCall = urlCallFactory.lastBuilt
     expect(urlCall.requestMethod).to.equal('GET')
@@ -24,8 +23,8 @@ describe('MastodonApi', () => {
     const urlCallFactory = new UrlCallStubFactory()
 
     // @ts-ignore
-    new MastodonApi("token", new StubLogger(), urlCallFactory)
-      .verifyCredentials("ohai.social")
+    new MastodonApi("ohai.social", "token", new StubLogger(), urlCallFactory)
+      .verifyCredentials()
 
     const urlCall = urlCallFactory.lastBuilt
     expect(urlCall.requestMethod).to.equal('GET')
@@ -38,8 +37,8 @@ describe('MastodonApi', () => {
     const urlCallFactory = new UrlCallStubFactory()
 
     // @ts-ignore
-    new MastodonApi("token", new StubLogger(), urlCallFactory)
-      .verifyAppCredentials("ohai.social", "-clientid-")
+    new MastodonApi("ohai.social", "token", new StubLogger(), urlCallFactory)
+      .verifyAppCredentials("-clientid-")
 
     const urlCall = urlCallFactory.lastBuilt
     expect(urlCall.requestMethod).to.equal('GET')
@@ -52,8 +51,8 @@ describe('MastodonApi', () => {
     const urlCallFactory = new UrlCallStubFactory()
 
     // @ts-ignore
-    new MastodonApi("token", new StubLogger(), urlCallFactory)
-      .requestStatusses("ohai.social", "_accountid_", "_frommtootid_")
+    new MastodonApi("ohai.social", "token", new StubLogger(), urlCallFactory)
+      .requestStatusses("_accountid_", "_frommtootid_")
 
     const urlCall = urlCallFactory.lastBuilt
     expect(urlCall.requestMethod).to.equal('GET')
@@ -62,5 +61,57 @@ describe('MastodonApi', () => {
   })
 
 
+  it("should favorite", async () => {
+    const urlCallFactory = new UrlCallStubFactory()
+
+    // @ts-ignore
+    new MastodonApi("ohai.social", "token", new StubLogger(), urlCallFactory)
+      .favorite("_tootid_")
+
+    const urlCall = urlCallFactory.lastBuilt
+    expect(urlCall.requestMethod).to.equal('POST')
+    expect(urlCall.requestHeaders['Authorization']).to.equal('Bearer token')
+    expect(urlCall.url).to.equal('https://ohai.social/api/v1/statuses/_tootid_/favourite')
+  })
+
+
+  it("should unfavorite", async () => {
+    const urlCallFactory = new UrlCallStubFactory()
+
+    // @ts-ignore
+    new MastodonApi("ohai.social", "token", new StubLogger(), urlCallFactory)
+      .unfavorite("_tootid_")
+
+    const urlCall = urlCallFactory.lastBuilt
+    expect(urlCall.requestMethod).to.equal('POST')
+    expect(urlCall.requestHeaders['Authorization']).to.equal('Bearer token')
+    expect(urlCall.url).to.equal('https://ohai.social/api/v1/statuses/_tootid_/unfavourite')
+  })
+
+  it("should boost", async () => {
+    const urlCallFactory = new UrlCallStubFactory()
+
+    // @ts-ignore
+    new MastodonApi("ohai.social", "token", new StubLogger(), urlCallFactory)
+      .boost("_tootid_")
+
+    const urlCall = urlCallFactory.lastBuilt
+    expect(urlCall.requestMethod).to.equal('POST')
+    expect(urlCall.requestHeaders['Authorization']).to.equal('Bearer token')
+    expect(urlCall.url).to.equal('https://ohai.social/api/v1/statuses/_tootid_/reblog')
+  })
+
+  it("should unboost", async () => {
+    const urlCallFactory = new UrlCallStubFactory()
+
+    // @ts-ignore
+    new MastodonApi("ohai.social", "token", new StubLogger(), urlCallFactory)
+      .unboost("_tootid_")
+
+    const urlCall = urlCallFactory.lastBuilt
+    expect(urlCall.requestMethod).to.equal('POST')
+    expect(urlCall.requestHeaders['Authorization']).to.equal('Bearer token')
+    expect(urlCall.url).to.equal('https://ohai.social/api/v1/statuses/_tootid_/unreblog')
+  })
 
 })
