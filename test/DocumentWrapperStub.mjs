@@ -1,4 +1,7 @@
 
+/**
+ * @implements {DocumentWrapper}
+ */
 export default class DocumentWrapperStub {
   constructor() {
     this.cookie = "";

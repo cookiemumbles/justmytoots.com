@@ -1,4 +1,4 @@
-import DocumentWrapper from "./DocumentWrapper.js";
+import DocumentWrapperImpl from "./DocumentWrapperImpl.js";
 import LoggerLive from "./LoggerLive.js";
 
 /**
@@ -8,11 +8,11 @@ import LoggerLive from "./LoggerLive.js";
 export default class CookieStore {
 
   /**
-   * @param {any} providedDocument
+   * @param {DocumentWrapper} providedDocument
    * @param {Logger} providedLogger
    */
   constructor(
-    providedDocument = new DocumentWrapper(),
+    providedDocument = new DocumentWrapperImpl(),
     providedLogger = new LoggerLive()
   ) {
     this.documentWrapper = providedDocument

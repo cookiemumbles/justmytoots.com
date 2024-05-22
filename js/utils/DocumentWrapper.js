@@ -1,15 +1,9 @@
 
 /**
- * Simple wrapper for the 'document' variable to allow stub replacement in tests
+ * @typedef {Object} DocumentWrapper
+ *
+ * Simple wrapper for the 'document' variable to allow easy testing.
+ *
+ * @prop {function(string) : void} writeCookieString
+ * @prop {function() : string} readCookieString
  */
-export default class DocumentWrapper {
-  /** @param {string} string */
-  writeCookieString(string) {
-    return document.cookie = string
-  }
-
-  /** @returns {string} cookie value */
-  readCookieString() {
-    return document.cookie
-  }
-}
