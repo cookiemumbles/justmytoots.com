@@ -1,4 +1,4 @@
-import LoggerLive from './LoggerLive.js';
+import LoggerImpl from './LoggerImpl.js';
 import { buildUrl } from './JRequest.js';
 import { UrlCallFactory } from './UrlCallFactory.js';
 
@@ -6,11 +6,11 @@ export default class MastodonAuth {
 
   /** 
    * @param {string} [server]
-   * @param {Logger} [providedLogger=new LoggerLive()]
+   * @param {Logger} [providedLogger=new LoggerImpl()]
    */
   constructor(
     server = "",
-    providedLogger = new LoggerLive(),
+    providedLogger = new LoggerImpl(),
     urlCallFactory = new UrlCallFactory()
   ) {
     this.server = server

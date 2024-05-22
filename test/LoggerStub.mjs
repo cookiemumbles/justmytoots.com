@@ -1,6 +1,6 @@
 
 /** @implements {Logger} */
-export default class StubLogger {
+export default class LoggerStub {
   constructor() {
   }
   e() { }

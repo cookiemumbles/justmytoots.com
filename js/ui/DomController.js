@@ -1,5 +1,5 @@
 import { addUrlSearchParam, removeUrlSearchParam } from "../utils/Browser.js"
-import LoggerLive from "../utils/LoggerLive.js"
+import LoggerImpl from "../utils/LoggerImpl.js"
 import MastodonApi from "../utils/MastodonApi.js"
 import { getLastTootId, getLoggedInUserData, getTargetUserData, setLastTootId } from "../utils/MemoryData.js"
 import { copyToClipboard } from "../utils/System.js"
@@ -25,7 +25,7 @@ const Visibility = {
   DIRECT : "direct" // Visible only to mentioned users.
 };
 
-var log = new LoggerLive()
+var log = new LoggerImpl()
 
 
 export function addInitialListeners() {

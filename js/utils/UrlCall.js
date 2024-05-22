@@ -1,4 +1,4 @@
-import LoggerLive from './LoggerLive.js';
+import LoggerImpl from './LoggerImpl.js';
 
 /**
  * Perform a basic (curl style) HttpRequest using a convenient builder pattern.
@@ -7,7 +7,7 @@ export default class UrlCall {
 
   constructor(
     httpRequest = new XMLHttpRequest(),
-    providedLogger = new LoggerLive()
+    providedLogger = new LoggerImpl()
   ) {
     this.httpRequest = httpRequest
     this.requestHeaders = {}

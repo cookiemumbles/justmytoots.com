@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 import MastodonAuth from '../../js/utils/MastodonAuth.js';
-import StubLogger from '../StubLogger.mjs';
+import LoggerStub from '../LoggerStub.mjs';
 import StubHttpRequest from '../StubHttpRequest.mjs';
 import { UrlCallStubFactory } from './UrlCallStubFactory.js';
 
@@ -12,7 +12,7 @@ describe('MastodonAuth', () => {
     const urlCallFactory = new UrlCallStubFactory()
 
     // @ts-ignore
-    new MastodonAuth("ohai.social", new StubLogger(), urlCallFactory)
+    new MastodonAuth("ohai.social", new LoggerStub(), urlCallFactory)
       .requestNewApiApp("AppName", "https://redirect/url")
 
     const urlCall = urlCallFactory.lastBuilt
@@ -23,7 +23,7 @@ describe('MastodonAuth', () => {
 
   it("should build login page url", async () => {
 
-    const resultUrl = new MastodonAuth("ohai.social", new StubLogger(), new UrlCallStubFactory())
+    const resultUrl = new MastodonAuth("ohai.social", new LoggerStub(), new UrlCallStubFactory())
       .getLoginPageUrl("_my_app_id_", "https://redirect/url")
 
     expect(resultUrl).to.equal('https://ohai.social/oauth/authorize?response_type=code&client_id=_my_app_id_&redirect_uri=https%3A%2F%2Fredirect%2Furl&scope=write%3Afavourites+write%3Astatuses+read%3Astatuses+read%3Aaccounts')
@@ -34,7 +34,7 @@ describe('MastodonAuth', () => {
     const urlCallFactory = new UrlCallStubFactory()
 
     // @ts-ignore
-    new MastodonAuth("ohai.social", new StubLogger(), urlCallFactory)
+    new MastodonAuth("ohai.social", new LoggerStub(), urlCallFactory)
       .requestBearerToken("_code_", "_clientid_", "_client_secret_", "https://redirect/url")
 
     const urlCall = urlCallFactory.lastBuilt

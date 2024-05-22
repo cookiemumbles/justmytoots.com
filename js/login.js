@@ -1,11 +1,11 @@
 import CookieStore from './utils/CookieStore.js';
 import MastodonApi from './utils/MastodonApi.js';
-import LoggerLive from './utils/LoggerLive.js';
+import LoggerImpl from './utils/LoggerImpl.js';
 import { clearCodeTokenFromUrl } from './utils/Browser.js';
 import { showSnacError } from './ui/Snacbar.js';
 import { setLoggedInUserData } from './utils/MemoryData.js';
 
-var log = new LoggerLive()
+var log = new LoggerImpl()
 
 
 /**

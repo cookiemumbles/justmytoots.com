@@ -1,5 +1,5 @@
 import DocumentWrapperImpl from "./DocumentWrapperImpl.js";
-import LoggerLive from "./LoggerLive.js";
+import LoggerImpl from "./LoggerImpl.js";
 
 /**
  * Wrapper class around the basic cookie structure to provide
@@ -13,7 +13,7 @@ export default class CookieStore {
    */
   constructor(
     providedDocument = new DocumentWrapperImpl(),
-    providedLogger = new LoggerLive()
+    providedLogger = new LoggerImpl()
   ) {
     this.documentWrapper = providedDocument
     this.logger = providedLogger

@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 import MastodonApi from '../../js/utils/MastodonApi.js';
-import StubLogger from '../StubLogger.mjs';
+import LoggerStub from '../LoggerStub.mjs';
 import { UrlCallStubFactory } from './UrlCallStubFactory.js';
 
 
@@ -10,7 +10,7 @@ describe('MastodonApi', () => {
     const urlCallFactory = new UrlCallStubFactory()
 
     // @ts-ignore
-    new MastodonApi("ohai.social", "token", new StubLogger(), urlCallFactory)
+    new MastodonApi("ohai.social", "token", new LoggerStub(), urlCallFactory)
       .getAccountInfo("cookie_mumbles")
 
     const urlCall = urlCallFactory.lastBuilt
@@ -23,7 +23,7 @@ describe('MastodonApi', () => {
     const urlCallFactory = new UrlCallStubFactory()
 
     // @ts-ignore
-    new MastodonApi("ohai.social", "token", new StubLogger(), urlCallFactory)
+    new MastodonApi("ohai.social", "token", new LoggerStub(), urlCallFactory)
       .verifyCredentials()
 
     const urlCall = urlCallFactory.lastBuilt
@@ -37,7 +37,7 @@ describe('MastodonApi', () => {
     const urlCallFactory = new UrlCallStubFactory()
 
     // @ts-ignore
-    new MastodonApi("ohai.social", "token", new StubLogger(), urlCallFactory)
+    new MastodonApi("ohai.social", "token", new LoggerStub(), urlCallFactory)
       .verifyAppCredentials("-clientid-")
 
     const urlCall = urlCallFactory.lastBuilt
@@ -51,7 +51,7 @@ describe('MastodonApi', () => {
     const urlCallFactory = new UrlCallStubFactory()
 
     // @ts-ignore
-    new MastodonApi("ohai.social", "token", new StubLogger(), urlCallFactory)
+    new MastodonApi("ohai.social", "token", new LoggerStub(), urlCallFactory)
       .requestStatusses("_accountid_", "_frommtootid_")
 
     const urlCall = urlCallFactory.lastBuilt
@@ -65,7 +65,7 @@ describe('MastodonApi', () => {
     const urlCallFactory = new UrlCallStubFactory()
 
     // @ts-ignore
-    new MastodonApi("ohai.social", "token", new StubLogger(), urlCallFactory)
+    new MastodonApi("ohai.social", "token", new LoggerStub(), urlCallFactory)
       .favorite("_tootid_")
 
     const urlCall = urlCallFactory.lastBuilt
@@ -79,7 +79,7 @@ describe('MastodonApi', () => {
     const urlCallFactory = new UrlCallStubFactory()
 
     // @ts-ignore
-    new MastodonApi("ohai.social", "token", new StubLogger(), urlCallFactory)
+    new MastodonApi("ohai.social", "token", new LoggerStub(), urlCallFactory)
       .unfavorite("_tootid_")
 
     const urlCall = urlCallFactory.lastBuilt
@@ -92,7 +92,7 @@ describe('MastodonApi', () => {
     const urlCallFactory = new UrlCallStubFactory()
 
     // @ts-ignore
-    new MastodonApi("ohai.social", "token", new StubLogger(), urlCallFactory)
+    new MastodonApi("ohai.social", "token", new LoggerStub(), urlCallFactory)
       .boost("_tootid_")
 
     const urlCall = urlCallFactory.lastBuilt
@@ -105,7 +105,7 @@ describe('MastodonApi', () => {
     const urlCallFactory = new UrlCallStubFactory()
 
     // @ts-ignore
-    new MastodonApi("ohai.social", "token", new StubLogger(), urlCallFactory)
+    new MastodonApi("ohai.social", "token", new LoggerStub(), urlCallFactory)
       .unboost("_tootid_")
 
     const urlCall = urlCallFactory.lastBuilt

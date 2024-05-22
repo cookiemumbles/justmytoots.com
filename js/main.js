@@ -1,5 +1,5 @@
 import { test_toots } from './testData.js';
-import LoggerLive from './utils/LoggerLive.js';
+import LoggerImpl from './utils/LoggerImpl.js';
 import { displayServerError, displayMissingUserMessage, NoConsentError, displayNoConsentError, displayErrorResponse, displayUnauthorizedErrorResponse, displayGeneralErrorResponse } from './ui/ErrorScreen.js';
 import MastodonApi from './utils/MastodonApi.js';
 import { getUrlParams, getUserDataFromUrl } from './utils/Browser.js';
@@ -10,7 +10,7 @@ import { setForcedOptions } from './utils/Options.js';
 import CookieStore from './utils/CookieStore.js';
 import { ErrorResponse } from './utils/JRequest.js';
 
-var log = new LoggerLive()
+var log = new LoggerImpl()
 
 // NOTEs:
 // Disable pagespeed: url/?PageSpeed=off

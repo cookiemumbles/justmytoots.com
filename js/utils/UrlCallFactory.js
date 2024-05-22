@@ -5,7 +5,7 @@ export class UrlCallFactory {
 
   constructor(
     httpRequest = new XMLHttpRequest(),
-    providedLogger = new LoggerLive()
+    providedLogger = new LoggerImpl()
   ) {
     this.httpRequest = httpRequest
     this.logger = providedLogger

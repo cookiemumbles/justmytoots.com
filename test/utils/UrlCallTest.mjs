@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 import UrlCall from '../../js/utils/UrlCall.js';
-import StubLogger from '../StubLogger.mjs';
+import LoggerStub from '../LoggerStub.mjs';
 import StubHttpRequest from '../StubHttpRequest.mjs';
 
 describe('UrlCall', () => {
@@ -9,7 +9,7 @@ describe('UrlCall', () => {
     const httpRequest = new StubHttpRequest()
 
     // @ts-ignore
-    const urlCall = new UrlCall(httpRequest, new StubLogger())
+    const urlCall = new UrlCall(httpRequest, new LoggerStub())
       .withUrl("https://some.url")
 
     expect(urlCall.url).to.equal("https://some.url")
@@ -19,7 +19,7 @@ describe('UrlCall', () => {
   it("should set request method", () => {
     const httpRequest = new StubHttpRequest()
     // @ts-ignore
-    let urlCall = new UrlCall(httpRequest, new StubLogger())
+    let urlCall = new UrlCall(httpRequest, new LoggerStub())
       .withUrl("https://some.url")
 
     urlCall.get()
@@ -44,7 +44,7 @@ describe('UrlCall', () => {
     const httpRequest = new StubHttpRequest()
 
     // @ts-ignore
-    new UrlCall(httpRequest, new StubLogger())
+    new UrlCall(httpRequest, new LoggerStub())
       .addJsonDataHeader()
       .addHeader("Authorization", "Bearer <token>")
       .post()
@@ -57,7 +57,7 @@ describe('UrlCall', () => {
     const httpRequest = new StubHttpRequest()
 
     // @ts-ignore
-    const urlCall = new UrlCall(httpRequest, new StubLogger())
+    const urlCall = new UrlCall(httpRequest, new LoggerStub())
       .withData({ key:'value' })
 
     const result =  urlCall.post()
@@ -70,7 +70,7 @@ describe('UrlCall', () => {
     const httpRequest = new StubHttpRequest()
 
     // @ts-ignore
-    const urlCall = new UrlCall(httpRequest, new StubLogger())
+    const urlCall = new UrlCall(httpRequest, new LoggerStub())
       .withUrl("https://some.url")
       .withParams({someData: "data"})
 
@@ -81,7 +81,7 @@ describe('UrlCall', () => {
     // given
     const httpRequest = new StubHttpRequest()
     // @ts-ignore
-    const urlCall = new UrlCall(httpRequest, new StubLogger())
+    const urlCall = new UrlCall(httpRequest, new LoggerStub())
       .withUrl("https://some.url")
 
     // when
@@ -99,7 +99,7 @@ describe('UrlCall', () => {
     // given
     const httpRequest = new StubHttpRequest()
     // @ts-ignore
-    const urlCall = new UrlCall(httpRequest, new StubLogger())
+    const urlCall = new UrlCall(httpRequest, new LoggerStub())
       .withUrl("https://some.url")
 
     // when
@@ -125,7 +125,7 @@ describe('UrlCall', () => {
     // given
     const httpRequest = new StubHttpRequest()
     // @ts-ignore
-    const urlCall = new UrlCall(httpRequest, new StubLogger())
+    const urlCall = new UrlCall(httpRequest, new LoggerStub())
       .withUrl("https://some.url")
 
     // when
@@ -145,7 +145,7 @@ describe('UrlCall', () => {
     // given
     const httpRequest = new StubHttpRequest()
     // @ts-ignore
-    const urlCall = new UrlCall(httpRequest, new StubLogger())
+    const urlCall = new UrlCall(httpRequest, new LoggerStub())
       .withUrl("https://some.url")
 
     // when

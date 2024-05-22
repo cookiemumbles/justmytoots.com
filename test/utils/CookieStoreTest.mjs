@@ -1,6 +1,6 @@
 import { assert, expect } from 'chai'
 import CookieStore from '../../js/utils/CookieStore.js';
-import StubLogger from '../StubLogger.mjs';
+import LoggerStub from '../LoggerStub.mjs';
 import "../../js/utils/Logger.js";
 import DocumentWrapperStub from '../DocumentWrapperStub.mjs';
 
@@ -9,7 +9,7 @@ describe('CookieStore', () => {
   it('should support basic reading and writing', () => {
     // given
     const stubDocument = new DocumentWrapperStub()
-    const logger = new StubLogger()
+    const logger = new LoggerStub()
     const cookieStore = new CookieStore(stubDocument, logger)
 
     // then
@@ -28,7 +28,7 @@ describe('CookieStore', () => {
   it('should support appending', () => {
     // given
     const stubDocument = new DocumentWrapperStub()
-    const logger = new StubLogger()
+    const logger = new LoggerStub()
     const cookieStore = new CookieStore(stubDocument, logger)
 
     // when

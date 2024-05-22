@@ -9,7 +9,7 @@ const LogLevel = {
 
 
 /** @implements {Logger} */
-export default class LoggerLive {
+export default class LoggerImpl {
 
   constructor() {
     this.logLevel = LogLevel.INFO
@@ -49,7 +49,7 @@ export default class LoggerLive {
   /** Warning log
    * @param {...any} args */
   w(...args) {
-    if (this.logLevel >= this.WARN) {
+    if (this.logLevel >= LogLevel.WARN) {
       console.warn(...args)
     }
   }
@@ -57,7 +57,7 @@ export default class LoggerLive {
   /** Normal logging
    * @param {...any} args */
   i(...args) {
-    if (this.logLevel >= this.INFO) {
+    if (this.logLevel >= LogLevel.INFO) {
       console.log(...args)
     }
   }
@@ -65,7 +65,7 @@ export default class LoggerLive {
   /** Debug log, written to console.log
    * @param {...any} args */
   d(...args) {
-    if (this.logLevel >= this.DEBUG) {
+    if (this.logLevel >= LogLevel.DEBUG) {
       console.log(...args)
     }
   }
@@ -73,7 +73,7 @@ export default class LoggerLive {
   /** Trace log, written to console.log
    * @param {...any} args */
   t(...args) {
-    if (this.logLevel >= this.TRACE) {
+    if (this.logLevel >= LogLevel.TRACE) {
       console.log(...args)
     }
   }

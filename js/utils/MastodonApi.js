@@ -1,4 +1,4 @@
-import LoggerLive from './LoggerLive.js';
+import LoggerImpl from './LoggerImpl.js';
 import MastodonAuth from './MastodonAuth.js';
 import { UrlCallFactory } from './UrlCallFactory.js';
 
@@ -11,7 +11,7 @@ export default class MastodonApi {
   constructor(
     server = "",
     bearerToken = "",
-    providedLogger = new LoggerLive(),
+    providedLogger = new LoggerImpl(),
     urlCallFactory = new UrlCallFactory()
   ) {
     this.server = server
