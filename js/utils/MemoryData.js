@@ -11,6 +11,10 @@
  * @prop {string} [url]
  */
 
+// TODO: This is a model saving all data as globals. Should probably be a
+// simple model instance that is passed around, but need to look into this when
+// refactoring and testing the main.js for example.
+
 /** @type {UserData} */
 var g_targetUserData = null
 

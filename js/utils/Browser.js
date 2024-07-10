@@ -1,5 +1,10 @@
 import { buildUrl } from "./JRequest.js"
 
+// TODO: Test this data:
+// - replace window calls with WindowWrapper
+// - replace JRequest with UrlCall
+// - write good tests
+
 export function getUserDataFromUrl() {
   var userData = {}
   var handle = getUserHandle()
