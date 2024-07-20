@@ -12,6 +12,5 @@ jobs:
       uses: SamKirkland/FTP-Deploy-Action@v4.3.5
       with:
         server: ftp.justmytoots.com
-        dry-run: true
         username: ${{ secrets.RAINBOW_FTP_USER }}
         password: ${{ secrets.RAINBOW_FTP_PASS }}
