@@ -1,0 +1,24 @@
+on:
+  push:
+    branches: [ staging ]
+name: 🚀 Deploy website to staging on push
+jobs:
+  web-deploy:
+    name: 🎉 Deploy
+    runs-on: ubuntu-latest
+    steps:
+    - name: 🚚 Get latest code
+      uses: actions/checkout@v4
+    
+    - name: 📂 Sync files
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      with:
+        server: ftp.justmytoots.com
+        server-dir: ./staging.justmytoots.com/
+        username: ${{ secrets.RAINBOW_FTP_USER }}
+        password: ${{ secrets.RAINBOW_FTP_PASS }}
+        exclude: |
+          **/.git*
+          **/.git*/**
+          **/node_modules/**
+          ./selenium-test/**
