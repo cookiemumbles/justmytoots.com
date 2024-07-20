@@ -14,3 +14,8 @@ jobs:
         server: ftp.justmytoots.com
         username: ${{ secrets.RAINBOW_FTP_USER }}
         password: ${{ secrets.RAINBOW_FTP_PASS }}
+        exclude: |
+          **/.git*
+          **/.git*/**
+          **/node_modules/**
+          ./selenium-test/**
