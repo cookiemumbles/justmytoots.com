@@ -42,7 +42,7 @@ export function showLoginModal() {
   container.appendChild(createElement('p', {}, "Login to favorite and boost directly on the page."))
   container.appendChild(createElement('p', {}, `
     Don't worry, your login data is <b>only saved locally</b> and uses <b>a
-    cookie</b> to save it on your device. The premissions are:`))
+    cookie</b> to save it on your device. The permissions are:`))
   container.appendChild(createElement('ul', {}, `
       <li><code>read:statuses</code> - to read the useres toots</li>
       <li><code>write:favourites</code> - favorite</li>
